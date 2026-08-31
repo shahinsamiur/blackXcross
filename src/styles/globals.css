@@ -1,0 +1,99 @@
+@import "./variables.css";
+@import "tailwindcss";
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-muted: var(--muted);
+  --color-border: var(--border);
+  --color-card: var(--card);
+  --color-primary: var(--primary);
+  --color-success: var(--success);
+  --color-danger: var(--danger);
+  --color-warning: var(--warning);
+  --font-sans: var(--font-sans);
+  --font-mono: var(--font-mono);
+}
+@layer base {
+  body {
+    @apply bg-background text-foreground font-sans antialiased;
+  }
+
+  section {
+    @apply container mx-auto px-4 sm:px-6 lg:px-8;
+  }
+
+  p {
+    @apply text-base leading-relaxed;
+  }
+
+  h1 {
+    @apply font-bold tracking-tight text-lg md:text-lg lg:text-xl;
+  }
+
+  h2 {
+    @apply font-semibold tracking-tight text-sm md:text-lg lg:text-lg;
+  }
+
+  a {
+    @apply text-foreground hover:opacity-70 transition duration-300 text-base;
+  }
+}
+
+li {
+  @apply cursor-pointer flex justify-center items-center;
+}
+
+:root {
+  --torn-size: 14px;
+}
+
+* {
+  scroll-behavior: smooth;
+}
+
+/* body {
+  background-color: #fbfaf6;
+  color: balck;
+} */
+
+/* @media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+} */
+
+/* Torn receipt-paper edge, used on cards throughout the page */
+/* .torn-edge-top {
+  position: relative;
+}
+
+.torn-edge-top::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: var(--torn-size);
+  transform: translateY(-50%);
+  background-image:
+    linear-gradient(135deg, #fbfaf6 50%, transparent 50%),
+    linear-gradient(45deg, #fbfaf6 50%, transparent 50%);
+  background-position: bottom left;
+  background-repeat: repeat-x;
+  background-size: 10px 14px;
+}
+
+.tabular-nums {
+  font-variant-numeric: tabular-nums;
+}
+
+:focus-visible {
+  outline: 2px solid #2a4ce0;
+  outline-offset: 2px;
+} */

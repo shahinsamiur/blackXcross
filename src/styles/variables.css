@@ -1,0 +1,38 @@
+/* Core Light Colors */
+:root {
+  /* Background & Text */
+  --background: #ffffff; /* page background */
+  --foreground: #171717; /* main text color */
+  --muted: #6b7280; /* secondary text / placeholder */
+
+  /* Borders & Surfaces */
+  --border: #e5e5e5; /* borders */
+  --card: #f9fafb; /* card / section background */
+
+  /* Brand / Accent */
+  --primary: #2563eb; /* main brand color */
+  --success: #16a34a; /* success color */
+  --danger: #dc2626; /* error color */
+  --warning: #f59e0b; /* warning color */
+
+  /* Fonts */
+  --font-sans: "Geist Sans", sans-serif;
+  --font-mono: "Geist Mono", monospace;
+}
+
+/* Dark Mode Overrides */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #ffffff;
+    --foreground: #000000;
+    --muted: #9ca3af;
+
+    --border: #262626;
+    --card: #111111;
+
+    --primary: #3b82f6;
+    --success: #22c55e;
+    --danger: #ef4444;
+    --warning: #fbbf24;
+  }
+}
