@@ -1,5 +1,11 @@
 import type { Metadata } from "next";
-import { Space_Grotesk, Manrope, IBM_Plex_Mono } from "next/font/google";
+import {
+  Space_Grotesk,
+  Manrope,
+  IBM_Plex_Mono,
+  League_Gothic,
+} from "next/font/google";
+
 import "../styles/globals.css";
 
 const spaceGrotesk = Space_Grotesk({
@@ -20,6 +26,12 @@ const plexMono = IBM_Plex_Mono({
   variable: "--font-plex-mono",
 });
 
+const leagueGothic = League_Gothic({
+  subsets: ["latin"],
+  weight: ["400"],
+  variable: "--font-league-gothic",
+});
+
 export const metadata: Metadata = {
   title: "Xit — Bookkeeping that reconciles itself",
   description:
@@ -34,7 +46,12 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${spaceGrotesk.variable} ${manrope.variable} ${plexMono.variable}`}
+      className={`
+        ${spaceGrotesk.variable}
+        ${manrope.variable}
+        ${plexMono.variable}
+        ${leagueGothic.variable}
+      `}
     >
       <body className="font-body antialiased">{children}</body>
     </html>

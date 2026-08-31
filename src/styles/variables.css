@@ -10,6 +10,7 @@
   --warning: #f59e0b;
   --font-sans: "Geist Sans", sans-serif;
   --font-mono: "Geist Mono", monospace;
+  --font-league-gothic: "League Gothic", sans-serif;
 }
 
 @media (prefers-color-scheme: dark) {

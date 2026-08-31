@@ -13,7 +13,7 @@ import {
   FiPlus,
   FiSearch,
 } from "react-icons/fi";
-import SkullIcon from "../../components/icons/SkullIcon";
+// import SkullIcon from "../../components/icons/SkullIcon";
 import { myGroups, myContacts, sidebarNav } from "../../_mock/blackxcross";
 
 const navIcons = {
@@ -66,10 +66,14 @@ function SidebarContent() {
           {myGroups.map((group) => (
             <li
               key={group.id}
-              className="flex items-center justify-between text-sm text-foreground/90"
+              className="flex items-center! justify-between! text-sm text-foreground/90 w-full"
             >
-              <span className="truncate pr-2">{group.name}</span>
-              <span className="flex shrink-0 items-center gap-1.5 text-xs text-success">
+              <span className="flex h-7 w-7 items-center justify-center rounded-full text-muted bg-red-500"></span>
+
+              <span className="truncate w-7/10 text-foreground/80">
+                {group.name}
+              </span>
+              <span className="flex shrink-0 items-center gap-1.5 text-xs text-foreground/50">
                 <span className="h-1.5 w-1.5 rounded-full bg-success" />
                 {group.memberCount}
               </span>
@@ -95,7 +99,7 @@ function SidebarContent() {
           {myContacts.map((contact, i) => (
             <li
               key={`${contact.id}-${i}`}
-              className="flex items-center gap-2 text-sm text-foreground/90"
+              className="flex items-center gap-2 text-sm text-foreground/80"
             >
               <span className="flex h-7 w-7 items-center justify-center rounded-full bg-card text-muted">
                 <FiUser size={14} />
@@ -153,14 +157,14 @@ export default function Sidebar() {
         >
           {mobileOpen ? <FiX size={22} /> : <FiMenu size={22} />}
         </button>
-        <SkullIcon className="h-6 w-6 text-primary" />
+        {/* <SkullIcon className="h-6 w-6 text-primary" /> */}
         <span className="text-lg font-black tracking-wide">BLACK×CROSS</span>
       </div>
 
       <aside className="hidden w-64 shrink-0 border-r border-border lg:flex lg:flex-col xl:w-72">
         <div className="flex h-20 items-center gap-3 border-b border-border px-6">
           <FiMenu size={20} className="text-muted" />
-          <SkullIcon className="h-7 w-7 text-primary" />
+          {/* <SkullIcon className="h-7 w-7 text-primary" /> */}
           <span className="text-xl font-black tracking-wide">BLACK×CROSS</span>
         </div>
         <SidebarContent />

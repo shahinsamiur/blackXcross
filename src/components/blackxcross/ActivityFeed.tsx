@@ -17,7 +17,7 @@ export default function ActivityFeed() {
   return (
     <section className="flex flex-col gap-5 rounded-xl border border-border bg-card p-5">
       <div className="flex items-center justify-between">
-        <h2 className="text-sm font-bold tracking-wide text-foreground uppercase">
+        <h2 className="text-sm font-tight tracking-wide text-foreground/80 uppercase">
           Latest Community Activity
         </h2>
         <button
@@ -32,19 +32,20 @@ export default function ActivityFeed() {
         {activityItems.map((item) => {
           const Icon = iconMap[item.icon];
           return (
-            <li key={item.id} className="flex gap-3">
-              <span className="mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-primary/10 text-primary">
+            <li
+              key={item.id}
+              className="flex gap-3 justify-between! w-full items-start "
+            >
+              <span className=" flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-primary/10 text-primary">
                 <Icon size={16} />
               </span>
-              <div className="flex flex-col gap-1">
+              <div className="flex flex-1 flex-col gap-1">
                 <p className="text-sm leading-snug text-foreground/90">
-                  <span className="font-semibold text-foreground">
-                    {item.actor}
-                  </span>{" "}
-                  {item.action}{" "}
-                  <span className="font-semibold text-foreground">
+                  <span className="text-xs text-foreground">{item.actor}</span>{" "}
+                  {item.action}
+                  <div className="font-semibold text-foreground">
                     {item.target}
-                  </span>
+                  </div>
                 </p>
                 <div className="flex items-center gap-2 text-xs text-muted">
                   <span>{item.timeAgo}</span>

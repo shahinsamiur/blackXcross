@@ -38,9 +38,9 @@ export default function SearchFilterBar() {
                 key={filter}
                 type="button"
                 onClick={() => setActiveFilter(filter)}
-                className={`rounded-lg border px-4 py-2.5 text-sm font-medium transition-colors ${
+                className={`rounded-lg border px-4 py-2.5 text-sm font-medium transition-colors cursor-pointer ${
                   isActive
-                    ? "border-primary bg-primary text-background"
+                    ? "border-primary  text-primary hover:border-primary/40"
                     : "border-border bg-card text-foreground/80 hover:border-primary/40"
                 }`}
               >

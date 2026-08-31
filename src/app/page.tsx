@@ -1,6 +1,6 @@
 import Sidebar from "../components/blackxcross/Sidebar";
 import TopBar from "../components/blackxcross/TopBar";
-import BrandHero from "../components/blackxcross/BrandHero";
+// import BrandHero from "../components/blackxcross/BrandHero";
 import SearchFilterBar from "../components/blackxcross/SearchFilterBar";
 import CaseCardsRow from "../components/blackxcross/CaseCardsRow";
 import ActivityFeed from "../components/blackxcross/ActivityFeed";
@@ -11,12 +11,12 @@ import CtaBanner from "../components/blackxcross/CtaBanner";
 
 export default function Home() {
   return (
-    <div className="flex min-h-screen">
+    <div className="flex min-h-screen w-full ">
       <Sidebar />
 
-      <main className="flex-1">
+      <main className="w-7/10 flex-1">
         <TopBar />
-        <BrandHero />
+        {/* <BrandHero /> */}
         <SearchFilterBar />
         <CaseCardsRow />
 

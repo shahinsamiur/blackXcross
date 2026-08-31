@@ -13,10 +13,11 @@
   --color-warning: var(--warning);
   --font-sans: var(--font-sans);
   --font-mono: var(--font-mono);
+  --font-league: var(--font-league-gothic);
 }
 @layer base {
   body {
-    @apply bg-background text-foreground font-sans antialiased;
+    @apply bg-background text-foreground font-sans antialiased tracking-wide;
   }
 
   section {
