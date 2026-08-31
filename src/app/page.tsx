@@ -1,37 +1,36 @@
-import Header from "../components/Header";
-import Hero from "../components/Hero";
-import LogoTicker from "../components/LogoTicker";
-import Mission from "../components/Mission";
-import BentoFeatures from "../components/BentoFeatures";
-import FeatureTabs from "../components/FeatureTabs";
-import Pricing from "../components/Pricing";
-import Testimonials from "../components/Testimonials";
-import FAQ from "../components/FAQ";
-import Blog from "../components/Blog";
-import CTA from "../components/CTA";
-import Footer from "../components/Footer";
-import Proxcy from "../components/ProxyProductsTabs";
+import Sidebar from "../components/blackxcross/Sidebar";
+import TopBar from "../components/blackxcross/TopBar";
+import BrandHero from "../components/blackxcross/BrandHero";
+import SearchFilterBar from "../components/blackxcross/SearchFilterBar";
+import CaseCardsRow from "../components/blackxcross/CaseCardsRow";
+import ActivityFeed from "../components/blackxcross/ActivityFeed";
+import InvestigationsMap from "../components/blackxcross/InvestigationsMap";
+import TrendingTheories from "../components/blackxcross/TrendingTheories";
+import MemberSpotlight from "../components/blackxcross/MemberSpotlight";
+import CtaBanner from "../components/blackxcross/CtaBanner";
+
 export default function Home() {
   return (
-    <main className="min-h-screen  bg-[#f0efe3]">
-      <Header />
-      <Hero />
+    <div className="flex min-h-screen">
+      <Sidebar />
 
-      <div className="mx-auto container">
-        <LogoTicker />
-        <Proxcy />
-        <Mission />
-        <div id="product">
-          <BentoFeatures />
-          <FeatureTabs />
+      <main className="flex-1">
+        <TopBar />
+        <BrandHero />
+        <SearchFilterBar />
+        <CaseCardsRow />
+
+        <div className="grid grid-cols-1 gap-4 px-4 pb-8 sm:px-6 lg:grid-cols-3 lg:px-8">
+          <ActivityFeed />
+          <InvestigationsMap />
+          <div className="flex flex-col gap-4">
+            <TrendingTheories />
+            <MemberSpotlight />
+          </div>
         </div>
-        <Pricing />
-        <Testimonials />
-        <FAQ />
-        <Blog />
-        <CTA />
-      </div>
-      <Footer />
-    </main>
+
+        <CtaBanner />
+      </main>
+    </div>
   );
 }

@@ -22,7 +22,7 @@ export default function Footer() {
             <p className="font-display text-lg font-bold text-ink">
               Xit<span className="text-ledger">.</span>
             </p>
-            <p className="mt-3 max-w-[220px] text-sm text-ink/50">
+            <p className="mt-3 max-w-55 text-sm text-ink/50">
               Bookkeeping that reconciles itself.
             </p>
           </div>
@@ -49,7 +49,10 @@ export default function Footer() {
       </div>
 
       <div className="overflow-hidden border-t border-paper">
-        <p className="translate-y-[18%] select-none text-center font-display font-bold leading-none text-ink/[0.04]" style={{ fontSize: "clamp(5rem, 18vw, 13rem)" }}>
+        <p
+          className="translate-y-[18%] select-none text-center font-display font-bold leading-none text-ink/[0.04]"
+          style={{ fontSize: "clamp(5rem, 18vw, 13rem)" }}
+        >
           Xit.
         </p>
       </div>
