@@ -33,9 +33,9 @@ const leagueGothic = League_Gothic({
 });
 
 export const metadata: Metadata = {
-  title: "Xit — Bookkeeping that reconciles itself",
+  title: "BlackXCross",
   description:
-    "Xit connects your accounts, categorizes every transaction, and closes your books automatically. AI-powered finance for small teams.",
+    "BlackXCross is a modern finance solution for small teams. It connects your accounts, categorizes every transaction, and closes your books automatically.",
 };
 
 export default function RootLayout({

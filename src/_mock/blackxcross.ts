@@ -2,6 +2,7 @@ export type CaseStatus = "COLD CASE" | "OPEN CASE";
 
 export interface CaseFile {
   id: string;
+  image: string;
   caseNumber: string;
   status: CaseStatus;
   title: string;
@@ -13,6 +14,7 @@ export interface CaseFile {
 export const caseFiles: CaseFile[] = [
   {
     id: "alpine-anomaly-team",
+    image: "/image/bg1.jpeg",
     caseNumber: "#CAS-7781",
     status: "COLD CASE",
     title: "The Alpine Anomaly Team",
@@ -22,6 +24,7 @@ export const caseFiles: CaseFile[] = [
   },
   {
     id: "1984-highway-slip",
+    image: "/image/bg1.jpeg",
     caseNumber: "#CAS-5192",
     status: "COLD CASE",
     title: "The 1984 Highway Slip",
@@ -31,6 +34,7 @@ export const caseFiles: CaseFile[] = [
   },
   {
     id: "silent-signal-transmission",
+    image: "/image/bg1.jpeg",
     caseNumber: "#CAS-6621",
     status: "COLD CASE",
     title: "The Silent Signal Transmission",
@@ -41,6 +45,7 @@ export const caseFiles: CaseFile[] = [
   },
   {
     id: "alpine-ridge-disappearance",
+    image: "/image/bg1.jpeg",
     caseNumber: "#CAS-3320",
     status: "COLD CASE",
     title: "The Alpine Ridge Disappearance",
@@ -50,9 +55,21 @@ export const caseFiles: CaseFile[] = [
     ctaLabel: "Open Dossier",
   },
   {
-    id: "hinterkaifeck-murders-revisited",
+    id: "hinterkaifeck-murders-revisited-2",
+    image: "/image/bg1.jpeg",
     caseNumber: "#CAS-9102",
-    status: "OPEN CASE",
+    status: "COLD CASE",
+    title: "Hinterkaifeck Murders Revisited",
+    description:
+      "Re-examining new evidence in the historic unsolved murder case.",
+    theoryCount: 7,
+    ctaLabel: "Join Investigation",
+  },
+  {
+    id: "hinterkaifeck-murders-revisited",
+    image: "/image/bg1.jpeg",
+    caseNumber: "#CAS-9102",
+    status: "COLD CASE",
     title: "Hinterkaifeck Murders Revisited",
     description:
       "Re-examining new evidence in the historic unsolved murder case.",
@@ -103,16 +120,25 @@ export type ActivityIcon = "pin" | "comment" | "attachment" | "message";
 export interface ActivityItem {
   id: string;
   actor: string;
+  avatar: string;
   action: string;
   target: string;
   timeAgo: string;
   icon: ActivityIcon;
   meta?: string;
 }
+export interface SpotlightMember {
+  id: string;
+  name: string;
+  role: string;
+  contributions: number;
+  avatar: string;
+}
 
 export const activityItems: ActivityItem[] = [
   {
     id: "activity-1",
+    avatar: "/image/bg1.jpeg",
     actor: "Alpine Anomaly Team",
     action: "posted an update in",
     target: "Bay Area Cold Case Force",
@@ -121,6 +147,7 @@ export const activityItems: ActivityItem[] = [
   },
   {
     id: "activity-2",
+    avatar: "/image/bg1.jpeg",
     actor: "TrueCrimeJane",
     action: "shared a theory in",
     target: "The Silent Signal Transmission",
@@ -130,6 +157,7 @@ export const activityItems: ActivityItem[] = [
   },
   {
     id: "activity-3",
+    avatar: "/image/bg1.jpeg",
     actor: "ForensicPhil",
     action: "uploaded new evidence in",
     target: "Hinterkaifeck Murders Revisited",
@@ -138,6 +166,7 @@ export const activityItems: ActivityItem[] = [
   },
   {
     id: "activity-4",
+    avatar: "/image/bg1.jpeg",
     actor: "Investigator_X",
     action: "joined the discussion in",
     target: "The 1984 Highway Slip",
@@ -220,12 +249,14 @@ export const memberSpotlight: SpotlightMember[] = [
     name: "Diego Red Tiger",
     role: "Top Contributor",
     contributions: 124,
+    avatar: "/image/bg1.jpeg",
   },
   {
     id: "alexis-stokes",
     name: "Alexis Stokes",
     role: "Rising Investigator",
     contributions: 87,
+    avatar: "/image/bg1.jpeg",
   },
 ];
 

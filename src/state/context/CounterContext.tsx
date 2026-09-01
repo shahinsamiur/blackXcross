@@ -1,5 +1,4 @@
-// src/context/CounterContext.tsx
-"use client"; // required for Next.js app router
+"use client";
 
 import { createContext, useContext, useState, ReactNode } from "react";
 

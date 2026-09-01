@@ -16,8 +16,6 @@ export default function FloatingCard({
 }) {
   const isLeft = side === "left";
 
-  // Feather the photo itself into transparency — top corners soft,
-  // bottom/sides fade out gradually so the page background shows through.
   const maskStyle: React.CSSProperties = {
     WebkitMaskImage: "linear-gradient(to bottom, black 55%, transparent 95%)",
     WebkitMaskSize: "100% 100%",
@@ -48,7 +46,6 @@ export default function FloatingCard({
         }}
         className="relative w-48 md:w-56 lg:w-64"
       >
-        {/* No card box, no bg-white wrapper — the photo fades directly into the page */}
         <div
           className="relative aspect-3/4 w-full rounded-2xl!"
           style={maskStyle}
@@ -61,18 +58,6 @@ export default function FloatingCard({
             </div>
           )}
         </div>
-
-        {/* Caption sits over the fade, no background block behind it */}
-        {/* <div className="relative  px-2 z-10 ">
-          <p
-            className={`text-sm font-medium ${
-              isLeft ? "text-left" : "text-right"
-            }`}
-          >
-            <span className="font-semibold text-gray-900">{name}</span>
-            <span className="text-gray-500">{caption}</span>
-          </p>
-        </div> */}
       </motion.div>
     </motion.div>
   );

@@ -13,7 +13,6 @@ import {
   FiPlus,
   FiSearch,
 } from "react-icons/fi";
-// import SkullIcon from "../../components/icons/SkullIcon";
 import { myGroups, myContacts, sidebarNav } from "../../_mock/blackxcross";
 
 const navIcons = {
@@ -70,7 +69,7 @@ function SidebarContent() {
             >
               <span className="flex h-7 w-7 items-center justify-center rounded-full text-muted bg-red-500"></span>
 
-              <span className="truncate w-7/10 text-foreground/80">
+              <span className="flex-1 truncate text-foreground/80">
                 {group.name}
               </span>
               <span className="flex shrink-0 items-center gap-1.5 text-xs text-foreground/50">
@@ -148,7 +147,7 @@ export default function Sidebar() {
 
   return (
     <>
-      <div className="flex h-16 items-center gap-3 border-b border-border px-6 lg:hidden">
+      <div className="flex h-16 items-center gap-3 border-b border-border px-4 sm:px-6 lg:hidden">
         <button
           type="button"
           aria-label="Toggle navigation"
@@ -157,14 +156,14 @@ export default function Sidebar() {
         >
           {mobileOpen ? <FiX size={22} /> : <FiMenu size={22} />}
         </button>
-        {/* <SkullIcon className="h-6 w-6 text-primary" /> */}
-        <span className="text-lg font-black tracking-wide">BLACK×CROSS</span>
+        <span className="text-base font-black tracking-wide sm:text-lg">
+          BLACK×CROSS
+        </span>
       </div>
 
       <aside className="hidden w-64 shrink-0 border-r border-border lg:flex lg:flex-col xl:w-72">
         <div className="flex h-20 items-center gap-3 border-b border-border px-6">
           <FiMenu size={20} className="text-muted" />
-          {/* <SkullIcon className="h-7 w-7 text-primary" /> */}
           <span className="text-xl font-black tracking-wide">BLACK×CROSS</span>
         </div>
         <SidebarContent />
@@ -178,7 +177,20 @@ export default function Sidebar() {
             className="absolute inset-0 bg-background/80"
             onClick={() => setMobileOpen(false)}
           />
-          <aside className="relative z-50 h-full w-72 border-r border-border bg-background">
+          <aside className="relative z-50 flex h-full w-[85%] max-w-xs flex-col border-r border-border bg-background sm:w-80 md:w-96">
+            <div className="flex h-16 shrink-0 items-center justify-between border-b border-border px-4 sm:h-20 sm:px-6">
+              <span className="text-base font-black tracking-wide sm:text-lg">
+                BLACK×CROSS
+              </span>
+              <button
+                type="button"
+                aria-label="Close navigation"
+                onClick={() => setMobileOpen(false)}
+                className="flex h-9 w-9 items-center justify-center rounded-full text-foreground/80 hover:bg-card hover:text-primary"
+              >
+                <FiX size={20} />
+              </button>
+            </div>
             <SidebarContent />
           </aside>
         </div>

@@ -7,7 +7,6 @@ import CaseCard from "./CaseCard";
 
 export default function CaseCardsRow() {
   const scrollRef = useRef<HTMLDivElement>(null);
-
   const scrollNext = () => {
     scrollRef.current?.scrollBy({ left: 320, behavior: "smooth" });
   };

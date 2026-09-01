@@ -1,4 +1,3 @@
-// src/redux/slices/counterSlice.ts
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 type CounterState = { value: number };

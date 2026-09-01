@@ -1,40 +1,47 @@
-import { FiStar, FiUser } from "react-icons/fi";
+import { FiStar } from "react-icons/fi";
 import { memberSpotlight } from "../../_mock/blackxcross";
+import Image from "next/image";
 
 export default function MemberSpotlight() {
   return (
     <section className="flex flex-col gap-5 rounded-xl border border-border bg-card p-5">
       <div className="flex items-center justify-between">
-        <h2 className="text-sm font-bold tracking-wide text-foreground uppercase">
+        <h2 className="text-sm font-bold tracking-wide text-foreground/80 uppercase">
           Member Spotlight
         </h2>
         <button
           type="button"
-          className="text-xs font-semibold text-primary hover:opacity-80"
+          className="rounded-lg border border-border px-4 py-2 text-xs font-semibold text-foreground/80 hover:bg-primary/10 hover:opacity-90 cursor-pointer"
         >
           View All
         </button>
       </div>
 
-      <div className="grid grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 divide-y divide-border sm:grid-cols-2 sm:divide-x sm:divide-y-0">
         {memberSpotlight.map((member) => (
           <div
             key={member.id}
-            className="flex flex-col items-center gap-2 text-center"
+            className="flex items-center gap-3 py-3 first:pt-0 last:pb-0 sm:px-3 sm:py-0 sm:first:pl-0 sm:first:pt-0 sm:last:pr-0 sm:last:pb-0"
           >
-            <span className="flex h-14 w-14 items-center justify-center rounded-full bg-background text-muted">
-              <FiUser size={22} />
-            </span>
-            <div>
-              <p className="text-sm font-semibold text-primary">
+            <div className="h-12 w-12 shrink-0 overflow-hidden rounded-md border border-border bg-background sm:h-14 sm:w-14">
+              <Image
+                src={member.avatar}
+                alt={member.name}
+                width={112}
+                height={112}
+                className="h-full w-full object-cover"
+              />
+            </div>
+            <div className="flex min-w-0 flex-col gap-0.5">
+              <p className="truncate text-sm font-semibold text-primary">
                 {member.name}
               </p>
               <p className="text-xs text-muted">{member.role}</p>
+              <span className="flex items-center gap-1 text-xs font-medium text-foreground/80">
+                <FiStar size={12} className="text-primary" />
+                {member.contributions} Contributions
+              </span>
             </div>
-            <span className="flex items-center gap-1 text-xs font-medium text-foreground/80">
-              <FiStar size={12} className="text-warning" />
-              {member.contributions} Contributions
-            </span>
           </div>
         ))}
       </div>
