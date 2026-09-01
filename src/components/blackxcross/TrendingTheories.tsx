@@ -11,7 +11,7 @@ export default function TrendingTheories() {
         </h2>
         <button
           type="button"
-          className="rounded-full border border-border px-3 py-1 text-xs font-semibold text-foreground/80 hover:bg-primary/10 hover:opacity-90"
+          className=" text-xs font-semibold text-foreground/80 hover:opacity-90 border border-border px-4 py-2 rounded-lg hover:bg-primary/10 cursor-pointer"
         >
           View All
         </button>
