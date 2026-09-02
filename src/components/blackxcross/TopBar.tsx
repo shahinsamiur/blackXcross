@@ -8,6 +8,7 @@ import {
   FiUser,
   FiSettings,
   FiLogOut,
+  FiMenu,
 } from "react-icons/fi";
 import SkullMark from "../../components/icons/SkullMark";
 import GrungeOverlay from "./GrungeOverlay";
