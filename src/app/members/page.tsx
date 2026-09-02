@@ -1,27 +1,6 @@
 import Link from "next/link";
 import { FiUser } from "react-icons/fi";
-import { memberSpotlight, myContacts } from "../../_mock/blackxcross";
-
-const slugify = (name: string) =>
-  name
-    .toLowerCase()
-    .replace(/[^a-z0-9]+/g, "-")
-    .replace(/(^-|-$)/g, "");
-
-const allMembers = [
-  ...memberSpotlight.map((m) => ({
-    username: slugify(m.name),
-    name: m.name,
-    role: m.role,
-    contributions: m.contributions,
-  })),
-  ...myContacts.map((c, i) => ({
-    username: `${slugify(c.name)}-${i}`,
-    name: c.name,
-    role: c.online ? "Online" : "Offline",
-    contributions: 0,
-  })),
-];
+import { allMembers } from "../../_mock/blackxcross";
 
 export default function MembersPage() {
   return (

@@ -266,3 +266,31 @@ export const sidebarNav = [
   { id: "community-hub", label: "Community Hub", href: "/community" },
   { id: "my-dossier", label: "My Dossier", href: "/dossier" },
 ] as const;
+
+export const slugify = (name: string) =>
+  name
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/(^-|-$)/g, "");
+
+export interface DirectoryMember {
+  username: string;
+  name: string;
+  role: string;
+  contributions: number;
+}
+
+export const allMembers: DirectoryMember[] = [
+  ...memberSpotlight.map((m) => ({
+    username: slugify(m.name),
+    name: m.name,
+    role: m.role,
+    contributions: m.contributions,
+  })),
+  ...myContacts.map((c, i) => ({
+    username: `${slugify(c.name)}-${i}`,
+    name: c.name,
+    role: c.online ? "Online" : "Offline",
+    contributions: 0,
+  })),
+];
