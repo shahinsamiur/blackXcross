@@ -263,6 +263,6 @@ export const memberSpotlight: SpotlightMember[] = [
 export const sidebarNav = [
   { id: "home", label: "Home", href: "/" },
   { id: "archives", label: "Archives", href: "/archives" },
-  { id: "community-hub", label: "Community Hub", href: "/community-hub" },
-  { id: "my-dossier", label: "My Dossier", href: "/my-dossier" },
+  { id: "community-hub", label: "Community Hub", href: "/community" },
+  { id: "my-dossier", label: "My Dossier", href: "/dossier" },
 ] as const;
