@@ -82,7 +82,7 @@ export default function Header() {
   };
 
   return (
-    <header className="relative overflow-hidden bg-background flex-1">
+    <header className="relative  bg-background flex-1">
       <GrungeOverlay />
       <div className="relative flex flex-col gap-6 px-4 py-6 sm:px-6 sm:py-8 lg:flex-row lg:items-start lg:justify-between lg:px-10">
         <div

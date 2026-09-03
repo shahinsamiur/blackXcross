@@ -55,7 +55,7 @@ export default function GroupSettingsPage() {
   };
 
   return (
-    <div className="mx-auto flex max-w-xl flex-col gap-6 px-4 py-6 sm:px-6 lg:px-10">
+    <div className="mx-auto flex w-full flex-col gap-6 px-4 py-6 sm:px-6 lg:px-10">
       <h1 className="font-display text-2xl text-foreground/90">
         Group Settings
       </h1>
