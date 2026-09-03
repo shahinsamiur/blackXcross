@@ -4,10 +4,10 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import * as yup from "yup";
 import { FiSave, FiX } from "react-icons/fi";
-import { Button } from "../../../utils/Button";
-import { useFormErrors } from "../../../hooks/useFormErrors";
-import { caseSchema } from "../../../validations/case.schema";
-import type { CaseStatus } from "../../../_mock/blackxcross";
+import { Button } from "../../../../utils/Button";
+import { useFormErrors } from "../../../../hooks/useFormErrors";
+import { caseSchema } from "../../../../validations/case.schema";
+import type { CaseStatus } from "../../../../_mock/blackxcross";
 
 const initialValues: {
   title: string;

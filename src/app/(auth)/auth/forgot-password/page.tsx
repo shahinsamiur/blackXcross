@@ -26,7 +26,6 @@ export default function ForgotPasswordPage() {
     try {
       await forgotPasswordSchema.validate({ email }, { abortEarly: false });
       clearAllErrors();
-      // Placeholder: no forgot-password API exists yet.
       setSent(true);
     } catch (err) {
       if (err instanceof yup.ValidationError) {

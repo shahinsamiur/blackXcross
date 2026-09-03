@@ -264,7 +264,7 @@ export const sidebarNav = [
   { id: "home", label: "Home", href: "/" },
   { id: "archives", label: "Archives", href: "/archives" },
   { id: "community-hub", label: "Community Hub", href: "/community" },
-  { id: "my-dossier", label: "My Dossier", href: "/dossier" },
+  { id: "my-dossier", label: "My Dossier", href: "/my-dossier" },
 ] as const;
 
 export const slugify = (name: string) =>
