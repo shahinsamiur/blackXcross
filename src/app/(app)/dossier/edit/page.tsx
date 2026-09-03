@@ -4,10 +4,10 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import * as yup from "yup";
 import { FiSave, FiX } from "react-icons/fi";
-import { Button } from "../../../utils/Button";
-import { useFormErrors } from "../../../hooks/useFormErrors";
-import { dossierSchema } from "../../../validations/dossier.schema";
-import ProfileAvatar from "../../../components/blackxcross/ProfileAvatar";
+import { Button } from "../../../../utils/Button";
+import { useFormErrors } from "../../../../hooks/useFormErrors";
+import { dossierSchema } from "../../../../validations/dossier.schema";
+import ProfileAvatar from "../../../../components/blackxcross/ProfileAvatar";
 
 const initialValues = {
   displayName: "Your Name",

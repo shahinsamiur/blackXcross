@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { FiUser } from "react-icons/fi";
-import { allMembers } from "../../_mock/blackxcross";
+import { allMembers } from "../../../_mock/blackxcross";
 
 export default function MembersPage() {
   return (

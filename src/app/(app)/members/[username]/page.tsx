@@ -2,7 +2,7 @@
 
 import { useRouter, useParams } from "next/navigation";
 import { FiUser, FiAward } from "react-icons/fi";
-import { allMembers } from "../../../_mock/blackxcross";
+import { allMembers } from "../../../../_mock/blackxcross";
 
 export default function MemberProfilePage() {
   const router = useRouter();

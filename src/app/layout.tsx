@@ -5,10 +5,7 @@ import {
   IBM_Plex_Mono,
   League_Gothic,
 } from "next/font/google";
-
 import "../styles/globals.css";
-import Sidebar from "../components/blackxcross/Sidebar";
-import TopBar from "../components/blackxcross/TopBar";
 
 const spaceGrotesk = Space_Grotesk({
   subsets: ["latin"],
@@ -36,8 +33,7 @@ const leagueGothic = League_Gothic({
 
 export const metadata: Metadata = {
   title: "BlackXCross",
-  description:
-    "BlackXCross is a modern finance solution for small teams. It connects your accounts, categorizes every transaction, and closes your books automatically.",
+  description: "BlackXCross finance solution",
 };
 
 export default function RootLayout({
@@ -48,26 +44,9 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`
-        ${spaceGrotesk.variable}
-        ${manrope.variable}
-        ${plexMono.variable}
-        ${leagueGothic.variable}
-      `}
+      className={`${spaceGrotesk.variable} ${manrope.variable} ${plexMono.variable} ${leagueGothic.variable}`}
     >
-      <body className="font-body antialiased">
-        <div className="min-h-screen w-full">
-          <div className="flex min-h-screen w-full flex-col lg:flex-row">
-            <Sidebar />
-
-            <main className="min-w-0 flex-1 overflow-x-hidden">
-              <TopBar />
-
-              <div className="w-full">{children}</div>
-            </main>
-          </div>
-        </div>
-      </body>
+      <body className="font-body antialiased">{children}</body>
     </html>
   );
 }

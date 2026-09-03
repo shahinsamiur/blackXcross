@@ -1,7 +1,4 @@
 import { FiBell, FiPaperclip, FiMessageCircle, FiMapPin } from "react-icons/fi";
-
-// Placeholder: mirrors the shape of placeholderNotifications in Header.tsx
-// (which isn't exported) until a real notifications data source exists.
 const notifications = [
   {
     id: "n1",

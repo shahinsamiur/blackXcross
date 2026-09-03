@@ -1,7 +1,7 @@
-import ActivityFeed from "../../components/blackxcross/ActivityFeed";
-import TrendingTheories from "../../components/blackxcross/TrendingTheories";
-import MemberSpotlight from "../../components/blackxcross/MemberSpotlight";
-import { myGroups } from "../../_mock/blackxcross";
+import ActivityFeed from "../../../components/blackxcross/ActivityFeed";
+import TrendingTheories from "../../../components/blackxcross/TrendingTheories";
+import MemberSpotlight from "../../../components/blackxcross/MemberSpotlight";
+import { myGroups } from "../../../_mock/blackxcross";
 import { FiUsers, FiPlus } from "react-icons/fi";
 
 export default function CommunityPage() {

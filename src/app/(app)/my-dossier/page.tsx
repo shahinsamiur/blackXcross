@@ -2,9 +2,9 @@
 
 import Link from "next/link";
 import { FiEdit3, FiUsers, FiFileText } from "react-icons/fi";
-import { caseFiles, myGroups } from "../../_mock/blackxcross";
-import CaseCard from "../../components/blackxcross/CaseCard";
-import ProfileAvatar from "../../components/blackxcross/ProfileAvatar";
+import { caseFiles, myGroups } from "../../../_mock/blackxcross";
+import CaseCard from "../../../components/blackxcross/CaseCard";
+import ProfileAvatar from "../../../components/blackxcross/ProfileAvatar";
 
 const myCaseFiles = caseFiles.slice(0, 3);
 

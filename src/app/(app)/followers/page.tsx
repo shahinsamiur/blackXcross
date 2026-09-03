@@ -1,5 +1,5 @@
 import { FiUser, FiUsers } from "react-icons/fi";
-import { myContacts } from "../../_mock/blackxcross";
+import { myContacts } from "../../../_mock/blackxcross";
 
 const followers = myContacts;
 
