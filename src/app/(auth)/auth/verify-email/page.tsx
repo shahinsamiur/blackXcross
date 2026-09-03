@@ -26,7 +26,6 @@ export default function VerifyEmailPage() {
     try {
       await verifyEmailSchema.validate({ code }, { abortEarly: false });
       clearAllErrors();
-      // Placeholder: no verify-email API exists yet.
       router.push("/auth/login");
     } catch (err) {
       if (err instanceof yup.ValidationError) {

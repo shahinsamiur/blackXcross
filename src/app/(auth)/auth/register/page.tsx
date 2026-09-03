@@ -34,7 +34,6 @@ export default function RegisterPage() {
     try {
       await registerSchema.validate(values, { abortEarly: false });
       clearAllErrors();
-      // Placeholder: no auth/register API exists yet.
       router.push("/auth/verify-email");
     } catch (err) {
       if (err instanceof yup.ValidationError) {

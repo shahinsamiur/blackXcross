@@ -28,7 +28,6 @@ export default function ResetPasswordPage() {
     try {
       await resetPasswordSchema.validate(values, { abortEarly: false });
       clearAllErrors();
-      // Placeholder: no reset-password API exists yet.
       router.push("/auth/login");
     } catch (err) {
       if (err instanceof yup.ValidationError) {

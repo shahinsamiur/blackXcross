@@ -29,7 +29,6 @@ export default function LoginPage() {
     try {
       await loginSchema.validate(values, { abortEarly: false });
       clearAllErrors();
-      // Placeholder: no auth API exists yet.
       router.push("/");
     } catch (err) {
       if (err instanceof yup.ValidationError) {
