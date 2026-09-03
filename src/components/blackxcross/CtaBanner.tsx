@@ -3,7 +3,7 @@ import SkullIcon from "../../components/icons/SkullIcon";
 
 export default function CtaBanner() {
   return (
-    <section className="mx-4 mb-8 flex w-auto flex-col items-center gap-5 rounded-xl border border-primary/30 bg-card p-5 sm:mx-6 sm:flex-row sm:justify-between sm:gap-6 sm:p-6 lg:mx-8">
+    <section className=" mb-8 flex w-auto flex-col items-center gap-5 rounded-xl border border-primary/30 bg-card p-5 sm:mx-6 sm:flex-row sm:justify-between sm:gap-6 sm:p-6 lg:mx-8">
       <div className="flex min-w-0 items-center gap-3 text-center sm:gap-4 sm:text-left">
         <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-primary/10 shadow-[0_0_20px_var(--primary)]/30 sm:h-14 sm:w-14">
           <SkullIcon className="h-6 w-6 text-primary sm:h-8 sm:w-8" />
