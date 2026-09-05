@@ -9,7 +9,7 @@ import {
   FiSettings,
   FiLogOut,
 } from "react-icons/fi";
-import SkullMark from "../../components/icons/SkullMark";
+import SkullMark from "../icons/SkullMark";
 import GrungeOverlay from "./GrungeOverlay";
 import ProfileAvatar from "./ProfileAvatar";
 

@@ -1,5 +1,18 @@
 export type CaseStatus = "COLD CASE" | "OPEN CASE";
 
+export interface CaseEvidenceItem {
+  id: string;
+  label: string;
+  type: "image" | "document" | "audio";
+}
+
+export interface CaseComment {
+  id: string;
+  author: string;
+  text: string;
+  timeAgo: string;
+}
+
 export interface CaseFile {
   id: string;
   image: string;
@@ -9,6 +22,12 @@ export interface CaseFile {
   description: string;
   theoryCount: number;
   ctaLabel: string;
+  narrative?: string;
+  gallery?: string[];
+  location?: string;
+  evidence?: CaseEvidenceItem[];
+  relatedTheoryIds?: string[];
+  comments?: CaseComment[];
 }
 
 export const caseFiles: CaseFile[] = [
@@ -21,6 +40,30 @@ export const caseFiles: CaseFile[] = [
     description: "Unexplained disappearances of hikers in the Alpine region.",
     theoryCount: 14,
     ctaLabel: "Open Dossier",
+    narrative:
+      "In the summer of 1998, a five-person hiking team set out to survey Ridge 4 in the Alpine region and never returned. Search parties recovered camping equipment and a partially destroyed trail camera, but no bodies were ever found. The case resurfaced in community archives after a similar disappearance pattern was noted along the same ridge line decades later.",
+    gallery: ["/image/bg1.jpeg", "/image/hero1.jpg", "/image/hero2.jpg"],
+    location: "Alpine Region, Switzerland",
+    evidence: [
+      { id: "ev-1", label: "Trail camera footage, Ridge 4", type: "image" },
+      { id: "ev-2", label: "Missing persons report (1998)", type: "document" },
+      { id: "ev-3", label: "Radio distress recording", type: "audio" },
+    ],
+    relatedTheoryIds: ["t1"],
+    comments: [
+      {
+        id: "c-1",
+        author: "TrueCrimeJane",
+        text: "The timestamps on the trail camera stills don't line up with the official search log. Worth a second look.",
+        timeAgo: "3 hours ago",
+      },
+      {
+        id: "c-2",
+        author: "ForensicPhil",
+        text: "Requesting the original weather station data for that week if anyone has archive access.",
+        timeAgo: "1 day ago",
+      },
+    ],
   },
   {
     id: "1984-highway-slip",
@@ -31,6 +74,23 @@ export const caseFiles: CaseFile[] = [
     description: "Strange case of a bus disappearance leaving behind no trace.",
     theoryCount: 11,
     ctaLabel: "Open Dossier",
+    narrative:
+      "A passenger bus travelling overnight along an isolated interstate stretch never arrived at its scheduled stop. No wreckage, skid marks, or passenger belongings were ever recovered along the route, despite a multi-agency search. The case has drawn renewed attention after unconfirmed radio chatter from the same period was rediscovered in a decommissioned relay station archive.",
+    gallery: ["/image/bg1.jpeg", "/image/hero2.jpg"],
+    location: "Interstate 40, Nevada",
+    evidence: [
+      { id: "ev-4", label: "Dispatch log, night of the incident", type: "document" },
+      { id: "ev-5", label: "Relay station audio archive", type: "audio" },
+    ],
+    relatedTheoryIds: ["t2"],
+    comments: [
+      {
+        id: "c-3",
+        author: "Investigator_X",
+        text: "The relay station audio and the bus route overlap almost exactly — has anyone cross-referenced the timestamps?",
+        timeAgo: "6 hours ago",
+      },
+    ],
   },
   {
     id: "silent-signal-transmission",
@@ -42,6 +102,29 @@ export const caseFiles: CaseFile[] = [
       "Mysterious radio transmissions received from an unknown source.",
     theoryCount: 26,
     ctaLabel: "Open Dossier",
+    narrative:
+      "Amateur radio operators across three states independently logged an identical, unexplained transmission pattern over a period of six weeks. The signal has never been traced to a licensed source, and its structure has resisted every decoding attempt submitted to the community so far.",
+    gallery: ["/image/bg1.jpeg", "/image/hero1.jpg"],
+    location: "Undisclosed listening post, Pacific Northwest",
+    evidence: [
+      { id: "ev-6", label: "Raw signal recording, week 1", type: "audio" },
+      { id: "ev-7", label: "Operator log compilation", type: "document" },
+    ],
+    relatedTheoryIds: ["t4"],
+    comments: [
+      {
+        id: "c-4",
+        author: "ForensicPhil",
+        text: "Ran the waveform through a basic spectrogram — there's a repeating structure every 47 seconds.",
+        timeAgo: "20 min ago",
+      },
+      {
+        id: "c-5",
+        author: "TrueCrimeJane",
+        text: "Could this just be an old numbers station? Worth ruling out first.",
+        timeAgo: "45 min ago",
+      },
+    ],
   },
   {
     id: "alpine-ridge-disappearance",
@@ -53,6 +136,23 @@ export const caseFiles: CaseFile[] = [
       "A group of friends vanished without a trace during a winter expedition.",
     theoryCount: 9,
     ctaLabel: "Open Dossier",
+    narrative:
+      "Four friends on a planned three-day winter expedition failed to check in at their final waypoint. Their base camp was found intact and undisturbed, with no signs of struggle or a hurried departure, leaving investigators without a clear timeline of what happened after their last radio contact.",
+    gallery: ["/image/bg1.jpeg", "/image/hero2.jpg"],
+    location: "Alpine Ridge, Switzerland",
+    evidence: [
+      { id: "ev-8", label: "Base camp photographs", type: "image" },
+      { id: "ev-9", label: "Final radio check-in transcript", type: "document" },
+    ],
+    relatedTheoryIds: ["t1"],
+    comments: [
+      {
+        id: "c-6",
+        author: "Investigator_X",
+        text: "The intact base camp is the strangest part of this one — no gear was ever missing.",
+        timeAgo: "2 days ago",
+      },
+    ],
   },
   {
     id: "hinterkaifeck-murders-revisited-2",
@@ -64,6 +164,23 @@ export const caseFiles: CaseFile[] = [
       "Re-examining new evidence in the historic unsolved murder case.",
     theoryCount: 7,
     ctaLabel: "Join Investigation",
+    narrative:
+      "One of the most enduring unsolved cases on record, revisited here with newly digitized farm records and witness statements. This investigation group is compiling cross-referenced timelines from archival sources to re-examine long-standing assumptions about the case.",
+    gallery: ["/image/bg1.jpeg", "/image/hero1.jpg"],
+    location: "Hinterkaifeck Farm, Bavaria, Germany",
+    evidence: [
+      { id: "ev-10", label: "Digitized farm ledger pages", type: "document" },
+      { id: "ev-11", label: "Witness statement transcripts", type: "document" },
+    ],
+    relatedTheoryIds: ["t3"],
+    comments: [
+      {
+        id: "c-7",
+        author: "ForensicPhil",
+        text: "Uploaded the newly digitized ledger pages — footfall pattern near the barn entry is worth discussing.",
+        timeAgo: "1 hour ago",
+      },
+    ],
   },
   {
     id: "hinterkaifeck-murders-revisited",
@@ -75,6 +192,23 @@ export const caseFiles: CaseFile[] = [
       "Re-examining new evidence in the historic unsolved murder case.",
     theoryCount: 7,
     ctaLabel: "Join Investigation",
+    narrative:
+      "One of the most enduring unsolved cases on record, revisited here with newly digitized farm records and witness statements. This investigation group is compiling cross-referenced timelines from archival sources to re-examine long-standing assumptions about the case.",
+    gallery: ["/image/bg1.jpeg", "/image/hero1.jpg"],
+    location: "Hinterkaifeck Farm, Bavaria, Germany",
+    evidence: [
+      { id: "ev-12", label: "Digitized farm ledger pages", type: "document" },
+      { id: "ev-13", label: "Witness statement transcripts", type: "document" },
+    ],
+    relatedTheoryIds: ["t3"],
+    comments: [
+      {
+        id: "c-8",
+        author: "ForensicPhil",
+        text: "Uploaded the newly digitized ledger pages — footfall pattern near the barn entry is worth discussing.",
+        timeAgo: "1 hour ago",
+      },
+    ],
   },
 ];
 

@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { FiArrowRight } from "react-icons/fi";
 import type { CaseFile } from "../../_mock/blackxcross";
 
@@ -45,13 +46,13 @@ export default function CaseCard({ caseFile }: { caseFile: CaseFile }) {
       </div>
 
       <div className="mt-auto flex items-center justify-between gap-2 pt-2">
-        <button
-          type="button"
-          className="flex shrink-0 items-center gap-1.5 text-sm font-semibold text-primary hover:opacity-80 cursor-pointer"
+        <Link
+          href={`/cases/${caseFile.id}`}
+          className="flex shrink-0 items-center gap-1.5 text-sm font-semibold text-primary hover:opacity-80"
         >
           {caseFile.ctaLabel}
           <FiArrowRight size={14} />
-        </button>
+        </Link>
 
         <span className="shrink-0 text-xs text-muted">
           {caseFile.theoryCount} Theories

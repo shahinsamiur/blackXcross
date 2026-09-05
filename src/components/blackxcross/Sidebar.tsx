@@ -112,13 +112,14 @@ function SidebarContent() {
         </ul>
       </div>
 
-      <button
+      <Link
+        href="/groups/create"
         type="button"
         className="flex items-center justify-center gap-2 rounded-lg border border-border px-4 py-2.5 text-sm font-medium text-foreground/80 hover:border-primary/40 hover:text-primary"
       >
         <FiPlus size={16} />
         Start New Group
-      </button>
+      </Link>
 
       <label className="relative flex items-center">
         <FiSearch
