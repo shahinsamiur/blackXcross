@@ -25,7 +25,7 @@ export default function AdminCommentsPage() {
   const [comments, setComments] = useState<AdminComment[]>(initialComments);
   const [query, setQuery] = useState("");
   const [statusFilter, setStatusFilter] = useState<AdminCommentStatus | "All">(
-    "All"
+    "All",
   );
 
   const toggleVisibility = (id: string) => {
@@ -33,8 +33,8 @@ export default function AdminCommentsPage() {
       prev.map((c) =>
         c.id === id
           ? { ...c, status: c.status === "Hidden" ? "Visible" : "Hidden" }
-          : c
-      )
+          : c,
+      ),
     );
   };
 
@@ -93,14 +93,16 @@ export default function AdminCommentsPage() {
           {filteredComments.map((comment, i) => (
             <li
               key={comment.id}
-              className={`flex items-start justify-between gap-3 p-4 ${
+              className={`flex w-full! items-start! justify-between! gap-4 p-4 transition-colors  hover:bg-white/2 ${
+                comment.status === "Hidden" ? "opacity-60" : ""
+              } ${
                 i !== filteredComments.length - 1
                   ? "border-b border-border"
                   : ""
               }`}
             >
-              <div className="flex flex-col gap-1">
-                <div className="flex items-center gap-2">
+              <div className="flex min-w-0 flex-col gap-1 ">
+                <div className="flex flex-wrap items-center gap-2">
                   <span className="text-sm font-semibold text-foreground/90">
                     {comment.author}
                   </span>
@@ -108,7 +110,7 @@ export default function AdminCommentsPage() {
                     on {comment.caseLabel} · {comment.postedAt}
                   </span>
                 </div>
-                <p className="text-sm leading-relaxed text-muted">
+                <p className="text-sm leading-relaxed text-foreground/70">
                   {comment.text}
                 </p>
               </div>
@@ -127,7 +129,7 @@ export default function AdminCommentsPage() {
                       ? "Show comment"
                       : "Hide comment"
                   }
-                  className="flex h-8 w-8 items-center justify-center rounded-lg border border-border text-foreground/80 hover:border-primary/40 hover:text-primary"
+                  className="flex h-8 w-8 items-center justify-center rounded-lg border border-border text-foreground/80 transition-colors hover:border-primary/40 hover:bg-primary/10 hover:text-primary"
                 >
                   {comment.status === "Hidden" ? (
                     <FiEye size={14} />

@@ -24,14 +24,14 @@ export default function AdminSettingsPage() {
   };
 
   return (
-    <div className="flex w-full flex-col gap-6">
+    <div className="flex w-full flex-col gap-6 ">
       <h1 className="text-xl font-semibold text-foreground sm:text-2xl">
         Settings
       </h1>
 
       <form
         onSubmit={handleSave}
-        className="flex w-full max-w-2xl flex-col gap-6 rounded-xl border border-border bg-card p-5 sm:p-6"
+        className="flex w-full flex-col gap-6 rounded-xl border border-border p-5 sm:p-6"
       >
         <div>
           <label

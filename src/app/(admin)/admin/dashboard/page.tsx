@@ -1,10 +1,5 @@
 import Link from "next/link";
-import {
-  FiUsers,
-  FiFileText,
-  FiFlag,
-  FiAlertTriangle,
-} from "react-icons/fi";
+import { FiUsers, FiFileText, FiFlag, FiAlertTriangle } from "react-icons/fi";
 import {
   analyticsOverview,
   adminReports,
@@ -90,11 +85,11 @@ export default function AdminDashboardPage() {
               View All
             </Link>
           </div>
-          <ul className="flex flex-col">
+          <ul className="flex w-full flex-col">
             {recentReports.map((report, i) => (
               <li
                 key={report.id}
-                className={`flex items-center justify-between gap-3 py-3 ${
+                className={`flex w-full items-start justify-between! gap-3 py-3  ${
                   i !== recentReports.length - 1 ? "border-b border-border" : ""
                 }`}
               >
@@ -126,11 +121,11 @@ export default function AdminDashboardPage() {
               View All
             </Link>
           </div>
-          <ul className="flex flex-col">
+          <ul className="flex w-full flex-col">
             {recentFlags.map((item, i) => (
               <li
                 key={item.id}
-                className={`flex items-center justify-between gap-3 py-3 ${
+                className={`flex w-full items-center justify-between! gap-3 py-3 ${
                   i !== recentFlags.length - 1 ? "border-b border-border" : ""
                 }`}
               >

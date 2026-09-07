@@ -65,11 +65,11 @@ function SidebarContent() {
           {myGroups.map((group) => (
             <li
               key={group.id}
-              className="flex items-center! justify-between! text-sm text-foreground/90 w-full"
+              className="flex items-center! justify-between! gap-2 text-sm text-foreground/90 w-full"
             >
-              <span className="flex h-7 w-7 items-center justify-center rounded-full text-muted bg-red-500"></span>
+              <span className="flex h-7 w-7 items-center justify-center rounded-full text-muted bg-card border border-gray-800"></span>
 
-              <span className="flex-1 truncate text-foreground/80">
+              <span className="flex-1 truncate text-foreground/80  text-nowrap ">
                 {group.name}
               </span>
               <span className="flex shrink-0 items-center gap-1.5 text-xs text-foreground/50">

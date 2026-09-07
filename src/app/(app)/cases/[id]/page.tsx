@@ -286,22 +286,27 @@ export default function CaseDetailsPage() {
                 {relatedTheories.map((theory, i) => (
                   <li
                     key={theory.id}
-                    className={`flex items-center gap-3 py-3 ${
+                    className={`${
                       i !== relatedTheories.length - 1
                         ? "border-b border-border"
                         : ""
                     }`}
                   >
-                    <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-primary/10 text-primary">
-                      <FaFire size={16} />
-                    </span>
-                    <p className="flex-1 text-sm leading-snug text-foreground/90">
-                      {theory.text}
-                    </p>
-                    <span className="flex shrink-0 items-center gap-1 text-xs font-medium text-muted">
-                      <FiThumbsUp size={12} />
-                      {theory.likes}
-                    </span>
+                    <Link
+                      href={`/cases/${caseFile.id}/theories/${theory.id}`}
+                      className="flex items-center gap-3 py-3 transition-colors hover:text-primary"
+                    >
+                      <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-primary/10 text-primary">
+                        <FaFire size={16} />
+                      </span>
+                      <p className="flex-1 text-sm leading-snug text-foreground/90">
+                        {theory.text}
+                      </p>
+                      <span className="flex shrink-0 items-center gap-1 text-xs font-medium text-muted">
+                        <FiThumbsUp size={12} />
+                        {theory.likes}
+                      </span>
+                    </Link>
                   </li>
                 ))}
               </ul>

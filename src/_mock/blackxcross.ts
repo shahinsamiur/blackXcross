@@ -28,6 +28,7 @@ export interface CaseFile {
   evidence?: CaseEvidenceItem[];
   relatedTheoryIds?: string[];
   comments?: CaseComment[];
+  submittedAt: string;
 }
 
 export const caseFiles: CaseFile[] = [
@@ -63,7 +64,9 @@ export const caseFiles: CaseFile[] = [
         text: "Requesting the original weather station data for that week if anyone has archive access.",
         timeAgo: "1 day ago",
       },
+      
     ],
+    submittedAt: "2026-06-02",
   },
   {
     id: "1984-highway-slip",
@@ -91,6 +94,7 @@ export const caseFiles: CaseFile[] = [
         timeAgo: "6 hours ago",
       },
     ],
+    submittedAt: "2026-06-02",
   },
   {
     id: "silent-signal-transmission",
@@ -125,6 +129,7 @@ export const caseFiles: CaseFile[] = [
         timeAgo: "45 min ago",
       },
     ],
+    submittedAt: "2026-06-02",
   },
   {
     id: "alpine-ridge-disappearance",
@@ -153,6 +158,7 @@ export const caseFiles: CaseFile[] = [
         timeAgo: "2 days ago",
       },
     ],
+    submittedAt: "2026-06-02",
   },
   {
     id: "hinterkaifeck-murders-revisited-2",
@@ -181,6 +187,7 @@ export const caseFiles: CaseFile[] = [
         timeAgo: "1 hour ago",
       },
     ],
+    submittedAt: "2026-06-02",
   },
   {
     id: "hinterkaifeck-murders-revisited",
@@ -209,6 +216,7 @@ export const caseFiles: CaseFile[] = [
         timeAgo: "1 hour ago",
       },
     ],
+    submittedAt: "2026-06-02",
   },
 ];
 
@@ -347,26 +355,93 @@ export const mapMarkers: MapMarker[] = [
 
 export interface TrendingTheory {
   id: string;
+  caseId: string;
   text: string;
+  body: string;
+  author: string;
+  postedAt: string;
   likes: number;
+  comments?: CaseComment[];
 }
 
 export const trendingTheories: TrendingTheory[] = [
-  { id: "t1", text: "The connection between unsolved Alpine cases", likes: 92 },
+  {
+    id: "t1",
+    caseId: "alpine-anomaly-team",
+    text: "The connection between unsolved Alpine cases",
+    body:
+      "Cross-referencing search-party logs from both Alpine disappearances shows the same ridge line was flagged as 'unstable terrain, avoid after dusk' in two separate expedition briefings, six years apart. Neither case's official report mentions this warning existed prior to the incident. If the same routing hazard was known and undocumented twice, it raises the question of whether these are isolated disappearances or a recurring pattern tied to the terrain itself rather than coincidence.",
+    author: "TrueCrimeJane",
+    postedAt: "2 days ago",
+    likes: 92,
+    comments: [
+      {
+        id: "tc-1",
+        author: "ForensicPhil",
+        text: "Do we have the original briefing documents, or just secondhand references to them?",
+        timeAgo: "1 day ago",
+      },
+      {
+        id: "tc-2",
+        author: "Investigator_X",
+        text: "I can request the archive copies from the ranger station next week.",
+        timeAgo: "20 hours ago",
+      },
+    ],
+  },
   {
     id: "t2",
+    caseId: "1984-highway-slip",
     text: "Possible link between 1984 bus incident and radio signals",
+    body:
+      "The rediscovered relay station audio archive contains an unidentified transmission logged less than an hour before the bus's last confirmed radio check-in. The frequency doesn't match any known dispatch channel for that route. This theory proposes the transmission may have been a rerouting instruction the driver mistook for legitimate dispatch, which would explain the total absence of wreckage along the expected path.",
+    author: "Investigator_X",
+    postedAt: "6 hours ago",
     likes: 68,
+    comments: [
+      {
+        id: "tc-3",
+        author: "TrueCrimeJane",
+        text: "Has anyone confirmed the relay station's transmission range actually reached that stretch of the interstate?",
+        timeAgo: "4 hours ago",
+      },
+    ],
   },
   {
     id: "t3",
+    caseId: "hinterkaifeck-murders-revisited",
     text: "New evidence in Hinterkaifeck case changes everything",
+    body:
+      "The newly digitized farm ledger pages show a payment entry dated four days after the presumed date of the murders, recorded in a hand that doesn't match the household's known signatures. Combined with the witness statement transcripts describing smoke from the chimney days after the family was believed dead, this raises the possibility of an extended timeline that existing theories haven't accounted for.",
+    author: "ForensicPhil",
+    postedAt: "1 hour ago",
     likes: 53,
+    comments: [
+      {
+        id: "tc-4",
+        author: "Investigator_X",
+        text: "Handwriting comparison would be huge if it holds up — is the ledger page scan public yet?",
+        timeAgo: "40 min ago",
+      },
+    ],
   },
   {
     id: "t4",
+    caseId: "silent-signal-transmission",
     text: "Could the Silent Signal be a military project?",
+    body:
+      "The repeating 47-second structure identified in the spectrogram analysis is consistent with known numbers-station cadences, but the frequency band doesn't match any publicly documented military or intelligence broadcast range from the relevant period. This theory doesn't claim a definitive military origin, but argues the signal's structure is too deliberate to be incidental interference, and proposes cross-referencing declassified frequency allocations as a next step.",
+    author: "ForensicPhil",
+    postedAt: "20 min ago",
     likes: 47,
+    comments: [
+      {
+        id: "tc-5",
+        author: "TrueCrimeJane",
+        text: "Worth ruling out an old numbers station first before jumping to military.",
+        timeAgo: "10 min ago",
+      },
+    ],
   },
 ];
 
