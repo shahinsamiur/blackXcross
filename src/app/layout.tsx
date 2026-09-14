@@ -6,7 +6,7 @@ import {
   League_Gothic,
 } from "next/font/google";
 import "../styles/globals.css";
-
+import StateWraper from "../state/stateWraper";
 const spaceGrotesk = Space_Grotesk({
   subsets: ["latin"],
   weight: ["500", "600", "700"],
@@ -46,7 +46,11 @@ export default function RootLayout({
       lang="en"
       className={`${spaceGrotesk.variable} ${manrope.variable} ${plexMono.variable} ${leagueGothic.variable}`}
     >
-      <body className="font-body antialiased">{children}</body>
+      <body className="font-body antialiased">
+        <StateWraper >
+        {children}
+        </StateWraper>
+        </body>
     </html>
   );
 }

@@ -2,14 +2,38 @@
 
 import { useRef } from "react";
 import { FiChevronRight } from "react-icons/fi";
-import { caseFiles } from "../../_mock/blackxcross";
 import CaseCard from "./CaseCard";
 
-export default function CaseCardsRow() {
+interface CaseCardsRowProps {
+  cases: any[]; 
+  isLoading?: boolean;
+}
+
+export default function CaseCardsRow({ cases, isLoading }: CaseCardsRowProps) {
   const scrollRef = useRef<HTMLDivElement>(null);
   const scrollNext = () => {
     scrollRef.current?.scrollBy({ left: 320, behavior: "smooth" });
   };
+
+  if (isLoading) {
+    return (
+      <div className="relative px-4 pb-8 sm:px-6 lg:px-8">
+        <div className="flex snap-x snap-mandatory gap-4 overflow-x-auto pb-2 scrollbar-none [&::-webkit-scrollbar]:hidden">
+          {[...Array(4)].map((_, i) => (
+            <div key={i} className="h-64 w-80 shrink-0 animate-pulse rounded-xl bg-muted" />
+          ))}
+        </div>
+      </div>
+    );
+  }
+
+  if (!cases || cases.length === 0) {
+    return (
+      <div className="px-4 pb-8 text-center text-muted sm:px-6 lg:px-8">
+        No recent cases found.
+      </div>
+    );
+  }
 
   return (
     <div className="relative px-4 pb-8 sm:px-6 lg:px-8">
@@ -17,7 +41,7 @@ export default function CaseCardsRow() {
         ref={scrollRef}
         className="flex snap-x snap-mandatory gap-4 overflow-x-auto pb-2 scrollbar-none [&::-webkit-scrollbar]:hidden"
       >
-        {caseFiles.map((caseFile) => (
+        {cases.map((caseFile) => (
           <CaseCard key={caseFile.id} caseFile={caseFile} />
         ))}
       </div>
