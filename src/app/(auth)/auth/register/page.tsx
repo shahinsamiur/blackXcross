@@ -8,6 +8,8 @@ import { FiUserPlus } from "react-icons/fi";
 import { Button } from "../../../../utils/Button";
 import { useFormErrors } from "../../../../hooks/useFormErrors";
 import { registerSchema } from "../../../../validations/register.schema";
+import { useRegisterMutation } from "../../../../state/redux/api/auth";
+import PasswordInput from "../../../../components/ui/PasswordInput";
 
 const initialValues = {
   name: "",
@@ -19,32 +21,39 @@ const initialValues = {
 export default function RegisterPage() {
   const router = useRouter();
   const [values, setValues] = useState(initialValues);
-  const [submitting, setSubmitting] = useState(false);
-  const { errors, setMultipleErrors, clearError, clearAllErrors } =
-    useFormErrors();
+  const { errors, setMultipleErrors, clearError, clearAllErrors } = useFormErrors();
+  
+  const [register, { isLoading: isRegistering }] = useRegisterMutation();
 
   const handleChange = (field: keyof typeof values, value: string) => {
     setValues((prev) => ({ ...prev, [field]: value }));
     clearError(field);
+    clearError("general");
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setSubmitting(true);
     try {
       await registerSchema.validate(values, { abortEarly: false });
       clearAllErrors();
+      
+      await register(values).unwrap();
       router.push("/auth/verify-email");
-    } catch (err) {
+    } catch (err: any) {
       if (err instanceof yup.ValidationError) {
         const fieldErrors: Record<string, string> = {};
-        err.inner.forEach((e) => {
+        err.inner.forEach((e: any) => {
           if (e.path) fieldErrors[e.path] = e.message;
         });
         setMultipleErrors(fieldErrors);
+      } else {
+        const errorMessage = err.data?.message || err.message || "Registration failed.";
+        if (errorMessage.toLowerCase().includes("email")) {
+          setMultipleErrors({ email: errorMessage });
+        } else {
+          setMultipleErrors({ general: errorMessage });
+        }
       }
-    } finally {
-      setSubmitting(false);
     }
   };
 
@@ -56,6 +65,12 @@ export default function RegisterPage() {
       <h1 className="text-center text-xl font-semibold text-foreground sm:text-2xl">
         Create Account
       </h1>
+
+      {errors.general && (
+        <div className="rounded-lg border border-destructive/20 bg-destructive/5 p-3 text-sm text-destructive">
+          {errors.general}
+        </div>
+      )}
 
       <div>
         <label
@@ -72,7 +87,7 @@ export default function RegisterPage() {
           className="w-full rounded-lg border border-border bg-background px-3 py-2.5 text-sm text-foreground placeholder:text-muted focus:border-primary/50 focus:outline-none"
         />
         {errors.name && (
-          <p className="mt-1 text-xs text-primary">{errors.name}</p>
+          <p className="mt-1 text-xs text-destructive">{errors.name}</p>
         )}
       </div>
 
@@ -92,7 +107,7 @@ export default function RegisterPage() {
           placeholder="you@example.com"
         />
         {errors.email && (
-          <p className="mt-1 text-xs text-primary">{errors.email}</p>
+          <p className="mt-1 text-xs text-destructive">{errors.email}</p>
         )}
       </div>
 
@@ -103,16 +118,13 @@ export default function RegisterPage() {
         >
           Password
         </label>
-        <input
+        <PasswordInput
           id="password"
-          type="password"
           value={values.password}
           onChange={(e) => handleChange("password", e.target.value)}
-          className="w-full rounded-lg border border-border bg-background px-3 py-2.5 text-sm text-foreground placeholder:text-muted focus:border-primary/50 focus:outline-none"
+          error={errors.password}
+          placeholder="••••••••"
         />
-        {errors.password && (
-          <p className="mt-1 text-xs text-primary">{errors.password}</p>
-        )}
       </div>
 
       <div>
@@ -122,25 +134,22 @@ export default function RegisterPage() {
         >
           Confirm Password
         </label>
-        <input
+        <PasswordInput
           id="confirmPassword"
-          type="password"
           value={values.confirmPassword}
           onChange={(e) => handleChange("confirmPassword", e.target.value)}
-          className="w-full rounded-lg border border-border bg-background px-3 py-2.5 text-sm text-foreground placeholder:text-muted focus:border-primary/50 focus:outline-none"
+          error={errors.confirmPassword}
+          placeholder="••••••••"
         />
-        {errors.confirmPassword && (
-          <p className="mt-1 text-xs text-primary">{errors.confirmPassword}</p>
-        )}
       </div>
 
       <Button
         type="submit"
-        disabled={submitting}
+        disabled={isRegistering}
         className="flex items-center justify-center gap-2 rounded-lg bg-primary px-4 py-2.5 text-sm font-semibold text-foreground hover:opacity-90 disabled:opacity-60"
       >
         <FiUserPlus size={16} />
-        {submitting ? "Creating account..." : "Create Account"}
+        {isRegistering ? "Creating account..." : "Create Account"}
       </Button>
 
       <p className="text-center text-sm text-muted">

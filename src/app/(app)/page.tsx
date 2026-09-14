@@ -6,7 +6,7 @@ import ActivityFeed from "../../components/blackxcross/ActivityFeed";
 import InvestigationsMap from "../../components/blackxcross/InvestigationsMap";
 import TrendingTheories from "../../components/blackxcross/TrendingTheories";
 import CtaBanner from "../../components/blackxcross/CtaBanner";
-import { useGetDashboardQuery } from "../../state/redux/api";
+import { useGetDashboardQuery } from "../../state/redux/api/dashboard";
 import type { FetchBaseQueryError } from "@reduxjs/toolkit/query";
 import type { SerializedError } from "@reduxjs/toolkit";
 

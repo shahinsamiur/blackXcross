@@ -1,6 +1,6 @@
 import { FaFire } from "react-icons/fa6";
 import { FiThumbsUp } from "react-icons/fi";
-import type { DashboardTheory } from "@/src/state/redux/api";
+import type { DashboardTheory } from "@/src/state/redux/api/dashboard";
 
 interface TrendingTheoriesProps {
   theories: DashboardTheory[];

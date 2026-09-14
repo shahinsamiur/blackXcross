@@ -1,9 +1,16 @@
 import Link from "next/link";
 import { FiArrowRight } from "react-icons/fi";
-import type { CaseFile } from "../../_mock/blackxcross";
+import type { CaseItem } from "../../state/redux/api";
 
-export default function CaseCard({ caseFile }: { caseFile: CaseFile }) {
-  const isOpen = caseFile.status === "OPEN CASE";
+export default function CaseCard({ caseFile }: { caseFile: CaseItem }) {
+  const isOpen = caseFile.investigationStatus === "OPEN";
+
+  const displayStatus =
+    caseFile.investigationStatus === "COLD"
+      ? "COLD CASE"
+      : caseFile.investigationStatus === "OPEN"
+        ? "OPEN CASE"
+        : caseFile.investigationStatus || "UNKNOWN";
 
   return (
     <article
@@ -15,7 +22,7 @@ export default function CaseCard({ caseFile }: { caseFile: CaseFile }) {
             rgba(0, 0, 0, 0.8),
             rgba(0, 0, 0, 1)
           ),
-          url(${caseFile.image})
+          url(${caseFile.imageUrl || "/image/hero1.jpg"})
         `,
       }}
     >
@@ -27,11 +34,11 @@ export default function CaseCard({ caseFile }: { caseFile: CaseFile }) {
               : "bg-primary/10 border border-primary text-primary"
           }`}
         >
-          {caseFile.status}
+          {displayStatus}
         </span>
 
         <span className="shrink-0 text-xs font-medium text-muted">
-          {caseFile.caseNumber}
+          {caseFile.caseNumber || `#${caseFile.id.slice(0, 6)}`}
         </span>
       </div>
 
@@ -40,7 +47,7 @@ export default function CaseCard({ caseFile }: { caseFile: CaseFile }) {
           {caseFile.title}
         </h3>
 
-        <p className="text-sm leading-relaxed text-muted">
+        <p className="text-sm leading-relaxed text-muted line-clamp-3">
           {caseFile.description}
         </p>
       </div>
@@ -50,12 +57,12 @@ export default function CaseCard({ caseFile }: { caseFile: CaseFile }) {
           href={`/cases/${caseFile.id}`}
           className="flex shrink-0 items-center gap-1.5 text-sm font-semibold text-primary hover:opacity-80"
         >
-          {caseFile.ctaLabel}
+          View Case
           <FiArrowRight size={14} />
         </Link>
 
         <span className="shrink-0 text-xs text-muted">
-          {caseFile.theoryCount} Theories
+          {caseFile._count?.theories || 0} Theories
         </span>
       </div>
     </article>

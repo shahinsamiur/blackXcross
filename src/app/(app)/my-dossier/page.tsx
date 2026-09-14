@@ -2,21 +2,57 @@
 
 import Link from "next/link";
 import { FiEdit3, FiUsers, FiFileText } from "react-icons/fi";
-import { caseFiles, myGroups } from "../../../_mock/blackxcross";
+import { myGroups } from "../../../_mock/blackxcross"; 
 import CaseCard from "../../../components/blackxcross/CaseCard";
 import ProfileAvatar from "../../../components/blackxcross/ProfileAvatar";
+import { useGetUserQuery, useGetUserCasesQuery } from "../../../state/redux/api/users";
 
-const myCaseFiles = caseFiles.slice(0, 3);
+const CURRENT_USER_ID = "current-user-id-placeholder"; 
+
+const SkeletonCaseCard = () => (
+  <div className="flex w-60 shrink-0 snap-start flex-col gap-8 rounded-xl border border-border bg-card p-5 px-3 sm:w-72 sm:gap-10 sm:px-4 md:w-92 animate-pulse">
+    <div className="flex items-center justify-between gap-2">
+      <div className="h-5 w-20 rounded-md bg-muted" />
+      <div className="h-4 w-12 rounded bg-muted" />
+    </div>
+    <div className="flex flex-col gap-6 sm:gap-10">
+      <div className="h-6 w-3/4 rounded bg-muted" />
+      <div className="h-4 w-full rounded bg-muted" />
+      <div className="h-4 w-5/6 rounded bg-muted" />
+    </div>
+    <div className="mt-auto flex items-center justify-between gap-2 pt-2">
+      <div className="h-5 w-20 rounded bg-muted" />
+      <div className="h-4 w-16 rounded bg-muted" />
+    </div>
+  </div>
+);
 
 export default function DossierPage() {
+  const { data: user, isLoading: isUserLoading } = useGetUserQuery(CURRENT_USER_ID);
+  const { data: casesData, isLoading: isCasesLoading } = useGetUserCasesQuery(CURRENT_USER_ID);
+  
+  const myCaseFiles = casesData?.items || [];
+
   return (
     <div className="flex w-full flex-col gap-6 px-4 pb-8 sm:px-6 lg:px-8">
       <section className="flex flex-col gap-4 rounded-xl border border-border bg-card p-5 sm:flex-row sm:items-center sm:justify-between sm:p-6">
         <div className="flex items-center gap-4">
-          <ProfileAvatar src="/image/hero1.jpg" alt="Your profile" size={64} />
+          {isUserLoading ? (
+            <div className="h-16 w-16 animate-pulse rounded-full bg-muted" />
+          ) : (
+            <ProfileAvatar 
+              src={user?.avatarUrl || "/image/hero1.jpg"} 
+              alt={user?.username || "Your profile"} 
+              size={64} 
+            />
+          )}
           <div className="flex flex-col gap-1">
             <h1 className="text-xl font-semibold text-foreground sm:text-2xl">
-              My Dossier
+              {isUserLoading ? (
+                <div className="h-6 w-32 animate-pulse rounded bg-muted" />
+              ) : (
+                "My Dossier"
+              )}
             </h1>
             <p className="text-sm text-muted">
               {myCaseFiles.length} case files &middot; {myGroups.length} groups
@@ -41,7 +77,13 @@ export default function DossierPage() {
           </h2>
         </div>
 
-        {myCaseFiles.length > 0 ? (
+        {isCasesLoading ? (
+          <div className="flex w-full snap-x gap-4 overflow-x-auto pb-2">
+            {Array.from({ length: 3 }).map((_, i) => (
+              <SkeletonCaseCard key={i} />
+            ))}
+          </div>
+        ) : myCaseFiles.length > 0 ? (
           <div className="flex w-full snap-x gap-4 overflow-x-auto pb-2">
             {myCaseFiles.map((caseFile) => (
               <CaseCard key={caseFile.id} caseFile={caseFile} />

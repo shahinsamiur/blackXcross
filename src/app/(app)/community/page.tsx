@@ -1,9 +1,32 @@
+"use client";
+
 import ActivityFeed from "../../../components/blackxcross/ActivityFeed";
 import TrendingTheories from "../../../components/blackxcross/TrendingTheories";
-import { myGroups } from "../../../_mock/blackxcross";
 import { FiUsers, FiPlus } from "react-icons/fi";
+import { useGetGroupsQuery } from "../../../state/redux/api/groups";
+import { useGetDashboardQuery } from "../../../state/redux/api/dashboard";
+
+const SkeletonGroupItem = () => (
+  <li className="flex items-center justify-between rounded-lg border border-border bg-card p-4 animate-pulse">
+    <div className="h-4 w-3/4 rounded bg-muted" />
+    <div className="h-3 w-10 rounded bg-muted" />
+  </li>
+);
 
 export default function CommunityPage() {
+  const { 
+    data: groupsData, 
+    isLoading: isGroupsLoading, 
+    error: groupsError 
+  } = useGetGroupsQuery();
+
+  const { 
+    data: dashboardData, 
+    isLoading: isDashboardLoading 
+  } = useGetDashboardQuery();
+  
+  const groups = groupsData?.items || [];
+
   return (
     <div className="flex w-full flex-col gap-8 px-4 pb-10 sm:px-6 lg:px-8">
       <style>{`
@@ -30,10 +53,16 @@ export default function CommunityPage() {
 
       <div className="community-reveal grid w-full grid-cols-1 gap-5 lg:grid-cols-3">
         <div className="min-w-0 lg:col-span-2">
-          <ActivityFeed />
+          <ActivityFeed 
+            activities={dashboardData?.recentActivity || []} 
+            isLoading={isDashboardLoading} 
+          />
         </div>
         <div className="flex min-w-0 flex-col gap-4">
-          <TrendingTheories />
+          <TrendingTheories 
+            theories={dashboardData?.trendingTheories || []} 
+            isLoading={isDashboardLoading} 
+          />
         </div>
       </div>
 
@@ -58,20 +87,32 @@ export default function CommunityPage() {
         </div>
 
         <ul className="grid w-full grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
-          {myGroups.map((group) => (
-            <li
-              key={group.id}
-              className="group flex items-center justify-between rounded-lg border border-border bg-card p-4 text-sm text-foreground/90 transition-all duration-200 hover:-translate-y-0.5 hover:border-primary/30 hover:shadow-lg hover:shadow-black/20"
-            >
-              <span className="truncate transition-colors group-hover:text-foreground">
-                {group.name}
-              </span>
-              <span className="flex shrink-0 items-center gap-1.5 text-xs text-foreground/50">
-                <span className="h-1.5 w-1.5 rounded-full bg-success" />
-                {group.memberCount}
-              </span>
+          {isGroupsLoading ? (
+            Array.from({ length: 6 }).map((_, i) => <SkeletonGroupItem key={i} />)
+          ) : groupsError ? (
+            <li className="col-span-full flex items-center justify-center rounded-lg border border-destructive/20 bg-destructive/5 p-4 text-sm text-destructive">
+              Failed to load groups. Please try again later.
             </li>
-          ))}
+          ) : groups.length > 0 ? (
+            groups.map((group) => (
+              <li
+                key={group.id}
+                className="group flex items-center justify-between rounded-lg border border-border bg-card p-4 text-sm text-foreground/90 transition-all duration-200 hover:-translate-y-0.5 hover:border-primary/30 hover:shadow-lg hover:shadow-black/20"
+              >
+                <span className="truncate transition-colors group-hover:text-foreground">
+                  {group.name}
+                </span>
+                <span className="flex shrink-0 items-center gap-1.5 text-xs text-foreground/50">
+                  <span className="h-1.5 w-1.5 rounded-full bg-success" />
+                  {group.memberCount}
+                </span>
+              </li>
+            ))
+          ) : (
+            <li className="col-span-full flex items-center justify-center rounded-lg border border-border bg-card p-4 text-sm text-muted">
+              No groups found.
+            </li>
+          )}
         </ul>
       </section>
     </div>

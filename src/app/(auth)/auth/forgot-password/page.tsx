@@ -7,36 +7,40 @@ import { FiMail, FiCheckCircle } from "react-icons/fi";
 import { Button } from "../../../../utils/Button";
 import { useFormErrors } from "../../../../hooks/useFormErrors";
 import { forgotPasswordSchema } from "../../../../validations/forgotPassword.schema";
+import { useForgotPasswordMutation } from "../../../../state/redux/api/auth";
 
 export default function ForgotPasswordPage() {
   const [email, setEmail] = useState("");
-  const [submitting, setSubmitting] = useState(false);
   const [sent, setSent] = useState(false);
-  const { errors, setMultipleErrors, clearError, clearAllErrors } =
-    useFormErrors();
+  const { errors, setMultipleErrors, clearError, clearAllErrors } = useFormErrors();
+  
+  const [forgotPassword, { isLoading: isSubmitting }] = useForgotPasswordMutation();
 
   const handleChange = (value: string) => {
     setEmail(value);
     clearError("email");
+    clearError("general");
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setSubmitting(true);
     try {
       await forgotPasswordSchema.validate({ email }, { abortEarly: false });
       clearAllErrors();
+      
+      await forgotPassword({ email }).unwrap();
       setSent(true);
-    } catch (err) {
+    } catch (err: any) {
       if (err instanceof yup.ValidationError) {
         const fieldErrors: Record<string, string> = {};
-        err.inner.forEach((e) => {
+        err.inner.forEach((e: any) => {
           if (e.path) fieldErrors[e.path] = e.message;
         });
         setMultipleErrors(fieldErrors);
+      } else {
+        const errorMessage = err.data?.message || err.message || "Failed to send reset link.";
+        setMultipleErrors({ email: errorMessage });
       }
-    } finally {
-      setSubmitting(false);
     }
   };
 
@@ -76,6 +80,12 @@ export default function ForgotPasswordPage() {
         </p>
       </div>
 
+      {errors.general && (
+        <div className="rounded-lg border border-destructive/20 bg-destructive/5 p-3 text-sm text-destructive">
+          {errors.general}
+        </div>
+      )}
+
       <div>
         <label
           htmlFor="email"
@@ -92,17 +102,17 @@ export default function ForgotPasswordPage() {
           placeholder="you@example.com"
         />
         {errors.email && (
-          <p className="mt-1 text-xs text-primary">{errors.email}</p>
+          <p className="mt-1 text-xs text-destructive">{errors.email}</p>
         )}
       </div>
 
       <Button
         type="submit"
-        disabled={submitting}
+        disabled={isSubmitting}
         className="flex items-center justify-center gap-2 rounded-lg bg-primary px-4 py-2.5 text-sm font-semibold text-foreground hover:opacity-90 disabled:opacity-60"
       >
         <FiMail size={16} />
-        {submitting ? "Sending..." : "Send Reset Link"}
+        {isSubmitting ? "Sending..." : "Send Reset Link"}
       </Button>
 
       <p className="text-center text-sm text-muted">

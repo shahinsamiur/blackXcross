@@ -1,6 +1,6 @@
 import { FiFlag, FiMessageSquare } from "react-icons/fi";
 import Image from "next/image";
-import type { DashboardActivity } from "../../state/redux/api";
+import type { DashboardActivity } from "@/src/state/redux/api/dashboard";
 
 interface ActivityFeedProps {
   activities: DashboardActivity[];
