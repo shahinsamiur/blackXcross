@@ -1,4 +1,5 @@
 import { api } from "../api";
+
 export interface ApiResponse<T> {
   success: boolean;
   message: string;
@@ -8,9 +9,8 @@ export interface ApiResponse<T> {
 export interface CaseAuthor {
   id: string;
   username: string;
-  firstName?: string | null;
-  lastName?: string | null;
-  avatarUrl?: string | null;
+  name?: string | null;
+  avatar?: string | null;
 }
 
 export interface CaseTag {
@@ -40,6 +40,11 @@ export interface CaseItem {
   };
 }
 
+export interface CaseDetailResponse extends CaseItem {
+  narrative?: string | null;
+  files?: Array<{ id: string; url: string; filename: string; mimeType: string }>;
+}
+
 export interface CaseListResponse {
   items: CaseItem[];
   pagination: {
@@ -60,24 +65,57 @@ export interface CaseListQuery {
   limit?: number;
 }
 
+export interface CreateCaseRequest {
+  title: string;
+  description: string;
+  category: string;
+  investigationStatus: string;
+  imageUrl: string;
+  narrative?: string;
+  location?: string;
+  tags?: string[];
+}
+
+export interface UpdateCaseRequest extends Partial<CreateCaseRequest> {}
+
 export const casesApi = api.injectEndpoints({
   endpoints: (builder) => ({
     getCases: builder.query<CaseListResponse, CaseListQuery>({
-      query: (params) => ({
-        url: "/cases",
-        params,
-      }),
+      query: (params) => ({ url: "/cases", params }),
       transformResponse: (response: ApiResponse<CaseListResponse>) => response.data,
       providesTags: (result) =>
         result
-          ? [
-              ...result.items.map(({ id }) => ({ type: "Case" as const, id })),
-              { type: "Case", id: "LIST" },
-            ]
+          ? [...result.items.map(({ id }) => ({ type: "Case" as const, id })), { type: "Case", id: "LIST" }]
           : [{ type: "Case", id: "LIST" }],
+    }),
+    getCase: builder.query<CaseDetailResponse, string>({
+      query: (id) => `/cases/${id}`,
+      transformResponse: (response: ApiResponse<CaseDetailResponse>) => response.data,
+      providesTags: (result, error, id) => [{ type: "Case", id }],
+    }),
+    uploadCaseImage: builder.mutation<{ imageUrl: string }, File>({
+      query: (file) => {
+        const formData = new FormData();
+        formData.append("image", file);
+        return { url: "/cases/upload-image", method: "POST", body: formData };
+      },
+    }),
+    createCase: builder.mutation<CaseDetailResponse, CreateCaseRequest>({
+      query: (body) => ({ url: "/cases", method: "POST", body }),
+      invalidatesTags: [{ type: "Case", id: "LIST" }, "User"],
+    }),
+    updateCase: builder.mutation<CaseDetailResponse, { id: string; data: UpdateCaseRequest }>({
+      query: ({ id, data }) => ({ url: `/cases/${id}`, method: "PATCH", body: data }),
+      invalidatesTags: (result, error, { id }) => [{ type: "Case", id }, { type: "Case", id: "LIST" }],
     }),
   }),
   overrideExisting: false,
 });
 
-export const { useGetCasesQuery } = casesApi;
+export const {
+  useGetCasesQuery,
+  useGetCaseQuery,
+  useUploadCaseImageMutation,
+  useCreateCaseMutation,
+  useUpdateCaseMutation,
+} = casesApi;

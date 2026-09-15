@@ -1,8 +1,10 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useState } from "react";
+import { useSelector } from "react-redux";
+import { RootState } from "@/src/state/redux/store";
 import {
   FiMenu,
   FiX,
@@ -14,6 +16,7 @@ import {
   FiSearch,
 } from "react-icons/fi";
 import { myGroups, myContacts, sidebarNav } from "../../_mock/blackxcross";
+import RequireAuthModal from "@/src/components/ui/RequireAuthModal";
 
 const navIcons = {
   home: FiHome,
@@ -24,6 +27,16 @@ const navIcons = {
 
 function SidebarContent() {
   const pathname = usePathname();
+  const router = useRouter();
+  const { isAuthenticated } = useSelector((state: RootState) => state.auth);
+  const [authModalTarget, setAuthModalTarget] = useState<string | null>(null);
+
+  const handleNavClick = (e: React.MouseEvent, href: string) => {
+    if (!isAuthenticated) {
+      e.preventDefault();
+      setAuthModalTarget(href);
+    }
+  };
 
   return (
     <div className="flex h-full flex-col gap-8 overflow-y-auto px-6 py-6">
@@ -35,6 +48,7 @@ function SidebarContent() {
             <Link
               key={item.id}
               href={item.href}
+              onClick={(e) => handleNavClick(e, item.href)}
               className={`flex items-center gap-3 rounded-lg border px-4 py-3 text-sm font-medium transition-colors ${
                 isActive
                   ? "border-primary/40 bg-primary/10 text-primary"
@@ -68,8 +82,7 @@ function SidebarContent() {
               className="flex items-center! justify-between! gap-2 text-sm text-foreground/90 w-full"
             >
               <span className="flex h-7 w-7 items-center justify-center rounded-full text-muted bg-card border border-gray-800"></span>
-
-              <span className="flex-1 truncate text-foreground/80  text-nowrap ">
+              <span className="flex-1 truncate text-foreground/80 text-nowrap">
                 {group.name}
               </span>
               <span className="flex shrink-0 items-center gap-1.5 text-xs text-foreground/50">
@@ -139,6 +152,14 @@ function SidebarContent() {
         </p>
         <p className="mt-2 text-xs text-muted">— BLACK×CROSS</p>
       </div>
+
+      {authModalTarget && (
+        <RequireAuthModal
+          isOpen={true}
+          onClose={() => setAuthModalTarget(null)}
+          targetPath={authModalTarget}
+        />
+      )}
     </div>
   );
 }

@@ -1,6 +1,6 @@
 "use client";
 
-import { createContext, useContext, useState, ReactNode } from "react";
+import { createContext, useContext, useState, PropsWithChildren } from "react";
 
 type CounterContextType = {
   count: number;
@@ -10,7 +10,8 @@ type CounterContextType = {
 
 const CounterContext = createContext<CounterContextType | undefined>(undefined);
 
-export const CounterProvider = ({ children }: { children: ReactNode }) => {
+// Use PropsWithChildren to explicitly tell TypeScript this component accepts children
+export const CounterProvider = ({ children }: PropsWithChildren) => {
   const [count, setCount] = useState(0);
 
   const increment = () => setCount((prev) => prev + 1);

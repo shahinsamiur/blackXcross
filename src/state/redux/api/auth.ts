@@ -1,10 +1,17 @@
 import { api } from "../api";
 
-// --- Types ---
 export interface ApiResponse<T> {
   success: boolean;
   message: string;
   data: T;
+}
+
+export interface User {
+  id: string;
+  email: string;
+  username: string;
+  name?: string | null;
+  avatarUrl?: string | null;
 }
 
 export interface LoginRequest {
@@ -13,13 +20,7 @@ export interface LoginRequest {
 }
 
 export interface LoginResponse {
-  user: {
-    id: string;
-    email: string;
-    username: string;
-    name?: string | null;
-    avatarUrl?: string | null;
-  };
+  user: User;
   accessToken: string;
   refreshToken?: string;
 }
@@ -52,19 +53,27 @@ export interface ResetPasswordRequest {
 
 export interface VerifyEmailRequest {
   code: string;
-  // Add 'email' or 'token' here if your backend requires it alongside the code
 }
 
-// --- Endpoints ---
 export const authApi = api.injectEndpoints({
   endpoints: (builder) => ({
+    getMe: builder.query<{ user: User }, void>({
+      query: () => ({
+        url: "/auth/me",
+        method: "GET",
+      }),
+      providesTags: ["User"],
+      transformResponse: (response: { user: User }) => response,
+      transformErrorResponse: (response) => {
+        return { status: response.status, message: "Not authenticated" };
+      },
+    }),
     login: builder.mutation<LoginResponse, LoginRequest>({
       query: (credentials) => ({
         url: "/auth/login",
         method: "POST",
         body: credentials,
       }),
-      // Invalidate user-related tags on successful login
       invalidatesTags: ["User"],
     }),
     register: builder.mutation<RegisterResponse, RegisterRequest>({
@@ -100,6 +109,7 @@ export const authApi = api.injectEndpoints({
 });
 
 export const {
+  useGetMeQuery,
   useLoginMutation,
   useRegisterMutation,
   useForgotPasswordMutation,

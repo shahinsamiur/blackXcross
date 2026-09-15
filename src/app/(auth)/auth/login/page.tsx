@@ -2,22 +2,26 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
+import { useDispatch } from "react-redux";
 import * as yup from "yup";
 import { FiLogIn } from "react-icons/fi";
 import { Button } from "../../../../utils/Button";
 import { useFormErrors } from "../../../../hooks/useFormErrors";
 import { loginSchema } from "../../../../validations/login.schema";
 import { useLoginMutation } from "../../../../state/redux/api/auth";
+import { setCredentials } from "../../../../state/redux/slices/authSlice";
 import PasswordInput from "../../../../components/ui/PasswordInput";
 
 const initialValues = { email: "", password: "" };
 
 export default function LoginPage() {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const dispatch = useDispatch();
   const [values, setValues] = useState(initialValues);
   const { errors, setMultipleErrors, clearError, clearAllErrors } = useFormErrors();
-  
+
   const [login, { isLoading: isLoggingIn }] = useLoginMutation();
 
   const handleChange = (field: keyof typeof values, value: string) => {
@@ -31,9 +35,21 @@ export default function LoginPage() {
     try {
       await loginSchema.validate(values, { abortEarly: false });
       clearAllErrors();
-      
-      await login(values).unwrap();
-      router.push("/");
+
+      const result = await login(values).unwrap();
+
+      // Store tokens in cookies for middleware
+      document.cookie = `accessToken=${result.accessToken}; path=/; max-age=${60 * 60 * 24 * 7}`;
+      if (result.refreshToken) {
+        document.cookie = `refreshToken=${result.refreshToken}; path=/; max-age=${60 * 60 * 24 * 30}`;
+      }
+
+      // Store full user data in Redux
+      dispatch(setCredentials({ user: result.user }));
+
+      // Redirect to original destination or home
+      const redirectPath = searchParams.get("redirect") || "/";
+      router.push(redirectPath);
     } catch (err: any) {
       if (err instanceof yup.ValidationError) {
         const fieldErrors: Record<string, string> = {};
