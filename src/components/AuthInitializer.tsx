@@ -1,8 +1,9 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
-import { setCredentials } from "../state/redux/slices/authSlice";
+import { useGetMeQuery } from "../state/redux/api/auth";
+import { setCredentials, setAuthLoading, logout } from "../state/redux/slices/authSlice";
 
 function getCookie(name: string): string | undefined {
   if (typeof document === "undefined") return undefined;
@@ -14,23 +15,29 @@ function getCookie(name: string): string | undefined {
 
 export default function AuthInitializer() {
   const dispatch = useDispatch();
+  const [hasToken, setHasToken] = useState(false);
 
   useEffect(() => {
-    const accessToken = getCookie("accessToken");
-    if (accessToken) {
-
-      dispatch(
-        setCredentials({
-          user: {
-            id: "",
-            email: "",
-            username: "",
-            avatarUrl: null,
-          },
-        })
-      );
-    }
+    const token = !!getCookie("accessToken");
+    setHasToken(token);
+    dispatch(token ? setAuthLoading() : logout());
   }, [dispatch]);
+
+  const { data, isSuccess, isError } = useGetMeQuery(undefined, {
+    skip: !hasToken,
+  });
+
+  useEffect(() => {
+    if (isSuccess && data?.user) {
+      dispatch(setCredentials({ user: data.user }));
+    }
+  }, [isSuccess, data, dispatch]);
+
+  useEffect(() => {
+    if (isError) {
+      dispatch(logout());
+    }
+  }, [isError, dispatch]);
 
   return null;
 }

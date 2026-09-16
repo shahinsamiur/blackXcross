@@ -1,13 +1,13 @@
 "use client";
 
 import Link from "next/link";
+import { useSelector } from "react-redux";
 import { FiEdit3, FiUsers, FiFileText } from "react-icons/fi";
 import { myGroups } from "../../../_mock/blackxcross"; 
 import CaseCard from "../../../components/blackxcross/CaseCard";
 import ProfileAvatar from "../../../components/blackxcross/ProfileAvatar";
+import type { RootState } from "../../../state/redux/store";
 import { useGetUserQuery, useGetUserCasesQuery } from "../../../state/redux/api/users";
-
-const CURRENT_USER_ID = "current-user-id-placeholder"; 
 
 const SkeletonCaseCard = () => (
   <div className="flex w-60 shrink-0 snap-start flex-col gap-8 rounded-xl border border-border bg-card p-5 px-3 sm:w-72 sm:gap-10 sm:px-4 md:w-92 animate-pulse">
@@ -28,8 +28,14 @@ const SkeletonCaseCard = () => (
 );
 
 export default function DossierPage() {
-  const { data: user, isLoading: isUserLoading } = useGetUserQuery(CURRENT_USER_ID);
-  const { data: casesData, isLoading: isCasesLoading } = useGetUserCasesQuery(CURRENT_USER_ID);
+  const userId = useSelector((state: RootState) => state.auth?.user?.id);
+
+  const { data: user, isLoading: isUserLoading } = useGetUserQuery(userId as string, {
+    skip: !userId,
+  });
+  const { data: casesData, isLoading: isCasesLoading } = useGetUserCasesQuery(userId as string, {
+    skip: !userId,
+  });
   
   const myCaseFiles = casesData?.items || [];
 

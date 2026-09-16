@@ -1,43 +1,59 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { useSelector } from "react-redux";
 import * as yup from "yup";
-import { FiSave, FiAlertTriangle } from "react-icons/fi";
+import { FiSave, FiAlertTriangle, FiX } from "react-icons/fi";
 import { Button } from "../../../../utils/Button";
 import { useFormErrors } from "../../../../hooks/useFormErrors";
 import { dossierSchema } from "../../../../validations/dossier.schema";
-import { useGetUserQuery, useUploadAvatarMutation, useUpdateUserMutation } from "../../../../state/redux/api/users";
-
-const initialValues = {
-  displayName: "",
-  bio: "",
-  title: "",
-  location: "",
-  website: "",
-};
+import type { RootState } from "../../../../state/redux/store";
+import { Skeleton, SkeletonCircle } from "../../../../components/ui/Skeleton";
+import { 
+  useGetUserQuery, 
+  useUploadAvatarMutation, 
+  useUpdateUserMutation, 
+  useDeleteUserMutation 
+} from "../../../../state/redux/api/users";
 
 const DEFAULT_AVATAR = "/image/hero1.jpg";
 
 export default function DossierEditPage() {
   const router = useRouter();
-  const userId = useSelector((state: any) => state.auth.user?.id);
-  const userEmail = useSelector((state: any) => state.auth.user?.email) || "investigator@example.com";
 
-  const { data: userData, isLoading: isUserLoading } = useGetUserQuery(userId as string, { skip: !userId });
+  const userId = useSelector((state: RootState) => state.auth?.user?.id);
+  const userEmail = useSelector((state: RootState) => state.auth?.user?.email) || "";
+
+  const { data: userData, isLoading: isUserLoading, error: userError } = useGetUserQuery(userId as string, { 
+    skip: !userId 
+  });
+  
   const [uploadAvatar] = useUploadAvatarMutation();
   const [updateUser] = useUpdateUserMutation();
+  const [deleteUser, { isLoading: isDeleting }] = useDeleteUserMutation();
 
-  const [values, setValues] = useState(initialValues);
+  const [values, setValues] = useState({
+    displayName: "",
+    bio: "",
+    title: "",
+    location: "",
+    website: "",
+  });
+  
   const [avatarFile, setAvatarFile] = useState<File | null>(null);
   const [avatarPreview, setAvatarPreview] = useState(DEFAULT_AVATAR);
   const [submitting, setSubmitting] = useState(false);
-  const [confirmingDelete, setConfirmingDelete] = useState(false);
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  
   const { errors, setMultipleErrors, clearError, clearAllErrors } = useFormErrors();
+  
+  // useRef guarantees we only initialize the form state ONCE when data arrives.
+  // This completely prevents the "setState in effect" cascading render warning.
+  const hasInitialized = useRef(false);
 
   useEffect(() => {
-    if (userData) {
+    if (userData && !hasInitialized.current) {
       setValues({
         displayName: userData.name || "",
         bio: userData.bio || "",
@@ -46,6 +62,7 @@ export default function DossierEditPage() {
         website: userData.website || "",
       });
       setAvatarPreview(userData.avatar || DEFAULT_AVATAR);
+      hasInitialized.current = true;
     }
   }, [userData]);
 
@@ -73,47 +90,130 @@ export default function DossierEditPage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!userId) return;
+    
+    if (!userId) {
+      alert("You must be logged in to save changes.");
+      return; // Prevents any redirect, just stops execution
+    }
+
     setSubmitting(true);
     clearAllErrors();
 
     try {
-      await dossierSchema.validate({ ...values, avatarFile }, { abortEarly: false });
+      // 1. Validate form data strictly
+      const validatedData = await dossierSchema.validate(
+        { ...values, avatarFile },
+        { abortEarly: false }
+      );
 
+      // 2. Upload avatar if a new file is selected
       if (avatarFile) {
         await uploadAvatar({ id: userId, file: avatarFile }).unwrap();
       }
 
+      // 3. Update user profile
       await updateUser({
         id: userId,
         data: {
-          name: values.displayName,
-          bio: values.bio,
-          title: values.title,
-          location: values.location,
-          website: values.website,
+          name: validatedData.displayName,
+          bio: validatedData.bio || undefined,
+          title: validatedData.title || undefined,
+          location: validatedData.location || undefined,
+          website: validatedData.website || undefined,
         },
       }).unwrap();
 
+      // 4. ONLY redirect on complete, verified success
       router.push("/my-dossier");
-    } catch (err: any) {
-      if (err.name === "ValidationError") {
+      
+    } catch (err: unknown) {
+      const error = err as { 
+        name?: string; 
+        inner?: yup.ValidationError[]; 
+        data?: { message?: string }; 
+        message?: string 
+      };
+      
+      if (error.name === "ValidationError" && error.inner) {
+        // Handle Yup validation errors and display them under inputs
         const fieldErrors: Record<string, string> = {};
-        err.inner.forEach((e: yup.ValidationError) => {
+        error.inner.forEach((e: yup.ValidationError) => {
           if (e.path) fieldErrors[e.path] = e.message;
         });
         setMultipleErrors(fieldErrors);
       } else {
-        console.error("Submission error:", err);
+        // Handle API/Network errors
+        const errorMessage = error?.data?.message || error?.message || "Failed to save profile. Please check your inputs and try again.";
+        alert(errorMessage);
       }
     } finally {
       setSubmitting(false);
     }
   };
 
+  const handleDeleteAccount = async () => {
+    if (!userId) return;
+    try {
+      await deleteUser(userId).unwrap();
+      router.push("/auth/login");
+    } catch (err: unknown) {
+      const error = err as { message?: string; data?: { message?: string } };
+      alert(error?.data?.message || error?.message || "Failed to delete account.");
+    }
+  };
   if (isUserLoading) {
-    return <div className="flex w-full items-center justify-center py-16 text-sm text-muted">Loading dossier...</div>;
+    return (
+      <div className="flex w-full flex-col gap-6 px-4 pb-8 sm:px-6 lg:px-8">
+        <Skeleton className="h-7 w-40" />
+        <div className="flex w-full flex-col gap-6 rounded-xl border border-border bg-card p-5 sm:p-6">
+          <div className="flex items-center gap-4">
+            <SkeletonCircle className="h-16 w-16 shrink-0" />
+            <div className="flex-1">
+              <Skeleton className="mb-2 h-4 w-28" />
+              <Skeleton className="h-9 w-full" />
+            </div>
+          </div>
+          <div>
+            <Skeleton className="mb-1.5 h-4 w-24" />
+            <Skeleton className="h-10 w-full" />
+          </div>
+          <div>
+            <Skeleton className="mb-1.5 h-4 w-32" />
+            <Skeleton className="h-10 w-full" />
+          </div>
+          <div>
+            <Skeleton className="mb-1.5 h-4 w-16" />
+            <Skeleton className="h-24 w-full" />
+          </div>
+          <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
+            <div>
+              <Skeleton className="mb-1.5 h-4 w-20" />
+              <Skeleton className="h-10 w-full" />
+            </div>
+            <div>
+              <Skeleton className="mb-1.5 h-4 w-20" />
+              <Skeleton className="h-10 w-full" />
+            </div>
+          </div>
+          <div className="flex justify-end gap-3">
+            <Skeleton className="h-10 w-24" />
+            <Skeleton className="h-10 w-32" />
+          </div>
+        </div>
+      </div>
+    );
   }
+
+  // if (!userId || userError) {
+  //   return (
+  //     <div className="flex w-full flex-col items-center justify-center gap-4 py-16">
+  //       <p className="text-sm text-muted">Unable to load user data. Please log in again.</p>
+  //       <Button onClick={() => router.push("/auth/login")} className="rounded-lg bg-primary px-4 py-2.5 text-sm font-semibold text-foreground">
+  //         Go to Login
+  //       </Button>
+  //     </div>
+  //   );
+  // }
 
   return (
     <div className="flex w-full flex-col gap-6 px-4 pb-8 sm:px-6 lg:px-8">
@@ -142,44 +242,94 @@ export default function DossierEditPage() {
         </div>
 
         <div>
-          <label htmlFor="displayName" className="mb-1.5 block text-sm font-medium text-foreground/80">Display Name</label>
-          <input id="displayName" type="text" value={values.displayName} onChange={(e) => handleChange("displayName", e.target.value)} className="w-full rounded-lg border border-border bg-background px-3 py-2.5 text-sm text-foreground placeholder:text-muted focus:border-primary/50 focus:outline-none" />
+          <label htmlFor="displayName" className="mb-1.5 block text-sm font-medium text-foreground/80">Display Name <span className="text-primary">*</span></label>
+          <input 
+            id="displayName" 
+            type="text" 
+            value={values.displayName} 
+            onChange={(e) => handleChange("displayName", e.target.value)} 
+            className="w-full rounded-lg border border-border bg-background px-3 py-2.5 text-sm text-foreground placeholder:text-muted focus:border-primary/50 focus:outline-none" 
+          />
           {errors.displayName && <p className="mt-1 text-xs text-primary">{errors.displayName}</p>}
         </div>
 
         <div>
           <label htmlFor="title" className="mb-1.5 block text-sm font-medium text-foreground/80">Investigator Title</label>
-          <input id="title" type="text" value={values.title} onChange={(e) => handleChange("title", e.target.value)} className="w-full rounded-lg border border-border bg-background px-3 py-2.5 text-sm text-foreground placeholder:text-muted focus:border-primary/50 focus:outline-none" placeholder="Lead Researcher, Amateur Sleuth, etc." />
+          <input 
+            id="title" 
+            type="text" 
+            value={values.title} 
+            onChange={(e) => handleChange("title", e.target.value)} 
+            className="w-full rounded-lg border border-border bg-background px-3 py-2.5 text-sm text-foreground placeholder:text-muted focus:border-primary/50 focus:outline-none" 
+            placeholder="Lead Researcher, Amateur Sleuth, etc." 
+          />
           {errors.title && <p className="mt-1 text-xs text-primary">{errors.title}</p>}
         </div>
 
         <div>
           <label htmlFor="bio" className="mb-1.5 block text-sm font-medium text-foreground/80">Bio</label>
-          <textarea id="bio" rows={4} value={values.bio} onChange={(e) => handleChange("bio", e.target.value)} className="w-full resize-none rounded-lg border border-border bg-background px-3 py-2.5 text-sm text-foreground placeholder:text-muted focus:border-primary/50 focus:outline-none" placeholder="Tell the community about yourself..." />
+          <textarea 
+            id="bio" 
+            rows={4} 
+            value={values.bio} 
+            onChange={(e) => handleChange("bio", e.target.value)} 
+            className="w-full resize-none rounded-lg border border-border bg-background px-3 py-2.5 text-sm text-foreground placeholder:text-muted focus:border-primary/50 focus:outline-none" 
+            placeholder="Tell the community about yourself..." 
+          />
           {errors.bio && <p className="mt-1 text-xs text-primary">{errors.bio}</p>}
         </div>
 
         <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
           <div>
             <label htmlFor="location" className="mb-1.5 block text-sm font-medium text-foreground/80">Location</label>
-            <input id="location" type="text" value={values.location} onChange={(e) => handleChange("location", e.target.value)} className="w-full rounded-lg border border-border bg-background px-3 py-2.5 text-sm text-foreground placeholder:text-muted focus:border-primary/50 focus:outline-none" placeholder="City, Country" />
+            <input 
+              id="location" 
+              type="text" 
+              value={values.location} 
+              onChange={(e) => handleChange("location", e.target.value)} 
+              className="w-full rounded-lg border border-border bg-background px-3 py-2.5 text-sm text-foreground placeholder:text-muted focus:border-primary/50 focus:outline-none" 
+              placeholder="City, Country" 
+            />
             {errors.location && <p className="mt-1 text-xs text-primary">{errors.location}</p>}
           </div>
           <div>
             <label htmlFor="website" className="mb-1.5 block text-sm font-medium text-foreground/80">Website</label>
-            <input id="website" type="text" value={values.website} onChange={(e) => handleChange("website", e.target.value)} className="w-full rounded-lg border border-border bg-background px-3 py-2.5 text-sm text-foreground placeholder:text-muted focus:border-primary/50 focus:outline-none" placeholder="https://your-site.com" />
+            <input 
+              id="website" 
+              type="text" 
+              value={values.website} 
+              onChange={(e) => handleChange("website", e.target.value)} 
+              className="w-full rounded-lg border border-border bg-background px-3 py-2.5 text-sm text-foreground placeholder:text-muted focus:border-primary/50 focus:outline-none" 
+              placeholder="https://your-site.com" 
+            />
             {errors.website && <p className="mt-1 text-xs text-primary">{errors.website}</p>}
           </div>
         </div>
 
         <div>
           <label className="mb-1.5 block text-sm font-medium text-foreground/80">Email</label>
-          <input type="text" value={userEmail} disabled readOnly className="w-full cursor-not-allowed rounded-lg border border-border bg-background/50 px-3 py-2.5 text-sm text-foreground/60" />
+          <input 
+            type="text" 
+            value={userEmail} 
+            disabled 
+            readOnly 
+            className="w-full cursor-not-allowed rounded-lg border border-border bg-background/50 px-3 py-2.5 text-sm text-foreground/60" 
+          />
         </div>
 
         <div className="flex justify-end gap-3">
-          <Button type="button" onClick={() => router.push("/my-dossier")} className="rounded-lg border border-border px-4 py-2.5 text-sm font-medium text-foreground/80 hover:border-primary/40 hover:text-primary">Cancel</Button>
-          <Button type="submit" disabled={submitting} className="flex items-center gap-2 rounded-lg bg-primary px-4 py-2.5 text-sm font-semibold text-foreground hover:opacity-90 disabled:opacity-60">
+          <Button 
+            type="button" 
+            onClick={() => router.push("/my-dossier")} 
+            className="rounded-lg border border-border px-4 py-2.5 text-sm font-medium text-foreground/80 hover:border-primary/40 hover:text-primary"
+          >
+            Cancel
+          </Button>
+          <Button 
+            type="submit" 
+            disabled={submitting} 
+            className="flex items-center gap-2 rounded-lg bg-primary px-4 py-2.5 text-sm font-semibold text-foreground hover:opacity-90 disabled:opacity-60"
+          >
             <FiSave size={16} />
             {submitting ? "Saving..." : "Save Changes"}
           </Button>
@@ -192,16 +342,56 @@ export default function DossierEditPage() {
           <h2 className="text-base font-semibold">Danger Zone</h2>
         </div>
         <p className="text-sm text-foreground/70">Deleting your account permanently removes your dossier, submitted cases, and community activity. This action cannot be undone.</p>
-        {!confirmingDelete ? (
-          <Button type="button" onClick={() => setConfirmingDelete(true)} className="w-fit rounded-lg border border-primary px-4 py-2.5 text-sm font-medium text-primary hover:bg-primary hover:text-foreground">Delete Account</Button>
-        ) : (
-          <div className="flex flex-wrap items-center gap-3">
-            <p className="text-sm font-medium text-foreground">Are you sure?</p>
-            <Button type="button" onClick={() => router.push("/auth/login")} className="rounded-lg bg-primary px-4 py-2.5 text-sm font-semibold text-foreground hover:opacity-90">Yes, delete my account</Button>
-            <Button type="button" onClick={() => setConfirmingDelete(false)} className="rounded-lg border border-border px-4 py-2.5 text-sm font-medium text-foreground/80 hover:border-primary/40 hover:text-primary">Cancel</Button>
-          </div>
-        )}
+        <Button 
+          type="button" 
+          onClick={() => setIsDeleteModalOpen(true)} 
+          className="w-fit rounded-lg border border-primary px-4 py-2.5 text-sm font-medium text-primary hover:bg-primary hover:text-foreground"
+        >
+          Delete Account
+        </Button>
       </div>
+
+      {isDeleteModalOpen && (
+        <div className="fixed inset-0 z-999 flex items-center justify-center bg-black/60 p-4 backdrop-blur-sm">
+          <div className="w-full max-w-md rounded-xl border border-border bg-card p-6 shadow-xl">
+            <div className="mb-4 flex items-center justify-between">
+              <div className="flex items-center gap-3 text-primary">
+                <FiAlertTriangle size={24} />
+                <h3 className="text-lg font-semibold">Delete Account?</h3>
+              </div>
+              <button
+                type="button"
+                onClick={() => setIsDeleteModalOpen(false)}
+                disabled={isDeleting}
+                className="text-muted hover:text-foreground cursor-pointer disabled:opacity-50"
+              >
+                <FiX size={20} />
+              </button>
+            </div>
+            <p className="mb-6 text-sm text-foreground/70">
+              Deleting your account permanently removes your dossier, submitted cases, and community activity. This action cannot be undone.
+            </p>
+            <div className="flex justify-end gap-3">
+              <Button
+                type="button"
+                onClick={() => setIsDeleteModalOpen(false)}
+                disabled={isDeleting}
+                className="rounded-lg border border-border px-4 py-2.5 text-sm font-medium text-foreground/80 hover:border-primary/40 hover:text-primary disabled:opacity-50"
+              >
+                Cancel
+              </Button>
+              <Button
+                type="button"
+                onClick={handleDeleteAccount}
+                disabled={isDeleting}
+                className="flex items-center gap-2 rounded-lg bg-primary px-4 py-2.5 text-sm font-semibold text-foreground hover:opacity-90 disabled:opacity-50"
+              >
+                {isDeleting ? "Deleting..." : "Yes, Delete My Account"}
+              </Button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

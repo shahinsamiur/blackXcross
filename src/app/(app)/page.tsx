@@ -24,7 +24,6 @@ export default function Home() {
     }
     if ("data" in err && err.data) {
       const errorData = err.data as ErrorData;
-      console.log("ahfasdf" , errorData)
       return errorData.message || JSON.stringify(errorData.message);
     }
     if ("error" in err && typeof err.error === "string") {

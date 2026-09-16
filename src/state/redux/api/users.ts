@@ -68,6 +68,10 @@ export const usersApi = api.injectEndpoints({
       query: ({ id, data }) => ({ url: `/users/${id}`, method: "PATCH", body: data }),
       invalidatesTags: (result, error, { id }) => [{ type: "User", id }],
     }),
+    deleteUser: builder.mutation<{ message: string }, string>({
+      query: (id) => ({ url: `/users/${id}`, method: "DELETE" }),
+      invalidatesTags: ["User"],
+    }),
   }),
   overrideExisting: false,
 });
@@ -78,4 +82,5 @@ export const {
   useGetUserTheoriesQuery,
   useUploadAvatarMutation,
   useUpdateUserMutation,
+  useDeleteUserMutation,
 } = usersApi;

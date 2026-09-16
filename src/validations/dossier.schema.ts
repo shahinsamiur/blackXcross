@@ -11,7 +11,7 @@ export const dossierSchema = yup.object({
     .min(2, "Display name must be at least 2 characters")
     .max(50, "Display name must be under 50 characters"),
 
-  bio: yup.string().trim().max(280, "Bio must be under 280 characters"),
+  bio: yup.string().trim().max(280, "Bio must be under 280 characters").nullable(),
 
   avatarFile: yup
     .mixed<File>()
@@ -19,22 +19,23 @@ export const dossierSchema = yup.object({
     .test(
       "fileSize",
       "Image must be under 5MB",
-      (file) => !file || file.size <= MAX_FILE_SIZE,
+      (file) => !file || (file as File).size <= MAX_FILE_SIZE,
     )
     .test(
       "fileType",
       "Only JPG, PNG, or WEBP images are allowed",
-      (file) => !file || SUPPORTED_FORMATS.includes(file.type),
+      (file) => !file || SUPPORTED_FORMATS.includes((file as File).type),
     ),
 
-  title: yup.string().trim().max(50, "Title must be under 50 characters"),
+  title: yup.string().trim().max(50, "Title must be under 50 characters").nullable(),
 
-  location: yup.string().trim().max(80, "Location must be under 80 characters"),
+  location: yup.string().trim().max(80, "Location must be under 80 characters").nullable(),
 
   website: yup
     .string()
     .trim()
-    .transform((value) => (value === "" ? undefined : value))
-    .url("Please enter a valid URL")
+    .nullable()
+    .transform((value, originalValue) => (originalValue === "" ? null : value))
+    .url("Please enter a valid URL (e.g., https://example.com)")
     .max(200, "Website URL must be under 200 characters"),
 });
