@@ -19,6 +19,7 @@ export interface AdminReport {
   reporter: AdminReportReporter;
   targetType: string;
   targetId: string;
+  targetLabel?: string; 
   reason: string;
   status: string;
   adminNotes: string | null;
@@ -26,6 +27,7 @@ export interface AdminReport {
   createdAt: string;
   updatedAt: string;
 }
+
 
 export interface AdminFlag {
   id: string;
@@ -185,7 +187,6 @@ export const adminApi = api.injectEndpoints({
     getAdminAnalytics: build.query<AdminAnalyticsResponse, void>({
   query: () => '/admin/analytics',
   providesTags: [{ type: 'Analytics', id: 'OVERVIEW' }], 
-  // Note: Ensure 'Analytics' is added to your base API `tagTypes` array if not already present
 }),
   }),
   overrideExisting: false,

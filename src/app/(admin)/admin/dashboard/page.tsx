@@ -120,7 +120,9 @@ export default function AdminDashboardPage() {
                 >
                   <div className="flex flex-col">
                     <span className="text-sm text-foreground/90">{report.targetLabel}</span>
-                    <span className="text-xs text-muted">{report.reason} · reported by {report.reporter}</span>
+                                         
+
+                    <span className="text-xs text-muted">{report.reason} · reported by  {report.reason} · reported by {report.reporter.username || report.reporter.name}</span>
                   </div>
                   <span className="shrink-0 rounded-md border border-border px-2 py-1 text-[11px] font-semibold uppercase text-muted">
                     {report.status}

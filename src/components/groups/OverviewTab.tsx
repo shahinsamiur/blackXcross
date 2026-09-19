@@ -1,4 +1,4 @@
-import type { Group } from "../../../_mock/groups";
+import type { Group } from "../../_mock/groups";
 
 export default function OverviewTab({ group }: { group: Group }) {
   return (

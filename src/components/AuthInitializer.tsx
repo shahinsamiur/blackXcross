@@ -4,11 +4,12 @@ import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useGetMeQuery } from "../state/redux/api/auth";
 import { setCredentials, setAuthLoading, logout } from "../state/redux/slices/authSlice";
+import type { RootState } from "../state/redux/store";
 
 export default function AuthInitializer() {
   const dispatch = useDispatch();
 
-  const user = useSelector((state: any) => state.auth?.user);
+  const user = useSelector((state: RootState) => state.auth?.user);
 
   const { data, isSuccess, isError } = useGetMeQuery(undefined, {
     skip: !!user, 
@@ -21,8 +22,9 @@ export default function AuthInitializer() {
   }, [user, dispatch]);
 
   useEffect(() => {
+
     if (isSuccess && data?.data) {
-      dispatch(setCredentials({ user: data.user }));
+      dispatch(setCredentials({ user: data.data.user })); 
     }
   }, [isSuccess, data, dispatch]);
 

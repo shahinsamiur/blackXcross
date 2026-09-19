@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import * as yup from "yup";
 import { FiLock } from "react-icons/fi";
@@ -12,7 +12,7 @@ import PasswordInput from "../../../../components/ui/PasswordInput";
 
 const initialValues = { password: "", confirmPassword: "" };
 
-export default function ResetPasswordPage() {
+function ResetPasswordContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const token = searchParams.get("token") || "";
@@ -111,5 +111,13 @@ export default function ResetPasswordPage() {
         {isSubmitting ? "Resetting..." : "Reset Password"}
       </Button>
     </form>
+  );
+}
+
+export default function ResetPasswordPage() {
+  return (
+    <Suspense fallback={<div className="flex w-full items-center justify-center p-6 text-muted">Loading form...</div>}>
+      <ResetPasswordContent />
+    </Suspense>
   );
 }

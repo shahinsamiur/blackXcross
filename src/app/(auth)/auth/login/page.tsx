@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, Suspense } from "react";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useDispatch } from "react-redux";
@@ -15,7 +15,7 @@ import PasswordInput from "../../../../components/ui/PasswordInput";
 
 const initialValues = { email: "", password: "" };
 
-export default function LoginPage() {
+function LoginContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const dispatch = useDispatch();
@@ -41,11 +41,7 @@ export default function LoginPage() {
       if (result.refreshToken) {
         document.cookie = `refreshToken=${result.refreshToken}; path=/; max-age=${60 * 60 * 24 * 30}`;
       }
-
-      // Store full user data in Redux
       dispatch(setCredentials({ user: result.user }));
-
-      // Redirect to original destination or home
       const redirectPath = searchParams.get("redirect") || "/";
       router.push(redirectPath);
     } catch (err: any) {
@@ -140,5 +136,13 @@ export default function LoginPage() {
         </Link>
       </p>
     </form>
+  );
+}
+
+export default function LoginPage() {
+  return (
+    <Suspense fallback={<div className="flex w-full items-center justify-center p-6 text-muted">Loading form...</div>}>
+      <LoginContent />
+    </Suspense>
   );
 }

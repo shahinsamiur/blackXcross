@@ -47,7 +47,7 @@ export default function DossierPage() {
             <div className="h-16 w-16 animate-pulse rounded-full bg-muted" />
           ) : (
             <ProfileAvatar 
-              src={user?.avatarUrl || "/image/hero1.jpg"} 
+              src={user?.avatar || "/image/hero1.jpg"} 
               alt={user?.username || "Your profile"} 
               size={64} 
             />
