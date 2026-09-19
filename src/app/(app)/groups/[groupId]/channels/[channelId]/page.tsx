@@ -4,7 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { useParams } from "next/navigation";
 import { FiArrowLeft, FiHash, FiSend } from "react-icons/fi";
-import ProfileAvatar from "../../../../../../components/blackxcross/ProfileAvatar";
+import ProfileAvatar from "../../../../../../components/ProfileAvatar";
 import {
   getGroupById,
   getChannelById,

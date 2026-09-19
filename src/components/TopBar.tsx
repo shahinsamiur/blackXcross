@@ -6,6 +6,7 @@ import Link from "next/link";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/src/state/redux/store";
 import { logout } from "@/src/state/redux/slices/authSlice";
+import { GiCrossMark } from "react-icons/gi";
 import {
   FiBell,
   FiMail,
@@ -15,7 +16,6 @@ import {
   FiLogOut,
   FiLogIn,
 } from "react-icons/fi";
-import SkullMark from "../icons/SkullMark";
 import GrungeOverlay from "./GrungeOverlay";
 import ProfileAvatar from "./ProfileAvatar";
 
@@ -91,7 +91,7 @@ export default function Header() {
   };
 
   const handleLogout = () => {
-    document.cookie = "accessToken=; path=/; max-age=0";
+    document.cookie = "token=; path=/; max-age=0";
     document.cookie = "refreshToken=; path=/; max-age=0";
     dispatch(logout());
     router.push("/");
@@ -254,10 +254,9 @@ export default function Header() {
 
         <div className="flex min-w-0 flex-col gap-2 lg:order-1">
           <div className="flex min-w-0 flex-wrap items-center gap-2 sm:gap-4">
-            <h1 className="font-display min-w-0 wrap-break-word text-3xl leading-none tracking-wide text-foreground/90 [text-shadow:0_2px_10px_rgba(0,0,0,0.65)] xs:text-4xl sm:text-5xl md:text-6xl lg:text-7xl">
-              BLACK<span className="text-primary">×</span>CROSS
+            <h1 className="font-display min-w-0 wrap-break-word text-3xl leading-none w-full flex tracking-wide text-foreground/90 [text-shadow:0_2px_10px_rgba(0,0,0,0.65)] xs:text-4xl sm:text-5xl md:text-6xl lg:text-7xl">
+              BLACK<span className="text-primary"><GiCrossMark /></span>CROSS
             </h1>
-            <SkullMark className="h-8 w-8 shrink-0 drop-shadow-[0_2px_6px_rgba(0,0,0,0.6)] sm:h-11 sm:w-11 md:h-14 md:w-14 lg:h-16 lg:w-16" />
           </div>
           <p className="text-[10px] font-medium tracking-[0.2em] text-muted/80 uppercase sm:text-[11px] sm:tracking-[0.25em] md:text-xs">
             A crowdsourced public record investigative archive

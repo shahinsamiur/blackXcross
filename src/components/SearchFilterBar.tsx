@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { FiSearch } from "react-icons/fi";
-import { caseFilters } from "../../_mock/blackxcross";
+import { caseFilters } from "../_mock/blackxcross";
 
 interface SearchFilterBarProps {
   onSearchChange?: (value: string) => void;

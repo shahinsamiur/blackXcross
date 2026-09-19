@@ -1,5 +1,5 @@
 import { FiArrowRight } from "react-icons/fi";
-import SkullIcon from "../icons/SkullIcon";
+import SkullIcon from "./icons/SkullIcon";
 
 export default function CtaBanner() {
   return (

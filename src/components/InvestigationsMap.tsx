@@ -3,7 +3,7 @@
 import dynamic from "next/dynamic";
 import { FiUser, FiUsers } from "react-icons/fi";
 import { FaStar } from "react-icons/fa6";
-import { investigationStats } from "../../_mock/blackxcross";
+import { investigationStats } from "../_mock/blackxcross";
 
 const LeafletMap = dynamic(() => import("./LeafletMap"), {
   ssr: false,

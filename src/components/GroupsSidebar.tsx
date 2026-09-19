@@ -6,7 +6,7 @@ import { useMemo, useState } from "react";
 import { FiPlus, FiSearch } from "react-icons/fi";
 import ProfileAvatar from "./ProfileAvatar";
 import GroupBadge from "./GroupBadge";
-import { joinedGroups } from "../../_mock/groups";
+import { joinedGroups } from "../_mock/groups";
 
 export default function GroupsSidebar() {
   const pathname = usePathname();

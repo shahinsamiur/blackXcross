@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { FiHash, FiPlus } from "react-icons/fi";
 import ChannelThread from "./ChannelThread";
-import { getChannelsByGroup, type Channel } from "../../../_mock/groups";
+import { getChannelsByGroup, type Channel } from "../../_mock/groups";
 
 export default function ChannelsTab({ groupId }: { groupId: string }) {
   const [channelList, setChannelList] = useState(getChannelsByGroup(groupId));

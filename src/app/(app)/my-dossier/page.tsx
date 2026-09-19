@@ -4,8 +4,8 @@ import Link from "next/link";
 import { useSelector } from "react-redux";
 import { FiEdit3, FiUsers, FiFileText } from "react-icons/fi";
 import { myGroups } from "../../../_mock/blackxcross"; 
-import CaseCard from "../../../components/blackxcross/CaseCard";
-import ProfileAvatar from "../../../components/blackxcross/ProfileAvatar";
+import CaseCard from "../../../components/CaseCard";
+import ProfileAvatar from "../../../components/ProfileAvatar";
 import type { RootState } from "../../../state/redux/store";
 import { useGetUserQuery, useGetUserCasesQuery } from "../../../state/redux/api/users";
 

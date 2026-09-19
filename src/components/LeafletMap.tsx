@@ -4,7 +4,7 @@ import { FiPlus, FiMinus, FiCrosshair } from "react-icons/fi";
 import { MapContainer, TileLayer, Marker, useMap } from "react-leaflet";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
-import { mapMarkers } from "../../_mock/blackxcross";
+import { mapMarkers } from "../_mock/blackxcross";
 
 const pinIcon = L.divIcon({
   className: "",

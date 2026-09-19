@@ -1,6 +1,6 @@
 import { FiUserPlus } from "react-icons/fi";
 import ProfileAvatar from "../ProfileAvatar";
-import { getMembersByGroup } from "../../../_mock/groups";
+import { getMembersByGroup } from "../../_mock/groups";
 
 const roleStyles: Record<string, string> = {
   owner: "border-primary/40 bg-primary/10 text-primary",

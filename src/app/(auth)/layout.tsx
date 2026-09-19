@@ -1,4 +1,4 @@
-import GrungeOverlay from "../../components/blackxcross/GrungeOverlay";
+import GrungeOverlay from "../../components/GrungeOverlay";
 import SkullMark from "../../components/icons/SkullMark";
 
 export default function AuthLayout({

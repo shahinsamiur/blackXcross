@@ -1,6 +1,6 @@
 import { notFound } from "next/navigation";
 import { FiUserPlus } from "react-icons/fi";
-import ProfileAvatar from "../../../../../components/blackxcross/ProfileAvatar";
+import ProfileAvatar from "../../../../../components/ProfileAvatar";
 import { getGroupById, getMembersByGroup } from "../../../../../_mock/groups";
 
 const roleStyles: Record<string, string> = {

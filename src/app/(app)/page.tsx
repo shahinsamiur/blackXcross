@@ -1,11 +1,11 @@
 "use client";
 
-import SearchFilterBar from "../../components/blackxcross/SearchFilterBar";
-import CaseCardsRow from "../../components/blackxcross/CaseCardsRow";
-import ActivityFeed from "../../components/blackxcross/ActivityFeed";
-import InvestigationsMap from "../../components/blackxcross/InvestigationsMap";
-import TrendingTheories from "../../components/blackxcross/TrendingTheories";
-import CtaBanner from "../../components/blackxcross/CtaBanner";
+import SearchFilterBar from "../../components/SearchFilterBar";
+import CaseCardsRow from "../../components/CaseCardsRow";
+import ActivityFeed from "../../components/ActivityFeed";
+import InvestigationsMap from "../../components/InvestigationsMap";
+import TrendingTheories from "../../components/TrendingTheories";
+import CtaBanner from "../../components/CtaBanner";
 import { useGetDashboardQuery } from "../../state/redux/api/dashboard";
 import type { FetchBaseQueryError } from "@reduxjs/toolkit/query";
 import type { SerializedError } from "@reduxjs/toolkit";

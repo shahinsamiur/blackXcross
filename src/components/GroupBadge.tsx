@@ -1,5 +1,5 @@
 import { FiGlobe, FiLock } from "react-icons/fi";
-import type { GroupVisibility, GroupActivity } from "../../_mock/groups";
+import type { GroupVisibility, GroupActivity } from "../_mock/groups";
 
 export default function GroupBadge({
   visibility,

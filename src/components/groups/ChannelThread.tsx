@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { FiHash, FiArrowLeft, FiSend } from "react-icons/fi";
 import ProfileAvatar from "../ProfileAvatar";
-import { getMessagesByChannel, type Channel } from "../../../_mock/groups";
+import { getMessagesByChannel, type Channel } from "../../_mock/groups";
 
 export default function ChannelThread({
   channel,

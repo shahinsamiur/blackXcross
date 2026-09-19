@@ -2,8 +2,8 @@
 
 import { useState } from "react";
 import { FiChevronLeft, FiChevronRight } from "react-icons/fi";
-import SearchFilterBar from "../../../components/blackxcross/SearchFilterBar";
-import CaseCard from "../../../components/blackxcross/CaseCard";
+import SearchFilterBar from "../../../components/SearchFilterBar";
+import CaseCard from "../../../components/CaseCard";
 import { useGetCasesQuery } from "@/src/state/redux/api/cases"; 
 
 const caseFilters = ["All Cases", "Cold Cases", "Open Investigations", "Recent Submissions"];

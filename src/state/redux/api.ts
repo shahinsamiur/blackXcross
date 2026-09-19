@@ -11,6 +11,7 @@ export const tagTypes = [
   "Report",
   "Moderation",
   "Auth",
+  "Analytics"
 ] as const;
 
 export type TagType = (typeof tagTypes)[number];

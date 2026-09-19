@@ -15,7 +15,7 @@ import {
   FiPlus,
   FiSearch,
 } from "react-icons/fi";
-import { myGroups, myContacts, sidebarNav } from "../../_mock/blackxcross";
+import { myGroups, myContacts, sidebarNav } from "../_mock/blackxcross";
 import RequireAuthModal from "@/src/components/ui/RequireAuthModal";
 
 const navIcons = {

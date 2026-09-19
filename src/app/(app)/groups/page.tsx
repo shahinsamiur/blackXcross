@@ -4,8 +4,8 @@ import { useMemo, useState } from "react";
 import Link from "next/link";
 import { FiPlus, FiSearch } from "react-icons/fi";
 import TornCard from "../../../components/ui/TornCard";
-import ProfileAvatar from "../../../components/blackxcross/ProfileAvatar";
-import GroupBadge from "../../../components/blackxcross/GroupBadge";
+import ProfileAvatar from "../../../components/ProfileAvatar";
+import GroupBadge from "../../../components/GroupBadge";
 import { groups } from "../../../_mock/groups";
 
 const filters = ["All", "Joined", "Public", "Private"] as const;

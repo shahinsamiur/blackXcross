@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { FiArrowRight } from "react-icons/fi";
-import type { CaseItem } from "../../state/redux/api";
+import type { CaseItem } from "../state/redux/api";
 
 export default function CaseCard({ caseFile }: { caseFile: CaseItem }) {
   const isOpen = caseFile.investigationStatus === "OPEN";

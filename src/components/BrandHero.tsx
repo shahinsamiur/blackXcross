@@ -1,4 +1,4 @@
-import SkullIcon from "../icons/SkullIcon";
+import SkullIcon from "./icons/SkullIcon";
 
 export default function BrandHero() {
   return (

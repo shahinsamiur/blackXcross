@@ -16,16 +16,11 @@ const authRoutes = ["/auth/login", "/auth/register", "/auth/forgot-password", "/
 
 export function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
-
   const isProtectedRoute = protectedRoutes.some((route) => pathname.startsWith(route));
-
   const isAuthRoute = authRoutes.some((route) => pathname.startsWith(route));
-
-  const accessToken = request.cookies.get("accessToken")?.value;
+  const token = request.cookies.get("token")?.value;
   const refreshToken = request.cookies.get("refreshToken")?.value;
-  
-  const hasValidToken = accessToken || refreshToken;
-
+  const hasValidToken = token || refreshToken;
   if (isProtectedRoute && !hasValidToken) {
     const loginUrl = new URL("/auth/login", request.url);
     loginUrl.searchParams.set("redirect", pathname);

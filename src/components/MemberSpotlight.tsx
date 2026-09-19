@@ -1,5 +1,5 @@
 import { FiStar } from "react-icons/fi";
-import { memberSpotlight } from "../../_mock/blackxcross";
+import { memberSpotlight } from "../_mock/blackxcross";
 import Image from "next/image";
 
 export default function MemberSpotlight() {

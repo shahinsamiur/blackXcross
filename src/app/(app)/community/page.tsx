@@ -1,7 +1,7 @@
 "use client";
 
-import ActivityFeed from "../../../components/blackxcross/ActivityFeed";
-import TrendingTheories from "../../../components/blackxcross/TrendingTheories";
+import ActivityFeed from "../../../components/ActivityFeed";
+import TrendingTheories from "../../../components/TrendingTheories";
 import { FiUsers, FiPlus } from "react-icons/fi";
 import { useGetGroupsQuery } from "../../../state/redux/api/groups";
 import { useGetDashboardQuery } from "../../../state/redux/api/dashboard";

@@ -1,42 +1,43 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useState } from "react";
 import Link from "next/link";
-import { FiSearch } from "react-icons/fi";
 import {
-  moderationItems,
-  type ModerationStatus,
-} from "../../../../_mock/admin";
+  useGetModerationQueueQuery,
+  type ModerationItem,
+} from "../../../../state/redux/api/moderation";
 
-const statusFilters: (ModerationStatus | "All")[] = [
-  "All",
-  "Flagged",
-  "Approved",
-  "Rejected",
-];
+const statusFilters = ["All", "PENDING", "APPROVED", "REJECTED"] as const;
+const targetTypeFilters = ["All", "CASE", "THEORY", "COMMENT"] as const;
 
-const statusStyles: Record<ModerationStatus, string> = {
-  Flagged: "border-primary text-primary bg-primary/10",
-  Approved: "border-success text-success bg-success/10",
-  Rejected: "border-border text-muted bg-card",
+const statusStyles: Record<ModerationItem["status"], string> = {
+  PENDING: "border-primary text-primary bg-primary/10",
+  APPROVED: "border-success text-success bg-success/10",
+  REJECTED: "border-border text-muted bg-card",
+};
+
+const statusLabels: Record<ModerationItem["status"], string> = {
+  PENDING: "Pending",
+  APPROVED: "Approved",
+  REJECTED: "Rejected",
 };
 
 export default function AdminModerationPage() {
-  const [query, setQuery] = useState("");
-  const [statusFilter, setStatusFilter] = useState<ModerationStatus | "All">(
-    "All"
-  );
+  const [page, setPage] = useState(1);
+  const [statusFilter, setStatusFilter] =
+    useState<(typeof statusFilters)[number]>("All");
+  const [targetTypeFilter, setTargetTypeFilter] =
+    useState<(typeof targetTypeFilters)[number]>("All");
 
-  const filteredItems = useMemo(() => {
-    return moderationItems.filter((item) => {
-      const matchesQuery = item.contentLabel
-        .toLowerCase()
-        .includes(query.toLowerCase());
-      const matchesStatus =
-        statusFilter === "All" || item.status === statusFilter;
-      return matchesQuery && matchesStatus;
-    });
-  }, [query, statusFilter]);
+  const { data, isLoading, isFetching, isError } = useGetModerationQueueQuery({
+    page,
+    limit: 20,
+    status: statusFilter === "All" ? undefined : statusFilter,
+    targetType: targetTypeFilter === "All" ? undefined : targetTypeFilter,
+  });
+
+  const items = data?.data.items ?? [];
+  const pagination = data?.data.pagination;
 
   return (
     <div className="flex w-full flex-col gap-6">
@@ -45,33 +46,42 @@ export default function AdminModerationPage() {
       </h1>
 
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-        <div className="relative w-full max-w-sm">
-          <FiSearch
-            className="absolute left-3 top-1/2 -translate-y-1/2 text-muted"
-            size={16}
-          />
-          <input
-            type="text"
-            value={query}
-            onChange={(e) => setQuery(e.target.value)}
-            placeholder="Search flagged content..."
-            className="w-full rounded-lg border border-border bg-card py-2.5 pl-9 pr-3 text-sm text-foreground placeholder:text-muted focus:border-primary/50 focus:outline-none"
-          />
-        </div>
-
         <div className="flex flex-wrap gap-2">
           {statusFilters.map((status) => (
             <button
               key={status}
               type="button"
-              onClick={() => setStatusFilter(status)}
+              onClick={() => {
+                setStatusFilter(status);
+                setPage(1);
+              }}
               className={`rounded-lg border px-3 py-2 text-xs font-semibold ${
                 statusFilter === status
                   ? "border-primary text-primary bg-primary/10"
                   : "border-border text-foreground/80 hover:border-primary/40"
               }`}
             >
-              {status}
+              {status === "All" ? "All" : statusLabels[status]}
+            </button>
+          ))}
+        </div>
+
+        <div className="flex flex-wrap gap-2">
+          {targetTypeFilters.map((type) => (
+            <button
+              key={type}
+              type="button"
+              onClick={() => {
+                setTargetTypeFilter(type);
+                setPage(1);
+              }}
+              className={`rounded-lg border px-3 py-2 text-xs font-semibold ${
+                targetTypeFilter === type
+                  ? "border-primary text-primary bg-primary/10"
+                  : "border-border text-foreground/80 hover:border-primary/40"
+              }`}
+            >
+              {type}
             </button>
           ))}
         </div>
@@ -81,54 +91,99 @@ export default function AdminModerationPage() {
         <table className="w-full min-w-160 text-left text-sm">
           <thead>
             <tr className="border-b border-border text-xs uppercase tracking-wide text-muted">
-              <th className="px-4 py-3 font-medium">Content</th>
               <th className="px-4 py-3 font-medium">Type</th>
-              <th className="px-4 py-3 font-medium">Submitted By</th>
               <th className="px-4 py-3 font-medium">AI Flag Reason</th>
+              <th className="px-4 py-3 font-medium">Reviewer</th>
+              <th className="px-4 py-3 font-medium">Flagged At</th>
               <th className="px-4 py-3 font-medium">Status</th>
               <th className="px-4 py-3 font-medium"></th>
             </tr>
           </thead>
           <tbody>
-            {filteredItems.map((item) => (
-              <tr key={item.id} className="border-b border-border last:border-0">
-                <td className="px-4 py-3 font-medium text-foreground/90">
-                  {item.contentLabel}
-                </td>
-                <td className="px-4 py-3 text-foreground/80">
-                  {item.contentType}
-                </td>
-                <td className="px-4 py-3 text-foreground/80">
-                  {item.submittedBy}
-                </td>
-                <td className="px-4 py-3 text-muted">{item.aiFlagReason}</td>
-                <td className="px-4 py-3">
-                  <span
-                    className={`rounded-md border px-2 py-1 text-[11px] font-semibold uppercase ${statusStyles[item.status]}`}
-                  >
-                    {item.status}
-                  </span>
-                </td>
-                <td className="px-4 py-3 text-right">
-                  <Link
-                    href={`/admin/moderation/${item.id}`}
-                    className="text-xs font-semibold text-primary hover:opacity-80"
-                  >
-                    Review
-                  </Link>
-                </td>
-              </tr>
-            ))}
-            {filteredItems.length === 0 && (
+            {isLoading &&
+              Array.from({ length: 5 }).map((_, i) => (
+                <tr key={i} className="border-b border-border last:border-0">
+                  <td colSpan={6} className="px-4 py-3">
+                    <div className="h-4 w-full animate-pulse rounded bg-border" />
+                  </td>
+                </tr>
+              ))}
+
+            {!isLoading &&
+              items.map((item) => (
+                <tr key={item.id} className="border-b border-border last:border-0">
+                  <td className="px-4 py-3 font-medium text-foreground/90">
+                    {item.targetType}
+                  </td>
+                  <td className="px-4 py-3 text-muted">{item.reason || "—"}</td>
+                  <td className="px-4 py-3 text-foreground/80">
+                    {item.reviewer?.username || item.reviewer?.name || "—"}
+                  </td>
+                  <td className="px-4 py-3 text-foreground/80">
+                    {new Date(item.createdAt).toLocaleDateString()}
+                  </td>
+                  <td className="px-4 py-3">
+                    <span
+                      className={`rounded-md border px-2 py-1 text-[11px] font-semibold uppercase ${statusStyles[item.status]}`}
+                    >
+                      {statusLabels[item.status]}
+                    </span>
+                  </td>
+                  <td className="px-4 py-3 text-right">
+                    <Link
+                      href={`/admin/moderation/${item.id}`}
+                      className="text-xs font-semibold text-primary hover:opacity-80"
+                    >
+                      Review
+                    </Link>
+                  </td>
+                </tr>
+              ))}
+
+            {!isLoading && isError && (
               <tr>
                 <td colSpan={6} className="px-4 py-6 text-center text-muted">
-                  No flagged content matches your search.
+                  Failed to load moderation queue.
+                </td>
+              </tr>
+            )}
+
+            {!isLoading && !isError && items.length === 0 && (
+              <tr>
+                <td colSpan={6} className="px-4 py-6 text-center text-muted">
+                  No flagged content matches your filters.
                 </td>
               </tr>
             )}
           </tbody>
         </table>
       </div>
+
+      {pagination && pagination.totalPages > 1 && (
+        <div className="flex items-center justify-between text-xs text-muted">
+          <span>
+            Page {pagination.page} of {pagination.totalPages}
+          </span>
+          <div className="flex gap-2">
+            <button
+              type="button"
+              disabled={page <= 1 || isFetching}
+              onClick={() => setPage((p) => Math.max(1, p - 1))}
+              className="rounded-lg border border-border px-3 py-1.5 font-semibold text-foreground/80 disabled:opacity-40"
+            >
+              Previous
+            </button>
+            <button
+              type="button"
+              disabled={page >= pagination.totalPages || isFetching}
+              onClick={() => setPage((p) => p + 1)}
+              className="rounded-lg border border-border px-3 py-1.5 font-semibold text-foreground/80 disabled:opacity-40"
+            >
+              Next
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

@@ -38,8 +38,6 @@ export default function LoginPage() {
 
       const result = await login(values).unwrap();
 
-      // Store tokens in cookies for middleware
-      document.cookie = `accessToken=${result.accessToken}; path=/; max-age=${60 * 60 * 24 * 7}`;
       if (result.refreshToken) {
         document.cookie = `refreshToken=${result.refreshToken}; path=/; max-age=${60 * 60 * 24 * 30}`;
       }

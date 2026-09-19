@@ -6,17 +6,25 @@ export interface ApiResponse<T> {
   data: T;
 }
 
+export interface AdminReportReporter {
+  id: string;
+  name: string;
+  username: string | null;
+  avatar: string | null;
+}
 
 export interface AdminReport {
   id: string;
   reporterId: string;
-  targetId: string;
+  reporter: AdminReportReporter;
   targetType: string;
-  targetLabel: string;
-  reporter: string;
+  targetId: string;
   reason: string;
   status: string;
+  adminNotes: string | null;
+  resolvedBy: string | null;
   createdAt: string;
+  updatedAt: string;
 }
 
 export interface AdminFlag {
@@ -26,7 +34,7 @@ export interface AdminFlag {
   contentLabel: string;
   aiFlagReason: string;
   reason: string;
-  status: string;      
+  status: string;
   flaggedAt: string;
 }
 
@@ -37,7 +45,6 @@ export interface AdminCase {
   category: string;
   publishState: string;
   createdAt: string;
-
 }
 
 export interface AdminDashboardData {
@@ -63,7 +70,7 @@ export interface AdminDashboardData {
     createdAt: string;
   }>;
   recentReports: AdminReport[];
-  recentFlags?: AdminFlag[]; 
+  recentFlags?: AdminFlag[];
 }
 
 export interface AdminUser {
@@ -75,7 +82,7 @@ export interface AdminUser {
   joinDate: string;
   casesSubmitted: number;
   reportsFiled: number;
-  createdAt: string
+  createdAt: string;
 }
 
 export interface PaginatedResponse<T> {
@@ -87,6 +94,22 @@ export interface PaginatedResponse<T> {
     totalPages: number;
   };
 }
+export interface AdminAnalyticsResponse {
+  totals: {
+    users: number;
+    cases: number;
+    theories: number;
+    comments: number;
+    pendingReports: number;
+    pendingModeration: number;
+  };
+  growth: {
+    last7Days: { users: number; cases: number };
+    last30Days: { users: number; cases: number };
+  };
+  casesByCategory: { category: string | null; count: number }[];
+  reportsByStatus: { status: string; count: number }[];
+}
 
 export const adminApi = api.injectEndpoints({
   endpoints: (build) => ({
@@ -94,10 +117,7 @@ export const adminApi = api.injectEndpoints({
       query: () => "/admin/dashboard",
       providesTags: ["Dashboard"],
     }),
-    getAdminUsers: build.query<
-      ApiResponse<PaginatedResponse<AdminUser>>,
-      { page?: number; limit?: number; search?: string; role?: string; status?: string }
-    >({
+    getAdminUsers: build.query<ApiResponse<PaginatedResponse<AdminUser>>, { page?: number; limit?: number; search?: string; role?: string; status?: string }>({
       query: ({ page = 1, limit = 20, search, role, status }) => ({
         url: "/admin/users",
         params: { page, limit, search, role, status },
@@ -118,10 +138,7 @@ export const adminApi = api.injectEndpoints({
       }),
       invalidatesTags: ["User", "Dashboard"],
     }),
-    getAdminCases: build.query<
-      ApiResponse<PaginatedResponse<AdminCase>>,
-      { page?: number; limit?: number; search?: string; publishState?: string; category?: string }
-    >({
+    getAdminCases: build.query<ApiResponse<PaginatedResponse<AdminCase>>, { page?: number; limit?: number; search?: string; publishState?: string; category?: string }>({
       query: ({ page = 1, limit = 20, search, publishState, category }) => ({
         url: "/admin/cases",
         params: { page, limit, search, publishState, category },
@@ -146,21 +163,18 @@ export const adminApi = api.injectEndpoints({
       }),
       invalidatesTags: ["User", "Dashboard"],
     }),
-
-    getAdminReports: build.query<
-      ApiResponse<PaginatedResponse<AdminReport>>,
-      { page?: number; limit?: number; status?: string; targetType?: string }
-    >({
+    getAdminReports: build.query<ApiResponse<PaginatedResponse<AdminReport>>, { page?: number; limit?: number; status?: string; targetType?: string }>({
       query: ({ page = 1, limit = 20, status, targetType }) => ({
         url: "/admin/reports",
         params: { page, limit, status, targetType },
       }),
       providesTags: ["Report"],
     }),
-    updateReport: build.mutation<
-      ApiResponse<AdminReport>,
-      { id: string; status: string; adminNotes?: string }
-    >({
+    getAdminReportById: build.query<ApiResponse<AdminReport>, string>({
+      query: (id) => `/reports/${id}`,
+      providesTags: (result, error, id) => [{ type: "Report", id }],
+    }),
+    updateReport: build.mutation<ApiResponse<AdminReport>, { id: string; status: string; adminNotes?: string }>({
       query: ({ id, ...body }) => ({
         url: `/admin/reports/${id}`,
         method: "PATCH",
@@ -168,6 +182,11 @@ export const adminApi = api.injectEndpoints({
       }),
       invalidatesTags: ["Report", "Dashboard"],
     }),
+    getAdminAnalytics: build.query<AdminAnalyticsResponse, void>({
+  query: () => '/admin/analytics',
+  providesTags: [{ type: 'Analytics', id: 'OVERVIEW' }], 
+  // Note: Ensure 'Analytics' is added to your base API `tagTypes` array if not already present
+}),
   }),
   overrideExisting: false,
 });
@@ -182,5 +201,7 @@ export const {
   useGetAdminCasesQuery,
   useDeleteCaseMutation,
   useGetAdminReportsQuery,
+  useGetAdminReportByIdQuery,
   useUpdateReportMutation,
+  useGetAdminAnalyticsQuery
 } = adminApi;

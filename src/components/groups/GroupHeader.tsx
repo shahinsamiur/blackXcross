@@ -1,6 +1,6 @@
 import ProfileAvatar from "../ProfileAvatar";
 import GroupBadge from "../GroupBadge";
-import type { Group } from "../../../_mock/groups";
+import type { Group } from "../../_mock/groups";
 
 export default function GroupHeader({ group }: { group: Group }) {
   return (

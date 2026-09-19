@@ -2,8 +2,8 @@
 
 import { useState } from "react";
 import { ValidationError } from "yup";
-import { groupSchema } from "../../../validations/group.schema";
-import { groupCategories, type Group } from "../../../_mock/groups";
+import { groupSchema } from "../../validations/group.schema";
+import { groupCategories, type Group } from "../../_mock/groups";
 
 export default function SettingsTab({ group }: { group: Group }) {
   const [values, setValues] = useState({

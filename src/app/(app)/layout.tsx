@@ -1,5 +1,5 @@
-import Sidebar from "../../components/blackxcross/Sidebar";
-import TopBar from "../../components/blackxcross/TopBar";
+import Sidebar from "../../components/Sidebar";
+import TopBar from "../../components/TopBar";
 
 export default function AppLayout({ children }: { children: React.ReactNode }) {
   return (

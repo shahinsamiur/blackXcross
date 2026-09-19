@@ -2,14 +2,14 @@
 
 import { useState } from "react";
 import { useParams } from "next/navigation";
-import GroupHeader from "../../../../components/blackxcross/groups/GroupHeader";
+import GroupHeader from "../../../../components/groups/GroupHeader";
 import GroupTabsNav, {
   type GroupTabId,
-} from "../../../../components/blackxcross/groups/GroupTabsNav";
-import OverviewTab from "../../../../components/blackxcross/groups/OverviewTab";
-import ChannelsTab from "../../../../components/blackxcross/groups/ChannelsTab";
-import MembersTab from "../../../../components/blackxcross/groups/MembersTab";
-import SettingsTab from "../../../../components/blackxcross/groups/SettingsTab";
+} from "../../../../components/groups/GroupTabsNav";
+import OverviewTab from "../../../../components/groups/OverviewTab";
+import ChannelsTab from "../../../../components/groups/ChannelsTab";
+import MembersTab from "../../../../components/groups/MembersTab";
+import SettingsTab from "../../../../components/groups/SettingsTab";
 import { getGroupById } from "../../../../_mock/groups";
 
 export default function GroupPage() {
