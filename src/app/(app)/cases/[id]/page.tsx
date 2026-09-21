@@ -2,8 +2,10 @@
 
 import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
+import { useSelector } from "react-redux";
 import { FiArrowLeft, FiEdit2, FiFileText, FiImage, FiMic, FiMapPin, FiDownload, } from "react-icons/fi";
 import { useGetCaseQuery } from "../../../../state/redux/api/cases";
+import type { RootState } from "../../../../state/redux/store";
 
 const evidenceIcons = { image: FiImage, document: FiFileText, audio: FiMic };
 
@@ -11,6 +13,8 @@ export default function CaseDetailsPage() {
   const router = useRouter();
   const params = useParams<{ id: string }>();
   const { data: caseData, isLoading, isError } = useGetCaseQuery(params.id);
+  const { user, status } = useSelector((state: RootState) => state.auth);
+  const canEdit = status === "authenticated" && !!user && caseData?.userId === user.id;
 
   if (isLoading) {
     return (
@@ -54,9 +58,11 @@ export default function CaseDetailsPage() {
         <Link href="/" className="flex items-center gap-1.5 text-sm font-medium text-foreground/80 hover:text-primary">
           <FiArrowLeft size={16} /> Back to Cases
         </Link>
-        <Link href={`/cases/${caseData.id}/edit`} className="flex items-center gap-1.5 rounded-lg border border-border px-3 py-2 text-xs font-semibold text-foreground/80 hover:border-primary/40 hover:text-primary">
-          <FiEdit2 size={14} /> Edit Case
-        </Link>
+        {canEdit && (
+          <Link href={`/cases/${caseData.id}/edit`} className="flex items-center gap-1.5 rounded-lg border border-border px-3 py-2 text-xs font-semibold text-foreground/80 hover:border-primary/40 hover:text-primary">
+            <FiEdit2 size={14} /> Edit Case
+          </Link>
+        )}
       </div>
 
       <div className="relative flex h-56 w-full items-end overflow-hidden rounded-xl border border-border bg-cover bg-center p-5 sm:h-72 sm:p-6" style={{ backgroundImage: `linear-gradient(to bottom, rgba(0,0,0,0.3), rgba(0,0,0,0.9)), url(${caseData.imageUrl || "/image/hero1.jpg"})` }}>

@@ -49,10 +49,17 @@ export interface DashboardResponse {
   stats: DashboardStats;
 }
 
+interface ApiResponse<T> {
+  success: boolean;
+  message: string;
+  data: T;
+}
+
 export const dashboardApi = api.injectEndpoints({
   endpoints: (builder) => ({
     getDashboard: builder.query<DashboardResponse, void>({
       query: () => "/dashboard",
+      transformResponse: (response: ApiResponse<DashboardResponse>) => response.data,
       providesTags: ["Dashboard"],
     }),
   }),

@@ -69,14 +69,14 @@ export default function CreateCasePage() {
     setValues((prev) => ({ ...prev, imageFile: null, imagePreviewUrl: "" }));
   };
 
-  const handleGalleryFilesSelected = (files: File[]) => {
-    setValues((prev) => {
-      const remainingSlots = MAX_GALLERY_IMAGES - prev.gallery.length;
-      if (remainingSlots <= 0) return prev;
-      const previewUrls = files.slice(0, remainingSlots).map((file) => URL.createObjectURL(file));
-      return { ...prev, gallery: [...prev.gallery, ...previewUrls] };
-    });
-  };
+const handleGalleryFilesSelected = (files: File[]) => {
+  setValues((prev) => {
+    const remainingSlots = MAX_GALLERY_IMAGES - prev.gallery.length;
+    if (remainingSlots <= 0) return prev;
+    const previewUrls = files.slice(0, remainingSlots).map((file) => URL.createObjectURL(file));
+    return { ...prev, gallery: [...prev.gallery, ...previewUrls] };
+  });
+};
 
   const handleRemoveGalleryImage = (index: number) => {
     setValues((prev) => {

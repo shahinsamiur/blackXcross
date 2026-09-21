@@ -231,15 +231,27 @@ export interface MyGroup {
   id: string;
   name: string;
   memberCount: number;
+  avatar?: string;
 }
 
 export const myGroups: MyGroup[] = [
-  { id: "alpine-anomaly", name: "Alpine Anomaly Team", memberCount: 18 },
-  { id: "bay-area-ccf", name: "Bay Area Cold Case Force", memberCount: 12 },
+  {
+    id: "alpine-anomaly",
+    name: "Alpine Anomaly Team",
+    memberCount: 18,
+    avatar: "/image/bg1.jpeg",
+  },
+  {
+    id: "bay-area-ccf",
+    name: "Bay Area Cold Case Force",
+    memberCount: 12,
+    avatar: "/image/hero1.jpg",
+  },
   {
     id: "hinterkaifeck-think-tank",
     name: "Hinterkaifeck Think Tank",
     memberCount: 73,
+    avatar: "/image/hero2.jpg",
   },
 ];
 
@@ -247,14 +259,40 @@ export interface Contact {
   id: string;
   name: string;
   online: boolean;
+  avatar?: string;
 }
 
 export const myContacts: Contact[] = [
-  { id: "investigator-x-1", name: "Investigator_X", online: true },
-  { id: "truecrimejane", name: "TrueCrimeJane", online: true },
-  { id: "forensicphil-1", name: "ForensicPhil", online: true },
-  { id: "forensicphil-2", name: "ForensicPhil", online: true },
-  { id: "investigator-x-2", name: "Investigator_X", online: true },
+  {
+    id: "investigator-x-1",
+    name: "Investigator_X",
+    online: true,
+    avatar: "/image/bg1.jpeg",
+  },
+  {
+    id: "truecrimejane",
+    name: "TrueCrimeJane",
+    online: true,
+    avatar: "/image/hero1.jpg",
+  },
+  {
+    id: "forensicphil-1",
+    name: "ForensicPhil",
+    online: true,
+    avatar: "/image/hero2.jpg",
+  },
+  {
+    id: "forensicphil-2",
+    name: "ForensicPhil",
+    online: true,
+    avatar: "/image/bg1.jpeg",
+  },
+  {
+    id: "investigator-x-2",
+    name: "Investigator_X",
+    online: true,
+    avatar: "/image/hero1.jpg",
+  },
 ];
 
 export type ActivityIcon = "pin" | "comment" | "attachment" | "message";

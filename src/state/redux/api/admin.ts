@@ -147,6 +147,10 @@ export const adminApi = api.injectEndpoints({
       }),
       providesTags: ["Case"],
     }),
+    getAdminCaseById: build.query<ApiResponse<AdminCase & { narrative?: string | null; location?: string | null; caseNumber?: string | null; investigationStatus?: string; files?: Array<{ id: string; url: string; filename: string; mimeType: string }>; user?: { id: string; username: string; name?: string | null; avatar?: string | null }; _count?: { theories: number; files: number } }>, string>({
+      query: (id) => `/admin/cases/${id}`,
+      providesTags: (result, error, id) => [{ type: "Case", id }],
+    }),
     deleteCase: build.mutation<ApiResponse<null>, string>({
       query: (id) => ({
         url: `/admin/cases/${id}`,
@@ -200,6 +204,7 @@ export const {
   useBanUserMutation,
   useReactivateUserMutation,
   useGetAdminCasesQuery,
+  useGetAdminCaseByIdQuery,
   useDeleteCaseMutation,
   useGetAdminReportsQuery,
   useGetAdminReportByIdQuery,

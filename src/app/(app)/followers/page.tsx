@@ -1,5 +1,6 @@
 import { FiUser, FiUsers } from "react-icons/fi";
 import { myContacts } from "../../../_mock/blackxcross";
+import ProfileAvatar from "../../../components/ProfileAvatar";
 
 const followers = myContacts;
 
@@ -20,9 +21,17 @@ export default function FollowersPage() {
               key={`${contact.id}-${i}`}
               className="flex items-center gap-3 rounded-lg border border-border bg-card p-4"
             >
-              <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-background text-muted">
-                <FiUser size={16} />
-              </span>
+              {contact.avatar ? (
+                <ProfileAvatar
+                  src={contact.avatar}
+                  alt={contact.name}
+                  size={36}
+                />
+              ) : (
+                <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-background text-muted">
+                  <FiUser size={16} />
+                </span>
+              )}
               <span className="truncate text-sm text-foreground/90">
                 {contact.name}
               </span>

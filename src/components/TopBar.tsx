@@ -6,7 +6,7 @@ import Link from "next/link";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/src/state/redux/store";
 import { logout } from "@/src/state/redux/slices/authSlice";
-import { GiCrossMark } from "react-icons/gi";
+import Image from "next/image";
 import {
   FiBell,
   FiMail,
@@ -252,18 +252,17 @@ export default function Header() {
           </div>
         </div>
 
-        <div className="flex min-w-0 flex-col gap-2 lg:order-1">
-          <div className="flex min-w-0 flex-wrap items-center gap-2 sm:gap-4">
-            <h1 className="font-display min-w-0 wrap-break-word text-3xl leading-none w-full flex tracking-wide text-foreground/90 [text-shadow:0_2px_10px_rgba(0,0,0,0.65)] xs:text-4xl sm:text-5xl md:text-6xl lg:text-7xl">
-              BLACK<span className="text-primary"><GiCrossMark /></span>CROSS
-            </h1>
+        <div className="flex min-w-0 flex-col gap-2 lg:order-1 w-full">
+          <div className="flex min-w-0 flex-wrap items-center justify-center gap-2 sm:gap-4  w-full">
+     
+            <Image
+              src="/image/logo.png"
+              alt="BLACK×CROSS"
+              className="h-24 w-auto object-contain xs:h-28 sm:h-32 md:h-36 lg:h-44"
+              width={1000}
+              height={800}
+            />
           </div>
-          <p className="text-[10px] font-medium tracking-[0.2em] text-muted/80 uppercase sm:text-[11px] sm:tracking-[0.25em] md:text-xs">
-            A crowdsourced public record investigative archive
-          </p>
-          <p className="text-[9px] tracking-[0.15em] text-muted/80 uppercase sm:text-[10px] sm:tracking-[0.2em] md:text-xs">
-            Exploring cold cases. Connecting investigators. Seeking the truth.
-          </p>
         </div>
       </div>
     </header>

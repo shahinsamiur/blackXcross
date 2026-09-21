@@ -81,7 +81,18 @@ function SidebarContent() {
               key={group.id}
               className="flex items-center! justify-between! gap-2 text-sm text-foreground/90 w-full"
             >
-              <span className="flex h-7 w-7 items-center justify-center rounded-full text-muted bg-card border border-gray-800"></span>
+              <span className="relative flex h-7 w-7 shrink-0 items-center justify-center overflow-hidden rounded-full border border-gray-800 bg-card text-muted">
+                {group.avatar ? (
+                  // eslint-disable-next-line @next/next/no-img-element
+                  <img
+                    src={group.avatar}
+                    alt={group.name}
+                    className="h-full w-full object-cover"
+                  />
+                ) : (
+                  <FiUsers size={14} />
+                )}
+              </span>
               <span className="flex-1 truncate text-foreground/80 text-nowrap">
                 {group.name}
               </span>
@@ -113,8 +124,17 @@ function SidebarContent() {
               key={`${contact.id}-${i}`}
               className="flex items-center gap-2 text-sm text-foreground/80"
             >
-              <span className="flex h-7 w-7 items-center justify-center rounded-full bg-card text-muted">
-                <FiUser size={14} />
+              <span className="relative flex h-7 w-7 shrink-0 items-center justify-center overflow-hidden rounded-full bg-card text-muted">
+                {contact.avatar ? (
+                  // eslint-disable-next-line @next/next/no-img-element
+                  <img
+                    src={contact.avatar}
+                    alt={contact.name}
+                    className="h-full w-full object-cover"
+                  />
+                ) : (
+                  <FiUser size={14} />
+                )}
               </span>
               <span className="truncate">{contact.name}</span>
               {contact.online && (
@@ -185,8 +205,8 @@ export default function Sidebar() {
 
       <aside className="hidden w-64 shrink-0 border-r border-border lg:flex lg:flex-col xl:w-72">
         <div className="flex h-20 items-center gap-3 border-b border-border px-6">
-          <FiMenu size={20} className="text-muted" />
-          <span className="text-xl font-black tracking-wide">BLACK×CROSS</span>
+          {/* <FiMenu size={20} className="text-muted" /> */}
+          <span className="text-xl font-black tracking-wide">BLACKXCROSS</span>
         </div>
         <SidebarContent />
       </aside>

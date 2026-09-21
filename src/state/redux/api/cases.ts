@@ -108,6 +108,16 @@ export const casesApi = api.injectEndpoints({
       query: ({ id, data }) => ({ url: `/cases/${id}`, method: "PATCH", body: data }),
       invalidatesTags: (result, error, { id }) => [{ type: "Case", id }, { type: "Case", id: "LIST" }],
     }),
+    publishCase: builder.mutation<CaseDetailResponse, string>({
+      query: (id) => ({ url: `/cases/${id}/publish`, method: "POST" }),
+      transformResponse: (response: ApiResponse<CaseDetailResponse>) => response.data,
+      invalidatesTags: (result, error, id) => [{ type: "Case", id }, { type: "Case", id: "LIST" }],
+    }),
+    draftCase: builder.mutation<CaseDetailResponse, string>({
+      query: (id) => ({ url: `/cases/${id}/draft`, method: "POST" }),
+      transformResponse: (response: ApiResponse<CaseDetailResponse>) => response.data,
+      invalidatesTags: (result, error, id) => [{ type: "Case", id }, { type: "Case", id: "LIST" }],
+    }),
   }),
   overrideExisting: false,
 });
@@ -118,4 +128,6 @@ export const {
   useUploadCaseImageMutation,
   useCreateCaseMutation,
   useUpdateCaseMutation,
+  usePublishCaseMutation,
+  useDraftCaseMutation,
 } = casesApi;
