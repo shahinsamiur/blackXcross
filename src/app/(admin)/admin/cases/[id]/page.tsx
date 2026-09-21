@@ -4,7 +4,10 @@ import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
 import { FiArrowLeft, FiCheck, FiX } from "react-icons/fi";
 import { useGetAdminCaseByIdQuery } from "../../../../../state/redux/api/admin";
-import { usePublishCaseMutation, useDraftCaseMutation } from "../../../../../state/redux/api/cases";
+import {
+  usePublishCaseMutation,
+  useDraftCaseMutation,
+} from "../../../../../state/redux/api/cases";
 import Skeleton from "../../../../../components/ui/Skeleton";
 
 export default function AdminCaseDetailPage() {
@@ -87,7 +90,9 @@ export default function AdminCaseDetailPage() {
                 {caseFile.publishState}
               </span>
               {caseFile.caseNumber && (
-                <span className="text-xs text-muted">{caseFile.caseNumber}</span>
+                <span className="text-xs text-muted">
+                  {caseFile.caseNumber}
+                </span>
               )}
             </div>
             <h1 className="text-xl font-semibold text-foreground sm:text-2xl">
@@ -97,7 +102,7 @@ export default function AdminCaseDetailPage() {
         </div>
 
         <p className="text-sm leading-relaxed text-muted">
-          {caseFile.narrative ?? caseFile.description}
+          {caseFile.narrative}
         </p>
 
         {caseFile.files && caseFile.files.length > 0 && (
