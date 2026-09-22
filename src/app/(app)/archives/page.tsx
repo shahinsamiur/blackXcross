@@ -40,7 +40,6 @@ export default function ArchivesPage() {
         : activeFilter === "Open Investigations"
           ? "OPEN"
           : undefined,
-    // Cast the ternary result to the expected literal union type
     sort: (activeFilter === "Recent Submissions" ? "newest" : "newest") as "newest" | "oldest",
     page: currentPage,
     limit: ITEMS_PER_PAGE,

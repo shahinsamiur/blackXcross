@@ -78,6 +78,16 @@ export interface CreateCaseRequest {
 
 export interface UpdateCaseRequest extends Partial<CreateCaseRequest> {}
 
+export interface CaseFileItem {
+  id: string;
+  caseId: string;
+  url: string;
+  filename: string;
+  mimeType: string;
+  size: number;
+  createdAt: string;
+}
+
 export const casesApi = api.injectEndpoints({
   endpoints: (builder) => ({
     getCases: builder.query<CaseListResponse, CaseListQuery>({
@@ -100,8 +110,18 @@ export const casesApi = api.injectEndpoints({
         return { url: "/cases/upload-image", method: "POST", body: formData };
       },
     }),
+    addCaseFile: builder.mutation<CaseFileItem, { caseId: string; file: File }>({
+      query: ({ caseId, file }) => {
+        const formData = new FormData();
+        formData.append("file", file);
+        return { url: `/cases/${caseId}/files`, method: "POST", body: formData };
+      },
+      transformResponse: (response: ApiResponse<CaseFileItem>) => response.data,
+      invalidatesTags: (result, error, { caseId }) => [{ type: "Case", id: caseId }],
+    }),
     createCase: builder.mutation<CaseDetailResponse, CreateCaseRequest>({
       query: (body) => ({ url: "/cases", method: "POST", body }),
+      transformResponse: (response: ApiResponse<CaseDetailResponse>) => response.data,
       invalidatesTags: [{ type: "Case", id: "LIST" }, "User"],
     }),
     updateCase: builder.mutation<CaseDetailResponse, { id: string; data: UpdateCaseRequest }>({
@@ -126,6 +146,7 @@ export const {
   useGetCasesQuery,
   useGetCaseQuery,
   useUploadCaseImageMutation,
+  useAddCaseFileMutation,
   useCreateCaseMutation,
   useUpdateCaseMutation,
   usePublishCaseMutation,

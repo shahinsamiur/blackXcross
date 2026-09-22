@@ -3,12 +3,11 @@
 import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
 import { useSelector } from "react-redux";
-import { FiArrowLeft, FiEdit2, FiFileText, FiImage, FiMic, FiMapPin, FiDownload, } from "react-icons/fi";
+import { FiArrowLeft, FiEdit2, FiFileText, FiImage, FiMic, FiMapPin, FiDownload } from "react-icons/fi";
 import { useGetCaseQuery } from "../../../../state/redux/api/cases";
 import type { RootState } from "../../../../state/redux/store";
 
 const evidenceIcons = { image: FiImage, document: FiFileText, audio: FiMic };
-
 export default function CaseDetailsPage() {
   const router = useRouter();
   const params = useParams<{ id: string }>();
@@ -45,12 +44,8 @@ export default function CaseDetailsPage() {
 
   const isOpen = caseData.investigationStatus === "OPEN" || caseData.investigationStatus === "SOLVED";
   
-  const evidence = caseData.files?.map((file) => {
-    let type: "image" | "document" | "audio" = "document";
-    if (file.mimeType.startsWith("image/")) type = "image";
-    else if (file.mimeType.startsWith("audio/")) type = "audio";
-    return { id: file.id, label: file.filename, type };
-  }) || [];
+  const imageFiles = caseData.files?.filter((file) => file.mimeType.startsWith("image/")) || [];
+  const otherFiles = caseData.files?.filter((file) => !file.mimeType.startsWith("image/")) || [];
 
   return (
     <div className="flex w-full flex-col gap-6 px-4 pb-8 sm:px-6 lg:px-8">
@@ -89,27 +84,54 @@ export default function CaseDetailsPage() {
             <p className="text-sm leading-relaxed text-muted">{caseData.narrative || caseData.description}</p>
           </section>
 
-          {evidence.length > 0 && (
-            <section className="flex flex-col gap-3 rounded-xl border border-border bg-card p-5 shadow-sm sm:p-6">
-              <h2 className="text-xs font-bold tracking-widest text-primary uppercase">Evidence</h2>
-              <ul className="flex flex-col">
-                {evidence.map((item, i) => {
-                  const Icon = evidenceIcons[item.type];
-                  return (
-                    <li key={item.id} className={`flex items-center justify-between gap-3 py-3.5 ${i !== evidence.length - 1 ? "border-b border-border" : ""}`}>
-                      <div className="flex min-w-0 flex-1 items-center gap-3">
-                        <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-primary/10 text-primary">
-                          <Icon size={16} />
-                        </span>
-                        <span className="truncate text-sm text-foreground/90">{item.label}</span>
+          {caseData.files && caseData.files.length > 0 && (
+            <section className="flex flex-col gap-4 rounded-xl border border-border bg-card p-5 shadow-sm sm:p-6">
+              <h2 className="text-xs font-bold tracking-widest text-primary uppercase">Evidence & Gallery</h2>
+              
+              {imageFiles.length > 0 && (
+                <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
+                  {imageFiles.map((file) => (
+                    <div key={file.id} className="group relative aspect-square overflow-hidden rounded-lg border border-border bg-muted">
+                      <img 
+                        src={file.url} 
+                        alt={file.filename} 
+                        className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
+                      />
+                      <div className="absolute inset-0 flex items-end bg-linear-to-t from-black/70 to-transparent p-3 opacity-0 transition-opacity group-hover:opacity-100">
+                        <span className="truncate text-xs text-white">{file.filename}</span>
                       </div>
-                      <button type="button" aria-label={`Download ${item.label}`} className="flex shrink-0 items-center gap-1.5 rounded-lg border border-border px-3 py-1.5 text-xs font-semibold text-foreground/80 transition-colors hover:border-primary/40 hover:text-primary">
-                        <FiDownload size={13} /> Download
-                      </button>
-                    </li>
-                  );
-                })}
-              </ul>
+                    </div>
+                  ))}
+                </div>
+              )}
+
+              {otherFiles.length > 0 && (
+                <ul className="flex flex-col">
+                  {otherFiles.map((item, i) => {
+                    let type: "document" | "audio" = "document";
+                    if (item.mimeType.startsWith("audio/")) type = "audio";
+                    const Icon = evidenceIcons[type];
+                    return (
+                      <li key={item.id} className={`flex items-center justify-between gap-3 py-3.5 ${i !== otherFiles.length - 1 ? "border-b border-border" : ""}`}>
+                        <div className="flex min-w-0 flex-1 items-center gap-3">
+                          <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-primary/10 text-primary">
+                            <Icon size={16} />
+                          </span>
+                          <span className="truncate text-sm text-foreground/90">{item.filename}</span>
+                        </div>
+                        <a 
+                          href={item.url} 
+                          target="_blank" 
+                          rel="noopener noreferrer"
+                          className="flex shrink-0 items-center gap-1.5 rounded-lg border border-border px-3 py-1.5 text-xs font-semibold text-foreground/80 transition-colors hover:border-primary/40 hover:text-primary"
+                        >
+                          <FiDownload size={13} /> Download
+                        </a>
+                      </li>
+                    );
+                  })}
+                </ul>
+              )}
             </section>
           )}
         </div>

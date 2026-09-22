@@ -1,7 +1,7 @@
 "use client";
 
-import { useRef } from "react";
-import { FiChevronRight } from "react-icons/fi";
+import { useRef, useState, useEffect } from "react";
+import { FiChevronLeft, FiChevronRight } from "react-icons/fi";
 import CaseCard from "./CaseCard";
 
 interface CaseCardsRowProps {
@@ -11,9 +11,32 @@ interface CaseCardsRowProps {
 
 export default function CaseCardsRow({ cases, isLoading }: CaseCardsRowProps) {
   const scrollRef = useRef<HTMLDivElement>(null);
-  const scrollNext = () => {
-    scrollRef.current?.scrollBy({ left: 320, behavior: "smooth" });
+  const [showLeft, setShowLeft] = useState(false);
+  const [showRight, setShowRight] = useState(false);
+
+  const checkScroll = () => {
+    if (scrollRef.current) {
+      const { scrollLeft, scrollWidth, clientWidth } = scrollRef.current;
+      setShowLeft(scrollLeft > 0);
+      setShowRight(scrollLeft < scrollWidth - clientWidth - 10);
+    }
   };
+
+  useEffect(() => {
+    checkScroll();
+    const el = scrollRef.current;
+    if (el) {
+      el.addEventListener("scroll", checkScroll);
+      window.addEventListener("resize", checkScroll);
+    }
+    return () => {
+      if (el) el.removeEventListener("scroll", checkScroll);
+      window.removeEventListener("resize", checkScroll);
+    };
+  }, [cases]);
+
+  const scrollPrev = () => scrollRef.current?.scrollBy({ left: -320, behavior: "smooth" });
+  const scrollNext = () => scrollRef.current?.scrollBy({ left: 320, behavior: "smooth" });
 
   if (isLoading) {
     return (
@@ -37,6 +60,17 @@ export default function CaseCardsRow({ cases, isLoading }: CaseCardsRowProps) {
 
   return (
     <div className="relative px-4 pb-8 sm:px-6 lg:px-8">
+      {showLeft && (
+        <button
+          type="button"
+          aria-label="Scroll left"
+          onClick={scrollPrev}
+          className="absolute left-2 top-1/2 z-10 hidden h-9 w-9 -translate-y-1/2 items-center justify-center rounded-full border border-border bg-card text-foreground/80 shadow-lg hover:text-primary sm:left-4 lg:flex"
+        >
+          <FiChevronLeft size={18} />
+        </button>
+      )}
+
       <div
         ref={scrollRef}
         className="flex snap-x snap-mandatory gap-4 overflow-x-auto pb-2 scrollbar-none [&::-webkit-scrollbar]:hidden"
@@ -46,14 +80,16 @@ export default function CaseCardsRow({ cases, isLoading }: CaseCardsRowProps) {
         ))}
       </div>
 
-      <button
-        type="button"
-        aria-label="Show more cases"
-        onClick={scrollNext}
-        className="absolute right-2 top-1/2 hidden h-9 w-9 -translate-y-1/2 items-center justify-center rounded-full border border-border bg-card text-foreground/80 shadow-lg hover:text-primary sm:right-4 lg:flex"
-      >
-        <FiChevronRight size={18} />
-      </button>
+      {showRight && (
+        <button
+          type="button"
+          aria-label="Show more cases"
+          onClick={scrollNext}
+          className="absolute right-2 top-1/2 z-10 hidden h-9 w-9 -translate-y-1/2 items-center justify-center rounded-full border border-border bg-card text-foreground/80 shadow-lg hover:text-primary sm:right-4 lg:flex"
+        >
+          <FiChevronRight size={18} />
+        </button>
+      )}
     </div>
   );
 }

@@ -11,7 +11,7 @@ import type { CaseStatus, CaseEvidenceItem } from "../../../../_mock/blackxcross
 import { CaseImageUpload } from "../../../../components/case/CaseImageUpload";
 import { GalleryImageUpload } from "../../../../components/case/GalleryImageUpload";
 import { EvidenceManager } from "../../../../components/case/EvidenceManager";
-import { useUploadCaseImageMutation, useCreateCaseMutation } from "../../../../state/redux/api/cases";
+import { useUploadCaseImageMutation, useCreateCaseMutation, useAddCaseFileMutation } from "../../../../state/redux/api/cases";
 
 type FormValues = {
   title: string;
@@ -37,19 +37,26 @@ const initialValues: FormValues = {
   evidence: [],
 };
 
-const evidenceTypes: CaseEvidenceItem["type"][] = ["image", "document", "audio"];
 const MAX_GALLERY_IMAGES = 7;
+const MAX_EVIDENCE_FILES = 7;
+
+const detectEvidenceType = (file: File): CaseEvidenceItem["type"] => {
+  if (file.type.startsWith("image/")) return "image";
+  if (file.type.startsWith("audio/")) return "audio";
+  return "document";
+};
 
 export default function CreateCasePage() {
   const router = useRouter();
   const [values, setValues] = useState<FormValues>(initialValues);
-  const [newEvidenceLabel, setNewEvidenceLabel] = useState("");
-  const [newEvidenceType, setNewEvidenceType] = useState<CaseEvidenceItem["type"]>("document");
+  const [evidenceFiles, setEvidenceFiles] = useState<Record<string, File>>({});
+  const [galleryFiles, setGalleryFiles] = useState<File[]>([]); 
   const [submitting, setSubmitting] = useState(false);
   const { errors, setMultipleErrors, clearError, clearAllErrors } = useFormErrors();
 
   const [uploadCaseImage] = useUploadCaseImageMutation();
   const [createCase] = useCreateCaseMutation();
+  const [addCaseFile] = useAddCaseFileMutation();
 
   type EditableTextField = "title" | "description" | "status" | "narrative" | "location";
 
@@ -69,35 +76,63 @@ export default function CreateCasePage() {
     setValues((prev) => ({ ...prev, imageFile: null, imagePreviewUrl: "" }));
   };
 
-const handleGalleryFilesSelected = (files: File[]) => {
-  setValues((prev) => {
-    const remainingSlots = MAX_GALLERY_IMAGES - prev.gallery.length;
-    if (remainingSlots <= 0) return prev;
-    const previewUrls = files.slice(0, remainingSlots).map((file) => URL.createObjectURL(file));
-    return { ...prev, gallery: [...prev.gallery, ...previewUrls] };
-  });
-};
-
-  const handleRemoveGalleryImage = (index: number) => {
+  const handleGalleryFilesSelected = (files: File[]) => {
     setValues((prev) => {
-      const removed = prev.gallery[index];
-      if (removed?.startsWith("blob:")) URL.revokeObjectURL(removed);
-      return { ...prev, gallery: prev.gallery.filter((_, i) => i !== index) };
+      const remainingSlots = MAX_GALLERY_IMAGES - prev.gallery.length;
+      if (remainingSlots <= 0) return prev;
+      
+      const filesToAdd = files.slice(0, remainingSlots);
+      const newUrls = filesToAdd.map((file) => URL.createObjectURL(file));
+      
+      setGalleryFiles((prevFiles) => [...prevFiles, ...filesToAdd]);
+      
+      return { ...prev, gallery: [...prev.gallery, ...newUrls] };
     });
   };
 
-  const handleAddEvidence = () => {
-    if (!newEvidenceLabel.trim()) return;
-    setValues((prev) => ({
-      ...prev,
-      evidence: [...prev.evidence, { id: `ev-${Date.now()}`, label: newEvidenceLabel.trim(), type: newEvidenceType }],
-    }));
-    setNewEvidenceLabel("");
-    setNewEvidenceType("document");
+  const handleRemoveGalleryImage = (indexOrUrl: number | string) => {
+    setValues((prev) => {
+      let index = typeof indexOrUrl === "number" ? indexOrUrl : prev.gallery.indexOf(String(indexOrUrl));
+      if (index === -1) return prev;
+
+      const removedUrl = prev.gallery[index];
+      if (removedUrl?.startsWith("blob:")) URL.revokeObjectURL(removedUrl);
+      
+      const newGallery = prev.gallery.filter((_, i) => i !== index);
+      const newFiles = galleryFiles.filter((_, i) => i !== index);
+      
+      setGalleryFiles(newFiles);
+      
+      return { ...prev, gallery: newGallery };
+    });
+  };
+
+  const handleEvidenceFilesSelected = (files: File[]) => {
+    setValues((prev) => {
+      const remainingSlots = MAX_EVIDENCE_FILES - prev.evidence.length;
+      if (remainingSlots <= 0) return prev;
+
+      const filesToAdd = files.slice(0, remainingSlots);
+      const newItems: CaseEvidenceItem[] = [];
+      const newFilesMap: Record<string, File> = {};
+
+      filesToAdd.forEach((file) => {
+        const id = `ev-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
+        newItems.push({ id, label: file.name, type: detectEvidenceType(file) });
+        newFilesMap[id] = file;
+      });
+
+      setEvidenceFiles((prevFiles) => ({ ...prevFiles, ...newFilesMap }));
+      return { ...prev, evidence: [...prev.evidence, ...newItems] };
+    });
   };
 
   const handleRemoveEvidence = (id: string) => {
     setValues((prev) => ({ ...prev, evidence: prev.evidence.filter((item) => item.id !== id) }));
+    setEvidenceFiles((prev) => {
+      const { [id]: _removed, ...rest } = prev;
+      return rest;
+    });
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -117,7 +152,7 @@ const handleGalleryFilesSelected = (files: File[]) => {
         finalImageUrl = uploadResult.imageUrl;
       }
 
-      await createCase({
+      const created = await createCase({
         title: values.title,
         description: values.description,
         category: "OTHER",
@@ -126,6 +161,20 @@ const handleGalleryFilesSelected = (files: File[]) => {
         narrative: values.narrative,
         location: values.location,
       }).unwrap();
+      const galleryUploads = galleryFiles.map((file) =>
+        addCaseFile({ caseId: created.id, file }).unwrap()
+      );
+      const evidenceUploads = values.evidence
+        .filter((item) => evidenceFiles[item.id])
+        .map((item) => addCaseFile({ caseId: created.id, file: evidenceFiles[item.id] }).unwrap());
+      const allUploads = [...galleryUploads, ...evidenceUploads];
+      if (allUploads.length) {
+        const results = await Promise.allSettled(allUploads);
+        const failed = results.filter((r) => r.status === "rejected").length;
+        if (failed > 0) {
+          alert(`Case created successfully, but ${failed} file(s) failed to upload to the server.`);
+        }
+      }
 
       router.push("/my-dossier");
     } catch (err: any) {
@@ -137,6 +186,7 @@ const handleGalleryFilesSelected = (files: File[]) => {
         setMultipleErrors(fieldErrors);
       } else {
         console.error("Submission error:", err);
+        alert("Failed to create case. Please try again.");
       }
     } finally {
       setSubmitting(false);
@@ -160,7 +210,7 @@ const handleGalleryFilesSelected = (files: File[]) => {
           <label htmlFor="description" className="mb-1.5 block text-sm font-medium text-foreground/80">Description</label>
           <textarea id="description" rows={4} value={values.description} onChange={(e) => handleChange("description", e.target.value)} className="w-full resize-none rounded-lg border border-border bg-background px-3 py-2.5 text-sm text-foreground placeholder:text-muted focus:border-primary/50 focus:outline-none" placeholder="Summarize the case for other investigators..." />
           {errors.description && <p className="mt-1 text-xs text-primary">{errors.description}</p>}
-        </div>
+                </div>
 
         <div>
           <label htmlFor="narrative" className="mb-1.5 block text-sm font-medium text-foreground/80">Case Narrative</label>
@@ -183,7 +233,7 @@ const handleGalleryFilesSelected = (files: File[]) => {
 
         <CaseImageUpload value={values.imagePreviewUrl} onSelect={handleCaseImageSelect} onRemove={handleRemoveCaseImage} error={errors.image} />
         <GalleryImageUpload images={values.gallery} max={MAX_GALLERY_IMAGES} onFilesSelected={handleGalleryFilesSelected} onRemove={handleRemoveGalleryImage} />
-        <EvidenceManager evidence={values.evidence} evidenceTypes={evidenceTypes} newLabel={newEvidenceLabel} newType={newEvidenceType} onLabelChange={setNewEvidenceLabel} onTypeChange={setNewEvidenceType} onAdd={handleAddEvidence} onRemove={handleRemoveEvidence} />
+        <EvidenceManager evidence={values.evidence} max={MAX_EVIDENCE_FILES} onFilesSelected={handleEvidenceFilesSelected} onRemove={handleRemoveEvidence} />
 
         <div className="flex justify-end gap-3">
           <Button type="button" onClick={() => router.push("/my-dossier")} className="rounded-lg border border-border px-4 py-2.5 text-sm font-medium text-foreground/80 hover:border-primary/40 hover:text-primary">Cancel</Button>

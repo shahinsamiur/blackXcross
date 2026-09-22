@@ -15,6 +15,7 @@ import {
   FiPlus,
   FiSearch,
 } from "react-icons/fi";
+import { IoBriefcaseSharp } from "react-icons/io5";
 import { myGroups, myContacts, sidebarNav } from "../_mock/blackxcross";
 import RequireAuthModal from "@/src/components/ui/RequireAuthModal";
 
@@ -23,6 +24,7 @@ const navIcons = {
   archives: FiCalendar,
   "community-hub": FiUsers,
   "my-dossier": FiUser,
+  "case": IoBriefcaseSharp
 };
 
 function SidebarContent() {

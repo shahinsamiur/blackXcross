@@ -1,24 +1,35 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import { FiSearch } from "react-icons/fi";
 import { caseFilters } from "../_mock/blackxcross";
 
 interface SearchFilterBarProps {
-  onSearchChange?: (value: string) => void;
+  onSearch?: (value: string) => void;
   onFilterChange?: (filter: (typeof caseFilters)[number]) => void;
 }
 
 export default function SearchFilterBar({
-  onSearchChange,
+  onSearch,
   onFilterChange,
 }: SearchFilterBarProps = {}) {
+  const router = useRouter();
   const [activeFilter, setActiveFilter] = useState<string>(caseFilters[0]);
   const [searchValue, setSearchValue] = useState("");
 
-  const handleSearchChange = (value: string) => {
-    setSearchValue(value);
-    onSearchChange?.(value);
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter") {
+      e.preventDefault();
+      const trimmed = searchValue.trim();
+      if (trimmed) {
+        if (onSearch) {
+          onSearch(trimmed);
+        } else {
+          router.push(`/cases?search=${encodeURIComponent(trimmed)}`);
+        }
+      }
+    }
   };
 
   const handleFilterChange = (filter: (typeof caseFilters)[number]) => {
@@ -33,14 +44,12 @@ export default function SearchFilterBar({
           Search Cases
         </span>
         <label className="relative flex w-full items-center sm:w-96">
-          <FiSearch
-            className="pointer-events-none absolute left-4 text-muted"
-            size={18}
-          />
+          <FiSearch className="pointer-events-none absolute left-4 text-muted" size={18} />
           <input
             type="text"
             value={searchValue}
-            onChange={(e) => handleSearchChange(e.target.value)}
+            onChange={(e) => setSearchValue(e.target.value)}
+            onKeyDown={handleKeyDown}
             placeholder="Search case files, locations, or details..."
             className="w-full rounded-lg border border-border bg-card py-3 pl-11 pr-4 text-sm text-foreground placeholder:text-muted focus:border-primary/50 focus:outline-none"
           />
@@ -61,7 +70,7 @@ export default function SearchFilterBar({
                 onClick={() => handleFilterChange(filter)}
                 className={`rounded-lg border px-4 py-2.5 text-sm font-medium transition-colors cursor-pointer ${
                   isActive
-                    ? "border-primary  text-primary hover:border-primary/40"
+                    ? "border-primary text-primary hover:border-primary/40"
                     : "border-border bg-card text-foreground/80 hover:border-primary/40"
                 }`}
               >

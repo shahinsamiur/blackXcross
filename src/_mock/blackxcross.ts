@@ -512,6 +512,7 @@ export const sidebarNav = [
   { id: "archives", label: "Archives", href: "/archives" },
   { id: "community-hub", label: "Community Hub", href: "/community" },
   { id: "my-dossier", label: "My Dossier", href: "/my-dossier" },
+  { id: "case", label: "Submit a Case", href: "/cases/create" },
 ] as const;
 
 export const slugify = (name: string) =>
