@@ -11,7 +11,7 @@ import { dossierSchema } from "../../../../validations/dossier.schema";
 import type { RootState } from "../../../../state/redux/store";
 import { Skeleton, SkeletonCircle } from "../../../../components/ui/Skeleton";
 import { 
-  useGetUserQuery, 
+  useGetMeQuery,
   useUploadAvatarMutation, 
   useUpdateUserMutation, 
   useDeleteUserMutation 
@@ -22,13 +22,9 @@ const DEFAULT_AVATAR = "/image/hero1.jpg";
 export default function DossierEditPage() {
   const router = useRouter();
 
-  const userId = useSelector((state: RootState) => state.auth?.user?.id);
-  const userEmail = useSelector((state: RootState) => state.auth?.user?.email) || "";
-
-  const { data: userData, isLoading: isUserLoading, error: userError } = useGetUserQuery(userId as string, { 
-    skip: !userId 
-  });
-  
+  const { data: userData, isLoading: isUserLoading, error: userError } = useGetMeQuery();
+  const userId = userData?.id;
+  const userEmail = useSelector((state: RootState) => (state as any).auth?.user?.email) || "";
   const [uploadAvatar] = useUploadAvatarMutation();
   const [updateUser] = useUpdateUserMutation();
   const [deleteUser, { isLoading: isDeleting }] = useDeleteUserMutation();
@@ -45,13 +41,8 @@ export default function DossierEditPage() {
   const [avatarPreview, setAvatarPreview] = useState(DEFAULT_AVATAR);
   const [submitting, setSubmitting] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
-  
   const { errors, setMultipleErrors, clearError, clearAllErrors } = useFormErrors();
-  
-  // useRef guarantees we only initialize the form state ONCE when data arrives.
-  // This completely prevents the "setState in effect" cascading render warning.
   const hasInitialized = useRef(false);
-
   useEffect(() => {
     if (userData && !hasInitialized.current) {
       setValues({
@@ -88,68 +79,74 @@ export default function DossierEditPage() {
     }
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    
-    if (!userId) {
-      alert("You must be logged in to save changes.");
-      return; // Prevents any redirect, just stops execution
-    }
 
-    setSubmitting(true);
-    clearAllErrors();
+const handleSubmit = async (e: React.FormEvent) => {
+  e.preventDefault();
 
-    try {
-      // 1. Validate form data strictly
-      const validatedData = await dossierSchema.validate(
-        { ...values, avatarFile },
-        { abortEarly: false }
-      );
+  if (!userId) {
+    alert("You must be logged in to save changes.");
+    return;
+  }
 
-      // 2. Upload avatar if a new file is selected
-      if (avatarFile) {
-        await uploadAvatar({ id: userId, file: avatarFile }).unwrap();
-      }
+  setSubmitting(true);
+  clearAllErrors();
 
-      // 3. Update user profile
-      await updateUser({
+  try {
+    const validatedData = await dossierSchema.validate(
+      { ...values, avatarFile },
+      { abortEarly: false }
+    );
+
+    if (avatarFile) {
+      await uploadAvatar({
         id: userId,
-        data: {
-          name: validatedData.displayName,
-          bio: validatedData.bio || undefined,
-          title: validatedData.title || undefined,
-          location: validatedData.location || undefined,
-          website: validatedData.website || undefined,
-        },
+        file: avatarFile,
       }).unwrap();
-
-      // 4. ONLY redirect on complete, verified success
-      router.push("/my-dossier");
-      
-    } catch (err: unknown) {
-      const error = err as { 
-        name?: string; 
-        inner?: yup.ValidationError[]; 
-        data?: { message?: string }; 
-        message?: string 
-      };
-      
-      if (error.name === "ValidationError" && error.inner) {
-        // Handle Yup validation errors and display them under inputs
-        const fieldErrors: Record<string, string> = {};
-        error.inner.forEach((e: yup.ValidationError) => {
-          if (e.path) fieldErrors[e.path] = e.message;
-        });
-        setMultipleErrors(fieldErrors);
-      } else {
-        // Handle API/Network errors
-        const errorMessage = error?.data?.message || error?.message || "Failed to save profile. Please check your inputs and try again.";
-        alert(errorMessage);
-      }
-    } finally {
-      setSubmitting(false);
     }
-  };
+
+    await updateUser({
+      id: userId,
+      data: {
+        name: validatedData.displayName,
+        bio: validatedData.bio || undefined,
+        title: validatedData.title || undefined,
+        location: validatedData.location || undefined,
+        website: validatedData.website || undefined,
+      },
+    }).unwrap();
+
+    router.push("/my-dossier");
+  } catch (err: unknown) {
+    const error = err as {
+      name?: string;
+      inner?: yup.ValidationError[];
+      data?: { message?: string };
+      message?: string;
+    };
+
+    if (error.name === "ValidationError" && error.inner) {
+      const fieldErrors: Record<string, string> = {};
+
+      error.inner.forEach((e: yup.ValidationError) => {
+        if (e.path) {
+          fieldErrors[e.path] = e.message;
+        }
+      });
+
+      setMultipleErrors(fieldErrors);
+    } else {
+      const errorMessage =
+        error?.data?.message ||
+        error?.message ||
+        "Failed to save profile. Please check your inputs and try again.";
+
+      alert(errorMessage);
+    }
+  } finally {
+    setSubmitting(false);
+  }
+};
+
 
   const handleDeleteAccount = async () => {
     if (!userId) return;
@@ -161,6 +158,7 @@ export default function DossierEditPage() {
       alert(error?.data?.message || error?.message || "Failed to delete account.");
     }
   };
+
   if (isUserLoading) {
     return (
       <div className="flex w-full flex-col gap-6 px-4 pb-8 sm:px-6 lg:px-8">
@@ -200,20 +198,11 @@ export default function DossierEditPage() {
             <Skeleton className="h-10 w-32" />
           </div>
         </div>
-      </div>
+        </div>
+
     );
   }
 
-  // if (!userId || userError) {
-  //   return (
-  //     <div className="flex w-full flex-col items-center justify-center gap-4 py-16">
-  //       <p className="text-sm text-muted">Unable to load user data. Please log in again.</p>
-  //       <Button onClick={() => router.push("/auth/login")} className="rounded-lg bg-primary px-4 py-2.5 text-sm font-semibold text-foreground">
-  //         Go to Login
-  //       </Button>
-  //     </div>
-  //   );
-  // }
 
   return (
     <div className="flex w-full flex-col gap-6 px-4 pb-8 sm:px-6 lg:px-8">

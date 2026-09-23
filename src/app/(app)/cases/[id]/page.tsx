@@ -6,15 +6,16 @@ import { useSelector } from "react-redux";
 import { FiArrowLeft, FiEdit2, FiFileText, FiImage, FiMic, FiMapPin, FiDownload } from "react-icons/fi";
 import { useGetCaseQuery } from "../../../../state/redux/api/cases";
 import type { RootState } from "../../../../state/redux/store";
-
+import { TheoriesSection } from "../../../../components/case/TheoriesSection";
 const evidenceIcons = { image: FiImage, document: FiFileText, audio: FiMic };
 export default function CaseDetailsPage() {
   const router = useRouter();
   const params = useParams<{ id: string }>();
   const { data: caseData, isLoading, isError } = useGetCaseQuery(params.id);
-  const { user, status } = useSelector((state: RootState) => state.auth);
-  const canEdit = status === "authenticated" && !!user && caseData?.userId === user.id;
-
+  const { user, isAuthenticated } = useSelector((state: RootState) => state.auth);
+  const canEdit = isAuthenticated  && !!user && caseData?.userId === user.id;
+const canInteract = isAuthenticated;
+console.log("AUTH DEBUG:", { isAuthenticated, user, canEdit, canInteract });
   if (isLoading) {
     return (
       <div className="flex w-full flex-col gap-6 px-4 pb-8 sm:px-6 lg:px-8">
@@ -104,7 +105,7 @@ export default function CaseDetailsPage() {
                   ))}
                 </div>
               )}
-
+      
               {otherFiles.length > 0 && (
                 <ul className="flex flex-col">
                   {otherFiles.map((item, i) => {
@@ -134,6 +135,7 @@ export default function CaseDetailsPage() {
               )}
             </section>
           )}
+              <TheoriesSection caseId={caseData.id} canInteract={canInteract} />
         </div>
 
         <div className="flex flex-col gap-4">

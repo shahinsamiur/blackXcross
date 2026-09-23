@@ -1,5 +1,5 @@
 import { api } from "../api";
-import type { CaseListResponse } from "./cases";
+import type { CaseItem } from "./cases";
 
 export interface ApiResponse<T> {
   success: boolean;
@@ -46,15 +46,26 @@ export const usersApi = api.injectEndpoints({
       transformResponse: (response: ApiResponse<PublicUser>) => response.data,
       providesTags: (result, error, id) => [{ type: "User", id }],
     }),
-    getUserCases: builder.query<CaseListResponse, string>({
+    getMe: builder.query<PublicUser, void>({
+      query: () => `/users/me`,
+      transformResponse: (response: ApiResponse<PublicUser>) => response.data,
+      providesTags: (result) =>
+        result ? [{ type: "User", id: result.id }] : ["User"],
+    }),
+    getUserCases: builder.query<CaseItem[], string>({
       query: (id) => `/users/${id}/cases`,
-      transformResponse: (response: ApiResponse<CaseListResponse>) => response.data,
-      providesTags: (result, error, id) => [{ type: "User", id: `${id}-CASES` }],
+      transformResponse: (response: ApiResponse<CaseItem[]>) => response.data,
+      providesTags: (result, error, id) => [
+        { type: "User", id: `${id}-CASES` },
+      ],
     }),
     getUserTheories: builder.query<{ items: TheoryItem[] }, string>({
       query: (id) => `/users/${id}/theories`,
-      transformResponse: (response: ApiResponse<{ items: TheoryItem[] }>) => response.data,
-      providesTags: (result, error, id) => [{ type: "User", id: `${id}-THEORIES` }],
+      transformResponse: (response: ApiResponse<{ items: TheoryItem[] }>) =>
+        response.data,
+      providesTags: (result, error, id) => [
+        { type: "User", id: `${id}-THEORIES` },
+      ],
     }),
     uploadAvatar: builder.mutation<PublicUser, { id: string; file: File }>({
       query: ({ id, file }) => {
@@ -64,8 +75,15 @@ export const usersApi = api.injectEndpoints({
       },
       invalidatesTags: (result, error, { id }) => [{ type: "User", id }],
     }),
-    updateUser: builder.mutation<PublicUser, { id: string; data: UpdateUserRequest }>({
-      query: ({ id, data }) => ({ url: `/users/${id}`, method: "PATCH", body: data }),
+    updateUser: builder.mutation<
+      PublicUser,
+      { id: string; data: UpdateUserRequest }
+    >({
+      query: ({ id, data }) => ({
+        url: `/users/${id}`,
+        method: "PATCH",
+        body: data,
+      }),
       invalidatesTags: (result, error, { id }) => [{ type: "User", id }],
     }),
     deleteUser: builder.mutation<{ message: string }, string>({
@@ -77,6 +95,7 @@ export const usersApi = api.injectEndpoints({
 });
 
 export const {
+  useGetMeQuery,
   useGetUserQuery,
   useGetUserCasesQuery,
   useGetUserTheoriesQuery,

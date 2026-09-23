@@ -37,7 +37,7 @@ export default function DossierPage() {
     skip: !userId,
   });
   
-  const myCaseFiles = casesData?.items || [];
+  const myCaseFiles = casesData || [];
 
   return (
     <div className="flex w-full flex-col gap-6 px-4 pb-8 sm:px-6 lg:px-8">

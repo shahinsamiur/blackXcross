@@ -72,7 +72,7 @@ export default function Header() {
   const { isAuthenticated, user } = useSelector((state: RootState) => state.auth);
   const [openMenu, setOpenMenu] = useState<OpenMenu>(null);
   const containerRef = useRef<HTMLDivElement>(null);
-
+  console.log("from topbar ", user)
   useEffect(() => {
     function handleClickOutside(e: MouseEvent) {
       if (

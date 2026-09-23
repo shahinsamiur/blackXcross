@@ -49,8 +49,9 @@ const detectEvidenceType = (file: File): CaseEvidenceItem["type"] => {
 export default function CreateCasePage() {
   const router = useRouter();
   const [values, setValues] = useState<FormValues>(initialValues);
+  // FIX: Use a single state for gallery items to prevent stale closure bugs
+  const [galleryItems, setGalleryItems] = useState<{ file: File; url: string }[]>([]);
   const [evidenceFiles, setEvidenceFiles] = useState<Record<string, File>>({});
-  const [galleryFiles, setGalleryFiles] = useState<File[]>([]); 
   const [submitting, setSubmitting] = useState(false);
   const { errors, setMultipleErrors, clearError, clearAllErrors } = useFormErrors();
 
@@ -76,34 +77,42 @@ export default function CreateCasePage() {
     setValues((prev) => ({ ...prev, imageFile: null, imagePreviewUrl: "" }));
   };
 
+  // FIX: Functional updates ensure we never read stale state
   const handleGalleryFilesSelected = (files: File[]) => {
-    setValues((prev) => {
-      const remainingSlots = MAX_GALLERY_IMAGES - prev.gallery.length;
+    setGalleryItems((prev) => {
+      const remainingSlots = MAX_GALLERY_IMAGES - prev.length;
       if (remainingSlots <= 0) return prev;
       
       const filesToAdd = files.slice(0, remainingSlots);
-      const newUrls = filesToAdd.map((file) => URL.createObjectURL(file));
+      const newItems = filesToAdd.map((file) => ({
+        file,
+        url: URL.createObjectURL(file),
+      }));
       
-      setGalleryFiles((prevFiles) => [...prevFiles, ...filesToAdd]);
+      setValues((prevValues) => ({
+        ...prevValues,
+        gallery: [...prevValues.gallery, ...newItems.map((item) => item.url)],
+      }));
       
-      return { ...prev, gallery: [...prev.gallery, ...newUrls] };
+      return [...prev, ...newItems];
     });
   };
 
-  const handleRemoveGalleryImage = (indexOrUrl: number | string) => {
-    setValues((prev) => {
-      let index = typeof indexOrUrl === "number" ? indexOrUrl : prev.gallery.indexOf(String(indexOrUrl));
-      if (index === -1) return prev;
-
-      const removedUrl = prev.gallery[index];
-      if (removedUrl?.startsWith("blob:")) URL.revokeObjectURL(removedUrl);
+  const handleRemoveGalleryImage = (index: number) => {
+    setGalleryItems((prev) => {
+      const removed = prev[index];
+      if (removed?.url?.startsWith("blob:")) {
+        URL.revokeObjectURL(removed.url);
+      }
       
-      const newGallery = prev.gallery.filter((_, i) => i !== index);
-      const newFiles = galleryFiles.filter((_, i) => i !== index);
+      const newItems = prev.filter((_, i) => i !== index);
       
-      setGalleryFiles(newFiles);
+      setValues((prevValues) => ({
+        ...prevValues,
+        gallery: newItems.map((item) => item.url),
+      }));
       
-      return { ...prev, gallery: newGallery };
+      return newItems;
     });
   };
 
@@ -161,12 +170,16 @@ export default function CreateCasePage() {
         narrative: values.narrative,
         location: values.location,
       }).unwrap();
-      const galleryUploads = galleryFiles.map((file) =>
-        addCaseFile({ caseId: created.id, file }).unwrap()
+
+      // FIX: Map directly from the reliable galleryItems state
+      const galleryUploads = galleryItems.map((item) =>
+        addCaseFile({ caseId: created.id, file: item.file }).unwrap()
       );
+      
       const evidenceUploads = values.evidence
         .filter((item) => evidenceFiles[item.id])
         .map((item) => addCaseFile({ caseId: created.id, file: evidenceFiles[item.id] }).unwrap());
+        
       const allUploads = [...galleryUploads, ...evidenceUploads];
       if (allUploads.length) {
         const results = await Promise.allSettled(allUploads);
@@ -210,7 +223,7 @@ export default function CreateCasePage() {
           <label htmlFor="description" className="mb-1.5 block text-sm font-medium text-foreground/80">Description</label>
           <textarea id="description" rows={4} value={values.description} onChange={(e) => handleChange("description", e.target.value)} className="w-full resize-none rounded-lg border border-border bg-background px-3 py-2.5 text-sm text-foreground placeholder:text-muted focus:border-primary/50 focus:outline-none" placeholder="Summarize the case for other investigators..." />
           {errors.description && <p className="mt-1 text-xs text-primary">{errors.description}</p>}
-                </div>
+        </div>
 
         <div>
           <label htmlFor="narrative" className="mb-1.5 block text-sm font-medium text-foreground/80">Case Narrative</label>
