@@ -73,7 +73,7 @@ export default function ArchivesPage() {
       </div>
 
       <SearchFilterBar
-        onSearchChange={handleSearchChange}
+        onSearch={handleSearchChange}
         onFilterChange={handleFilterChange}
       />
 
