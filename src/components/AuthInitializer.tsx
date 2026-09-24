@@ -14,7 +14,7 @@ export default function AuthInitializer() {
   const { data, isSuccess, isError } = useGetMeQuery(undefined, {
     skip: !!user, 
   });
-
+console.log("getMe:", { isSuccess, isError, data });
   useEffect(() => {
     if (!user) {
       dispatch(setAuthLoading());
@@ -23,9 +23,9 @@ export default function AuthInitializer() {
 
   useEffect(() => {
 
-    if (isSuccess && data?.data) {
-      dispatch(setCredentials({ user: data.data.user })); 
-    }
+if (isSuccess && data?.data) {
+  dispatch(setCredentials({ user: data.data }));
+}
   }, [isSuccess, data, dispatch]);
 
   useEffect(() => {

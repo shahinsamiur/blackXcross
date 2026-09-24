@@ -57,13 +57,13 @@ export interface VerifyEmailRequest {
 
 export const authApi = api.injectEndpoints({
   endpoints: (builder) => ({
-    getMe: builder.query<{ data: { user: User } }, void>({
+    getMe: builder.query<{ data: User }, void>({
       query: () => ({
         url: "/auth/me",
         method: "GET",
       }),
       providesTags: ["User"],
-      transformResponse: (response: { data: { user: User } }) => response,
+      transformResponse: (response: { data: User }) => response,
       transformErrorResponse: (response) => {
         return { status: response.status, message: "Not authenticated" };
       },
