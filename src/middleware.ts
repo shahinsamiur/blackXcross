@@ -12,26 +12,37 @@ const protectedRoutes = [
   "/members",
 ];
 
-const authRoutes = ["/auth/login", "/auth/register", "/auth/forgot-password", "/auth/reset-password", "/auth/verify-email"];
+const authRoutes = [
+  "/auth/login",
+  "/auth/register",
+  "/auth/forgot-password",
+  "/auth/reset-password",
+  "/auth/verify-email",
+];
 
-export function proxy(request: NextRequest) {
+export function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
-  const isProtectedRoute = protectedRoutes.some((route) => pathname.startsWith(route));
+
+  const isProtectedRoute = protectedRoutes.some((route) =>
+    pathname.startsWith(route)
+  );
   const isAuthRoute = authRoutes.some((route) => pathname.startsWith(route));
+
   const token = request.cookies.get("token")?.value;
   const refreshToken = request.cookies.get("refreshToken")?.value;
-  const hasValidToken = token || refreshToken;
-  if (isProtectedRoute && !hasValidToken) {
+  const isAuthenticated = Boolean(token || refreshToken);
+
+  if (isProtectedRoute && !isAuthenticated) {
     const loginUrl = new URL("/auth/login", request.url);
     loginUrl.searchParams.set("redirect", pathname);
     return NextResponse.redirect(loginUrl);
   }
-  
 
-  if (isAuthRoute && hasValidToken) {
-    return NextResponse.redirect(new URL("/", request.url));
+  if (isAuthRoute && isAuthenticated) {
+
+    const redirectUrl = request.nextUrl.searchParams.get("redirect") || "/";
+    return NextResponse.redirect(new URL(redirectUrl, request.url));
   }
-  
 
   return NextResponse.next();
 }
@@ -39,6 +50,6 @@ export function proxy(request: NextRequest) {
 export const config = {
   matcher: [
  
-    "/((?!api|_next/static|_next/image|favicon.ico|public).*)",
+    "/((?!api|_next/static|_next/image|favicon.ico|public|.*\\..*).*)",
   ],
 };

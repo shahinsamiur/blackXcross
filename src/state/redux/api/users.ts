@@ -1,4 +1,4 @@
-import { api } from "../api";
+import { api } from "../baseApi";
 import type { CaseItem } from "./cases";
 
 export interface ApiResponse<T> {

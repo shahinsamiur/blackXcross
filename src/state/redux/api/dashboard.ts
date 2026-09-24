@@ -1,4 +1,4 @@
-import { api } from "../api";
+import { api } from "../baseApi";
 
 // --- Types ---
 export interface DashboardAuthor {
