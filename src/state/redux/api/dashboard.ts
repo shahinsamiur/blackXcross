@@ -20,7 +20,7 @@ export interface DashboardCase {
 
 export interface DashboardTheory {
   id: string;
-  text: string;
+  content: string;
   author: DashboardAuthor;
   case: { id: string; title: string };
   _count: { theoryUpvotes: number; comments: number };

@@ -11,7 +11,7 @@ import type { CaseStatus, CaseEvidenceItem } from "../../../../_mock/blackxcross
 import { CaseImageUpload } from "../../../../components/case/CaseImageUpload";
 import { GalleryImageUpload } from "../../../../components/case/GalleryImageUpload";
 import { EvidenceManager } from "../../../../components/case/EvidenceManager";
-import { useUploadCaseImageMutation, useCreateCaseMutation, useAddCaseFileMutation } from "../../../../state/redux/api/cases";
+import { useUploadCaseImageMutation, useCreateCaseMutation, useAddCaseFileMutation, useAddCaseGalleryImageMutation } from "../../../../state/redux/api/cases";
 
 type FormValues = {
   title: string;
@@ -58,6 +58,7 @@ export default function CreateCasePage() {
   const [uploadCaseImage] = useUploadCaseImageMutation();
   const [createCase] = useCreateCaseMutation();
   const [addCaseFile] = useAddCaseFileMutation();
+  const [addCaseGalleryImage] = useAddCaseGalleryImageMutation();
 
   type EditableTextField = "title" | "description" | "status" | "narrative" | "location";
 
@@ -173,7 +174,7 @@ export default function CreateCasePage() {
 
       // FIX: Map directly from the reliable galleryItems state
       const galleryUploads = galleryItems.map((item) =>
-        addCaseFile({ caseId: created.id, file: item.file }).unwrap()
+        addCaseGalleryImage({ caseId: created.id, file: item.file }).unwrap()
       );
       
       const evidenceUploads = values.evidence

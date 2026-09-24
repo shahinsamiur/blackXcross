@@ -119,6 +119,15 @@ export const casesApi = api.injectEndpoints({
       transformResponse: (response: ApiResponse<CaseFileItem>) => response.data,
       invalidatesTags: (result, error, { caseId }) => [{ type: "Case", id: caseId }],
     }),
+    addCaseGalleryImage: builder.mutation<CaseFileItem, { caseId: string; file: File }>({
+      query: ({ caseId, file }) => {
+        const formData = new FormData();
+        formData.append("file", file);
+        return { url: `/cases/${caseId}/gallery`, method: "POST", body: formData };
+      },
+      transformResponse: (response: ApiResponse<CaseFileItem>) => response.data,
+      invalidatesTags: (result, error, { caseId }) => [{ type: "Case", id: caseId }],
+    }),
     createCase: builder.mutation<CaseDetailResponse, CreateCaseRequest>({
       query: (body) => ({ url: "/cases", method: "POST", body }),
       transformResponse: (response: ApiResponse<CaseDetailResponse>) => response.data,
@@ -147,6 +156,7 @@ export const {
   useGetCaseQuery,
   useUploadCaseImageMutation,
   useAddCaseFileMutation,
+  useAddCaseGalleryImageMutation,
   useCreateCaseMutation,
   useUpdateCaseMutation,
   usePublishCaseMutation,

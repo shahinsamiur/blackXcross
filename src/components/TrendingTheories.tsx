@@ -1,6 +1,7 @@
 import { FaFire } from "react-icons/fa6";
 import { FiThumbsUp } from "react-icons/fi";
 import type { DashboardTheory } from "@/src/state/redux/api/dashboard";
+import ProfileAvatar from "./ProfileAvatar";
 
 interface TrendingTheoriesProps {
   theories: DashboardTheory[];
@@ -50,12 +51,23 @@ export default function TrendingTheories({ theories, isLoading }: TrendingTheori
                 index !== theories.length - 1 ? "border-b border-border" : ""
               }`}
             >
-              <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-primary/10 text-primary">
-                <FaFire size={16} />
-              </span>
-              <p className="flex-1 text-sm leading-snug text-foreground/90 line-clamp-2">
-                {theory.text}
-              </p>
+              {theory.author?.avatarUrl ? (
+                <ProfileAvatar src={theory.author.avatarUrl} alt={theory.author.name || "Author"} size={36} />
+              ) : (
+                <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-primary/10 text-primary">
+                  <FaFire size={16} />
+                </span>
+              )}
+
+              <div className="flex min-w-0 flex-1 flex-col gap-0.5">
+                <span className="truncate text-xs font-semibold text-foreground/90">
+                  {theory.author?.name || theory.author?.username || "Anonymous"}
+                </span>
+                <p className="truncate text-sm leading-snug text-muted">
+                  {theory.content}
+                </p>
+              </div>
+
               <span className="flex shrink-0 items-center gap-1 text-xs font-medium text-muted">
                 <FiThumbsUp size={12} />
                 {theory._count.theoryUpvotes}

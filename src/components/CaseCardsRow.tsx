@@ -76,7 +76,9 @@ export default function CaseCardsRow({ cases, isLoading }: CaseCardsRowProps) {
         className="flex snap-x snap-mandatory gap-4 overflow-x-auto pb-2 scrollbar-none [&::-webkit-scrollbar]:hidden"
       >
         {cases.map((caseFile) => (
-          <CaseCard key={caseFile.id} caseFile={caseFile} />
+          <div key={caseFile.id} className="w-60 shrink-0 snap-start sm:w-72 md:w-92">
+            <CaseCard caseFile={caseFile} />
+          </div>
         ))}
       </div>
 

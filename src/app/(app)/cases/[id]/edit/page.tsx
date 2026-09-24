@@ -18,6 +18,8 @@ import {
   useGetCaseQuery,
   useUploadCaseImageMutation,
   useUpdateCaseMutation,
+  useAddCaseFileMutation,
+  useAddCaseGalleryImageMutation,
 } from "../../../../../state/redux/api/cases";
 
 type FormValues = {
@@ -49,6 +51,7 @@ export default function EditCasePage() {
       if (remainingSlots <= 0) return prev;
 
       const selectedFiles = files.slice(0, remainingSlots);
+      const newFilesMap: Record<string, File> = {};
 
       const newEvidence: CaseEvidenceItem[] = selectedFiles.map((file) => {
         let type: CaseEvidenceItem["type"] = "document";
@@ -59,12 +62,12 @@ export default function EditCasePage() {
           type = "audio";
         }
 
-        return {
-          id: `ev-${Date.now()}-${file.name}`,
-          label: file.name,
-          type,
-        };
+        const id = `ev-${Date.now()}-${file.name}`;
+        newFilesMap[id] = file;
+        return { id, label: file.name, type };
       });
+
+      setEvidenceFiles((prevFiles) => ({ ...prevFiles, ...newFilesMap }));
 
       return {
         ...prev,
@@ -85,12 +88,16 @@ export default function EditCasePage() {
   });
 
 
+  const [galleryItems, setGalleryItems] = useState<{ file: File; url: string }[]>([]);
+  const [evidenceFiles, setEvidenceFiles] = useState<Record<string, File>>({});
   const [submitting, setSubmitting] = useState(false);
   const { errors, setMultipleErrors, clearError, clearAllErrors } =
     useFormErrors();
 
   const [uploadCaseImage] = useUploadCaseImageMutation();
   const [updateCase] = useUpdateCaseMutation();
+  const [addCaseFile] = useAddCaseFileMutation();
+  const [addCaseGalleryImage] = useAddCaseGalleryImageMutation();
 
   useEffect(() => {
     if (caseData) {
@@ -154,21 +161,38 @@ export default function EditCasePage() {
   };
 
   const handleGalleryFilesSelected = (files: File[]) => {
-    setValues((prev) => {
-      const remainingSlots = MAX_GALLERY_IMAGES - prev.gallery.length;
+    setGalleryItems((prev) => {
+      const remainingSlots = MAX_GALLERY_IMAGES - prev.length;
       if (remainingSlots <= 0) return prev;
-      const previewUrls = files
-        .slice(0, remainingSlots)
-        .map((file) => URL.createObjectURL(file));
-      return { ...prev, gallery: [...prev.gallery, ...previewUrls] };
+
+      const filesToAdd = files.slice(0, remainingSlots);
+      const newItems = filesToAdd.map((file) => ({
+        file,
+        url: URL.createObjectURL(file),
+      }));
+
+      setValues((prevValues) => ({
+        ...prevValues,
+        gallery: [...prevValues.gallery, ...newItems.map((item) => item.url)],
+      }));
+
+      return [...prev, ...newItems];
     });
   };
 
   const handleRemoveGalleryImage = (index: number) => {
-    setValues((prev) => {
-      const removed = prev.gallery[index];
-      if (removed?.startsWith("blob:")) URL.revokeObjectURL(removed);
-      return { ...prev, gallery: prev.gallery.filter((_, i) => i !== index) };
+    setGalleryItems((prev) => {
+      const removed = prev[index];
+      if (removed?.url?.startsWith("blob:")) URL.revokeObjectURL(removed.url);
+
+      const newItems = prev.filter((_, i) => i !== index);
+
+      setValues((prevValues) => ({
+        ...prevValues,
+        gallery: newItems.map((item) => item.url),
+      }));
+
+      return newItems;
     });
   };
 
@@ -178,6 +202,10 @@ export default function EditCasePage() {
       ...prev,
       evidence: prev.evidence.filter((item) => item.id !== id),
     }));
+    setEvidenceFiles((prev) => {
+      const { [id]: _removed, ...rest } = prev;
+      return rest;
+    });
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -213,6 +241,23 @@ export default function EditCasePage() {
           location: values.location,
         },
       }).unwrap();
+
+      const galleryUploads = galleryItems.map((item) =>
+        addCaseGalleryImage({ caseId: params.id, file: item.file }).unwrap()
+      );
+
+      const evidenceUploads = values.evidence
+        .filter((item) => evidenceFiles[item.id])
+        .map((item) => addCaseFile({ caseId: params.id, file: evidenceFiles[item.id] }).unwrap());
+
+      const allUploads = [...galleryUploads, ...evidenceUploads];
+      if (allUploads.length) {
+        const results = await Promise.allSettled(allUploads);
+        const failed = results.filter((r) => r.status === "rejected").length;
+        if (failed > 0) {
+          alert(`Case updated successfully, but ${failed} file(s) failed to upload to the server.`);
+        }
+      }
 
       router.push(`/cases/${params.id}`);
     } catch (err: any) {

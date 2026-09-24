@@ -14,7 +14,7 @@ export default function CaseCard({ caseFile }: { caseFile: CaseItem }) {
 
   return (
     <article
-      className="flex w-60 shrink-0 snap-start flex-col gap-8 rounded-xl border border-border bg-card p-5 px-3 bg-cover bg-center sm:w-72 sm:gap-10 sm:px-4 md:w-92"
+      className="flex w-full flex-col gap-8 rounded-xl border border-border bg-card p-5 px-3 bg-cover bg-center sm:gap-10 sm:px-4"
       style={{
         backgroundImage: `
           linear-gradient(
