@@ -20,6 +20,7 @@ import GrungeOverlay from "./GrungeOverlay";
 import ProfileAvatar from "./ProfileAvatar";
 
 function IconBadge({ count }: { count: number }) {
+  if (!count) return null;
   return (
     <span className="absolute -top-1 -right-1 flex h-5 min-w-5 items-center justify-center rounded-full bg-primary px-1 text-[11px] font-semibold text-foreground">
       {count}
@@ -58,12 +59,48 @@ const placeholderMessages = [
 
 type OpenMenu = "notifications" | "messages" | "profile" | null;
 
-function DropdownPanel({ children }: { children: React.ReactNode }) {
+function DropdownPanel({
+  title,
+  footerHref,
+  footerLabel,
+  children,
+}: {
+  title: string;
+  footerHref?: string;
+  footerLabel?: string;
+  children: React.ReactNode;
+}) {
   return (
-    <div className="absolute right-0 top-full z-50 mt-2 w-72 overflow-hidden rounded-lg border border-border bg-card shadow-xl sm:w-80">
+    <div className="absolute right-0 top-full z-50 mt-2 w-[min(20rem,calc(100vw-2rem))] overflow-hidden rounded-xl border border-border bg-card shadow-xl">
+      <div className="flex items-center justify-between border-b border-border px-4 py-3">
+        <h3 className="text-sm font-semibold text-foreground">{title}</h3>
+      </div>
       {children}
+      {footerHref && footerLabel && (
+        <Link
+          href={footerHref}
+          className="block border-t border-border px-4 py-2.5 text-center text-xs font-semibold text-primary hover:bg-background"
+        >
+          {footerLabel}
+        </Link>
+      )}
     </div>
   );
+}
+
+function EmptyDropdownState({ label }: { label: string }) {
+  return (
+    <div className="px-4 py-8 text-center text-xs text-muted">{label}</div>
+  );
+}
+
+function getInitials(name: string): string {
+  return name
+    .split(/\s+/)
+    .filter(Boolean)
+    .slice(0, 2)
+    .map((part) => part[0]?.toUpperCase())
+    .join("");
 }
 
 export default function Header() {
@@ -72,7 +109,7 @@ export default function Header() {
   const { isAuthenticated, user } = useSelector((state: RootState) => state.auth);
   const [openMenu, setOpenMenu] = useState<OpenMenu>(null);
   const containerRef = useRef<HTMLDivElement>(null);
-  console.log("from topbar ", user)
+
   useEffect(() => {
     function handleClickOutside(e: MouseEvent) {
       if (
@@ -119,25 +156,33 @@ export default function Header() {
               </button>
 
               {openMenu === "notifications" && (
-                <DropdownPanel>
-                  <div className="border-b border-border px-4 py-3">
-                    <h3 className="text-sm font-semibold text-foreground">
-                      Notifications
-                    </h3>
-                  </div>
-                  <ul className="max-h-96 overflow-y-auto">
-                    {placeholderNotifications.map((n) => (
-                      <li
-                        key={n.id}
-                        className="border-b border-border px-4 py-3 text-sm text-foreground/80 last:border-b-0 hover:bg-background"
-                      >
-                        <p className="leading-snug">{n.text}</p>
-                        <span className="mt-1 block text-xs text-muted">
-                          {n.time}
-                        </span>
-                      </li>
-                    ))}
-                  </ul>
+                <DropdownPanel
+                  title="Notifications"
+                  footerHref="/notifications"
+                  footerLabel="View all notifications"
+                >
+                  {placeholderNotifications.length === 0 ? (
+                    <EmptyDropdownState label="You're all caught up." />
+                  ) : (
+                    <ul className="max-h-80 overflow-y-auto">
+                      {placeholderNotifications.map((n) => (
+                        <li
+                          key={n.id}
+                          className="flex gap-3 border-b border-border px-4 py-3 last:border-b-0 hover:bg-background"
+                        >
+                          <span className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-primary" />
+                          <div className="min-w-0 flex-1">
+                            <p className="text-sm leading-snug text-foreground/90">
+                              {n.text}
+                            </p>
+                            <span className="mt-1 block text-xs text-muted">
+                              {n.time}
+                            </span>
+                          </div>
+                        </li>
+                      ))}
+                    </ul>
+                  )}
                 </DropdownPanel>
               )}
             </div>
@@ -157,28 +202,38 @@ export default function Header() {
               </button>
 
               {openMenu === "messages" && (
-                <DropdownPanel>
-                  <div className="border-b border-border px-4 py-3">
-                    <h3 className="text-sm font-semibold text-foreground">
-                      Messages
-                    </h3>
-                  </div>
-                  <ul className="max-h-72 overflow-y-auto">
-                    {placeholderMessages.map((m) => (
-                      <li
-                        key={m.id}
-                        className="border-b border-border px-4 py-3 text-sm text-foreground/80 last:border-b-0 hover:bg-background"
-                      >
-                        <p className="font-medium text-foreground/90">{m.from}</p>
-                        <p className="mt-0.5 truncate leading-snug text-foreground/70">
-                          {m.text}
-                        </p>
-                        <span className="mt-1 block text-xs text-muted">
-                          {m.time}
-                        </span>
-                      </li>
-                    ))}
-                  </ul>
+                <DropdownPanel
+                  title="Messages"
+                  footerHref="/notifications"
+                  footerLabel="View all messages"
+                >
+                  {placeholderMessages.length === 0 ? (
+                    <EmptyDropdownState label="No messages yet." />
+                  ) : (
+                    <ul className="max-h-80 overflow-y-auto">
+                      {placeholderMessages.map((m) => (
+                        <li
+                          key={m.id}
+                          className="flex gap-3 border-b border-border px-4 py-3 last:border-b-0 hover:bg-background"
+                        >
+                          <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-primary/10 text-xs font-semibold text-primary">
+                            {getInitials(m.from)}
+                          </span>
+                          <div className="min-w-0 flex-1">
+                            <p className="truncate text-sm font-medium text-foreground/90">
+                              {m.from}
+                            </p>
+                            <p className="mt-0.5 truncate text-sm leading-snug text-muted">
+                              {m.text}
+                            </p>
+                            <span className="mt-1 block text-xs text-muted">
+                              {m.time}
+                            </span>
+                          </div>
+                        </li>
+                      ))}
+                    </ul>
+                  )}
                 </DropdownPanel>
               )}
             </div>
@@ -214,7 +269,7 @@ export default function Header() {
                   <FiChevronDown size={16} />
                 </button>
                 {openMenu === "profile" && (
-                  <DropdownPanel>
+                  <div className="absolute right-0 top-full z-50 mt-2 w-[min(16rem,calc(100vw-2rem))] overflow-hidden rounded-xl border border-border bg-card shadow-xl">
                     <ul className="py-1">
                       <li>
                         <Link
@@ -245,7 +300,7 @@ export default function Header() {
                         </button>
                       </li>
                     </ul>
-                  </DropdownPanel>
+                  </div>
                 )}
               </>
             )}
