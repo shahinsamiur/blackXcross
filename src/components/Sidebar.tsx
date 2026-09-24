@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname } from "next/navigation";
 import { useState } from "react";
 import { useSelector } from "react-redux";
 import { RootState } from "@/src/state/redux/store";
@@ -29,7 +29,6 @@ const navIcons = {
 
 function SidebarContent() {
   const pathname = usePathname();
-  const router = useRouter();
   const { isAuthenticated } = useSelector((state: RootState) => state.auth);
   const [authModalTarget, setAuthModalTarget] = useState<string | null>(null);
 

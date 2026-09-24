@@ -104,6 +104,14 @@ export const authApi = api.injectEndpoints({
         body: data,
       }),
     }),
+    // Fix: Added logout mutation to hit backend and invalidate User cache
+    logout: builder.mutation<{ message: string }, void>({
+      query: () => ({
+        url: "/auth/logout",
+        method: "POST",
+      }),
+      invalidatesTags: ["User"],
+    }),
   }),
   overrideExisting: false,
 });
@@ -115,4 +123,5 @@ export const {
   useForgotPasswordMutation,
   useResetPasswordMutation,
   useVerifyEmailMutation,
+  useLogoutMutation, // Fix: Export new hook
 } = authApi;

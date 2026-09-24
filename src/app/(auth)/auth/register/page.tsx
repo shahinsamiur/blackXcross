@@ -38,7 +38,8 @@ export default function RegisterPage() {
       clearAllErrors();
       
       await register(values).unwrap();
-      router.push("/auth/verify-email");
+      // Fix: Redirect to login page after successful signup
+      router.push("/auth/login");
     } catch (err: any) {
       if (err instanceof yup.ValidationError) {
         const fieldErrors: Record<string, string> = {};

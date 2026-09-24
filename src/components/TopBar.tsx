@@ -6,6 +6,7 @@ import Link from "next/link";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/src/state/redux/store";
 import { logout } from "@/src/state/redux/slices/authSlice";
+import { useLogoutMutation } from "@/src/state/redux/api/auth";
 import Image from "next/image";
 import {
   FiBell,
@@ -109,6 +110,9 @@ export default function Header() {
   const { isAuthenticated, user } = useSelector((state: RootState) => state.auth);
   const [openMenu, setOpenMenu] = useState<OpenMenu>(null);
   const containerRef = useRef<HTMLDivElement>(null);
+  
+  // Fix: Use the RTK Query logout mutation to hit the backend
+  const [logoutMutation] = useLogoutMutation();
 
   useEffect(() => {
     function handleClickOutside(e: MouseEvent) {
@@ -127,11 +131,16 @@ export default function Header() {
     setOpenMenu((current) => (current === menu ? null : menu));
   };
 
-  const handleLogout = () => {
-    document.cookie = "token=; path=/; max-age=0";
-    document.cookie = "refreshToken=; path=/; max-age=0";
-    dispatch(logout());
-    router.push("/");
+  // Fix: Call backend API, then update Redux state and redirect
+  const handleLogout = async () => {
+    try {
+      await logoutMutation().unwrap();
+    } catch (error) {
+      console.error("Logout failed", error);
+    } finally {
+      dispatch(logout());
+      router.push("/");
+    }
   };
 
   return (
@@ -309,7 +318,6 @@ export default function Header() {
 
         <div className="flex min-w-0 flex-col gap-2 lg:order-1 w-full">
           <div className="flex min-w-0 flex-wrap items-center justify-center gap-2 sm:gap-4  w-full">
-     
             <Image
               src="/image/logo.png"
               alt="BLACK×CROSS"
