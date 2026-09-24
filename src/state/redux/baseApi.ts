@@ -19,7 +19,7 @@ export type TagType = (typeof tagTypes)[number];
 export const api = createApi({
   reducerPath: "api",
   baseQuery: fetchBaseQuery({
-    baseUrl: process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000/api",
+    baseUrl: "/api", 
     credentials: "include",
   }),
   tagTypes: [...tagTypes],
