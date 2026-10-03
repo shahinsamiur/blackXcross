@@ -2,7 +2,6 @@
 
 import Link from "next/link";
 import { FiUsers, FiFileText, FiFlag, FiAlertTriangle } from "react-icons/fi";
-// 1. Import the specific types we created earlier
 import { 
   useGetAdminDashboardQuery, 
   type AdminReport, 

@@ -4,12 +4,10 @@ import { useState } from "react";
 import { FiHash, FiPlus } from "react-icons/fi";
 import ChannelThread from "./ChannelThread";
 import { getChannelsByGroup, type Channel } from "../../_mock/groups";
-
 export default function ChannelsTab({ groupId }: { groupId: string }) {
   const [channelList, setChannelList] = useState(getChannelsByGroup(groupId));
   const [newChannel, setNewChannel] = useState("");
   const [selected, setSelected] = useState<Channel | null>(null);
-
   const handleAddChannel = (e: React.FormEvent) => {
     e.preventDefault();
     const name = newChannel.trim().toLowerCase().replace(/\s+/g, "-");
@@ -26,13 +24,11 @@ export default function ChannelsTab({ groupId }: { groupId: string }) {
     ]);
     setNewChannel("");
   };
-
   if (selected) {
     return (
       <ChannelThread channel={selected} onBack={() => setSelected(null)} />
     );
   }
-
   return (
     <div className="flex flex-col gap-4">
       <ul className="flex flex-col gap-2">
@@ -56,7 +52,6 @@ export default function ChannelsTab({ groupId }: { groupId: string }) {
           </li>
         ))}
       </ul>
-
       <form
         onSubmit={handleAddChannel}
         className="flex items-center gap-2 rounded-lg border border-border bg-card p-3"

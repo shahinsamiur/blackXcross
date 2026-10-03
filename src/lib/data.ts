@@ -2,14 +2,12 @@ export type NavLink = {
   label: string;
   href: string;
 };
-
 export const navLinks: NavLink[] = [
   { label: "Product", href: "#product" },
   { label: "Pricing", href: "#pricing" },
   { label: "Customers", href: "#testimonials" },
   { label: "Blog", href: "#blog" },
 ];
-
 export type LedgerEntry = {
   id: string;
   merchant: string;
@@ -17,7 +15,6 @@ export type LedgerEntry = {
   amount: number;
   status: "matched" | "flagged" | "pending";
 };
-
 export const ledgerEntries: LedgerEntry[] = [
   { id: "1", merchant: "Stripe Payout", category: "Revenue", amount: 18420.0, status: "matched" },
   { id: "2", merchant: "AWS", category: "Infrastructure", amount: -1284.32, status: "matched" },
@@ -28,14 +25,12 @@ export const ledgerEntries: LedgerEntry[] = [
   { id: "7", merchant: "Notion Labs", category: "Software", amount: -20.0, status: "matched" },
   { id: "8", merchant: "Client — Vantage Co", category: "Revenue", amount: 9800.0, status: "matched" },
 ];
-
 export type BentoFeature = {
   id: string;
   title: string;
   description: string;
   size: "sm" | "lg";
 };
-
 export const bentoFeatures: BentoFeature[] = [
   {
     id: "smart-expenses",
@@ -74,7 +69,6 @@ export const bentoFeatures: BentoFeature[] = [
     size: "lg",
   },
 ];
-
 export type FeatureTab = {
   id: string;
   label: string;
@@ -82,7 +76,6 @@ export type FeatureTab = {
   body: string;
   stat: { value: string; label: string };
 };
-
 export const featureTabs: FeatureTab[] = [
   {
     id: "visibility",
@@ -106,7 +99,6 @@ export const featureTabs: FeatureTab[] = [
     stat: { value: "9.4 hrs", label: "saved per close, on average" },
   },
 ];
-
 export type PricingTier = {
   id: string;
   name: string;
@@ -116,7 +108,6 @@ export type PricingTier = {
   features: string[];
   highlighted?: boolean;
 };
-
 export const pricingTiers: PricingTier[] = [
   {
     id: "free",
@@ -144,14 +135,12 @@ export const pricingTiers: PricingTier[] = [
     features: ["Everything in Pro", "Anomaly detection", "Forecasting", "Priority support"],
   },
 ];
-
 export type Testimonial = {
   id: string;
   quote: string;
   name: string;
   role: string;
 };
-
 export const testimonials: Testimonial[] = [
   {
     id: "1",
@@ -183,14 +172,12 @@ export const testimonials: Testimonial[] = [
 ];
 
 export type FaqCategory = "General" | "Billing" | "Security";
-
 export type FaqItem = {
   id: string;
   category: FaqCategory;
   question: string;
   answer: string;
 };
-
 export const faqItems: FaqItem[] = [
   {
     id: "1",

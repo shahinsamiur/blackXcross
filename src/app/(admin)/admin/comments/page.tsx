@@ -11,7 +11,6 @@ export default function AdminCommentsPage() {
   const [page, setPage] = useState(1);
   const [query, setQuery] = useState("");
   const [search, setSearch] = useState("");
-
   const { data, isLoading, isFetching, isError } = useGetAdminCommentsQuery({
     page,
     limit: 20,
@@ -19,10 +18,8 @@ export default function AdminCommentsPage() {
   });
   const [deleteComment, { isLoading: isDeleting }] = useDeleteAdminCommentMutation();
   const [deletingId, setDeletingId] = useState<string | null>(null);
-
   const items = data?.data.items ?? [];
   const pagination = data?.data.pagination;
-
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
     setSearch(query);
@@ -68,7 +65,6 @@ export default function AdminCommentsPage() {
                 <div className="h-5 w-full animate-pulse rounded bg-border" />
               </li>
             ))}
-
           {!isLoading &&
             items.map((comment, i) => (
               <li

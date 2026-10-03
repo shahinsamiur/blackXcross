@@ -10,7 +10,6 @@ import CtaBanner from "../../components/CtaBanner";
 import { useGetDashboardQuery } from "../../state/redux/api/dashboard";
 import type { FetchBaseQueryError } from "@reduxjs/toolkit/query";
 import type { SerializedError } from "@reduxjs/toolkit";
-
 interface ErrorData {
    message?: string;
 }
@@ -28,25 +27,19 @@ export default function Home() {
     if ("error" in err && typeof err.error === "string") return err.error;
     return "An unknown error occurred";
   };
-
   const handleSearch = (value: string) => {
     router.push(`/cases?search=${encodeURIComponent(value)}`);
   };
-
   return (
     <div className="flex w-full flex-col gap-4 px-4 pb-8 sm:px-6 lg:px-8">
       <SearchFilterBar onSearch={handleSearch} />
-      
       <CaseCardsRow cases={data?.recentCases?.slice(0, 5) || []} isLoading={isLoading} />
-      
       <div className="grid w-full grid-cols-1 gap-4 lg:grid-cols-3">
         <ActivityFeed activities={data?.recentActivity || []} isLoading={isLoading} />
         <InvestigationsMap />
         <TrendingTheories theories={data?.trendingTheories || []} isLoading={isLoading} />
       </div>
-      
       <CtaBanner />
-      
       {isError && (
         <div className="rounded-lg border border-danger bg-danger/10 p-4 text-center text-danger">
           <p className="font-medium">Failed to load dashboard data. Please try again later.</p>

@@ -1,7 +1,6 @@
 import ProfileAvatar from "../ProfileAvatar";
 import GroupBadge from "../GroupBadge";
 import type { Group } from "../../_mock/groups";
-
 export default function GroupHeader({ group }: { group: Group }) {
   return (
     <div className="flex flex-col gap-4 rounded-lg border border-border bg-card p-5 sm:flex-row sm:items-center sm:justify-between sm:p-6">

@@ -8,7 +8,6 @@ import { Button } from "../../../../utils/Button";
 import { useFormErrors } from "../../../../hooks/useFormErrors";
 import { verifyEmailSchema } from "../../../../validations/verifyEmail.schema";
 import { useVerifyEmailMutation } from "../../../../state/redux/api/auth";
-
 export default function VerifyEmailPage() {
   const router = useRouter();
   const [code, setCode] = useState("");
@@ -20,13 +19,11 @@ export default function VerifyEmailPage() {
     clearError("code");
     clearError("general");
   };
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
       await verifyEmailSchema.validate({ code }, { abortEarly: false });
       clearAllErrors();
-      
       await verifyEmail({ code }).unwrap();
       router.push("/auth/login");
     } catch (err: any) {
@@ -56,13 +53,11 @@ export default function VerifyEmailPage() {
           Enter the 6-digit code we sent to your inbox.
         </p>
       </div>
-
       {errors.general && (
         <div className="rounded-lg border border-destructive/20 bg-destructive/5 p-3 text-sm text-destructive">
           {errors.general}
         </div>
       )}
-
       <div>
         <label
           htmlFor="code"
@@ -84,7 +79,6 @@ export default function VerifyEmailPage() {
           <p className="mt-1 text-xs text-destructive">{errors.code}</p>
         )}
       </div>
-
       <Button
         type="submit"
         disabled={isSubmitting}
@@ -93,9 +87,8 @@ export default function VerifyEmailPage() {
         <FiCheckCircle size={16} />
         {isSubmitting ? "Verifying..." : "Verify Email"}
       </Button>
-
       <p className="text-center text-sm text-muted">
-        Didn&apos;t get a code?{" "}
+        Didn&apos;t get a code?
         <button
           type="button"
           className="font-medium text-primary hover:opacity-80"

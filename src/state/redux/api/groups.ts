@@ -29,12 +29,12 @@ export interface GroupListResponse {
   };
 }
 
-
 export const groupsApi = api.injectEndpoints({
   endpoints: (builder) => ({
     getGroups: builder.query<GroupListResponse, void>({
       query: () => "/groups",
-      transformResponse: (response: ApiResponse<GroupListResponse>) => response.data,
+      transformResponse: (response: ApiResponse<GroupListResponse>) =>
+        response.data,
       providesTags: (result) =>
         result
           ? [

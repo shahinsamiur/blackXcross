@@ -1,16 +1,13 @@
 import { FiUserPlus } from "react-icons/fi";
 import ProfileAvatar from "../ProfileAvatar";
 import { getMembersByGroup } from "../../_mock/groups";
-
 const roleStyles: Record<string, string> = {
   owner: "border-primary/40 bg-primary/10 text-primary",
   admin: "border-warning/40 bg-warning/10 text-warning",
   member: "border-border text-foreground/70",
 };
-
 export default function MembersTab({ groupId }: { groupId: string }) {
   const members = getMembersByGroup(groupId);
-
   return (
     <div className="flex flex-col gap-4">
       <div className="flex items-center justify-between">

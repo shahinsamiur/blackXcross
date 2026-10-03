@@ -59,7 +59,8 @@ export const dashboardApi = api.injectEndpoints({
   endpoints: (builder) => ({
     getDashboard: builder.query<DashboardResponse, void>({
       query: () => "/dashboard",
-      transformResponse: (response: ApiResponse<DashboardResponse>) => response.data,
+      transformResponse: (response: ApiResponse<DashboardResponse>) =>
+        response.data,
       providesTags: ["Dashboard"],
     }),
   }),

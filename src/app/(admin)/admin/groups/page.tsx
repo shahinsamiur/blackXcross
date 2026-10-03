@@ -8,7 +8,6 @@ export default function AdminGroupsPage() {
   const [page, setPage] = useState(1);
   const [query, setQuery] = useState("");
   const [search, setSearch] = useState("");
-
   const { data, isLoading, isFetching, isError } = useGetAdminGroupsQuery({
     page,
     limit: 20,

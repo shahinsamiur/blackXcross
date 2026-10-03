@@ -4,7 +4,6 @@ import { useState } from "react";
 import { FiHash, FiArrowLeft, FiSend } from "react-icons/fi";
 import ProfileAvatar from "../ProfileAvatar";
 import { getMessagesByChannel, type Channel } from "../../_mock/groups";
-
 export default function ChannelThread({
   channel,
   onBack,
@@ -14,7 +13,6 @@ export default function ChannelThread({
 }) {
   const [messages, setMessages] = useState(getMessagesByChannel(channel.id));
   const [draft, setDraft] = useState("");
-
   const handleSend = (e: React.FormEvent) => {
     e.preventDefault();
     const text = draft.trim();
@@ -32,7 +30,6 @@ export default function ChannelThread({
     ]);
     setDraft("");
   };
-
   return (
     <div className="flex flex-col gap-4 rounded-lg border border-border bg-card">
       <div className="flex items-center gap-3 border-b border-border px-4 py-3">
@@ -49,7 +46,6 @@ export default function ChannelThread({
           {channel.name}
         </h2>
       </div>
-
       <ul className="flex flex-col gap-4 px-4 py-2">
         {messages.map((message) => (
           <li key={message.id} className="flex items-start gap-3">

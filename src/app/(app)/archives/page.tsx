@@ -4,11 +4,14 @@ import { useState } from "react";
 import { FiChevronLeft, FiChevronRight } from "react-icons/fi";
 import SearchFilterBar from "../../../components/SearchFilterBar";
 import CaseCard from "../../../components/CaseCard";
-import { useGetCasesQuery } from "@/src/state/redux/api/cases"; 
-
-const caseFilters = ["All Cases", "Cold Cases", "Open Investigations", "Recent Submissions"];
+import { useGetCasesQuery } from "@/src/state/redux/api/cases";
+const caseFilters = [
+  "All Cases",
+  "Cold Cases",
+  "Open Investigations",
+  "Recent Submissions",
+];
 const ITEMS_PER_PAGE = 9;
-
 const SkeletonCard = () => (
   <div className="flex w-60 shrink-0 snap-start flex-col gap-8 rounded-xl border border-border bg-card p-5 px-3 sm:w-72 sm:gap-10 sm:px-4 md:w-92 animate-pulse">
     <div className="flex items-center justify-between gap-2">
@@ -26,12 +29,10 @@ const SkeletonCard = () => (
     </div>
   </div>
 );
-
 export default function ArchivesPage() {
   const [searchQuery, setSearchQuery] = useState("");
   const [activeFilter, setActiveFilter] = useState<string>(caseFilters[0]);
   const [currentPage, setCurrentPage] = useState(1);
-
   const queryParams = {
     search: searchQuery.trim() || undefined,
     status:
@@ -40,26 +41,23 @@ export default function ArchivesPage() {
         : activeFilter === "Open Investigations"
           ? "OPEN"
           : undefined,
-    sort: (activeFilter === "Recent Submissions" ? "newest" : "newest") as "newest" | "oldest",
+    sort: (activeFilter === "Recent Submissions" ? "newest" : "newest") as
+      | "newest"
+      | "oldest",
     page: currentPage,
     limit: ITEMS_PER_PAGE,
   };
-
   const { data, isLoading, isFetching, error } = useGetCasesQuery(queryParams);
-
   const cases = data?.items || [];
   const totalPages = data?.pagination?.totalPages || 1;
-
   const handleSearchChange = (val: string) => {
     setSearchQuery(val);
     setCurrentPage(1);
   };
-
   const handleFilterChange = (val: string | unknown) => {
     setActiveFilter(val as string);
     setCurrentPage(1);
   };
-
   return (
     <div className="flex w-full flex-col gap-6 px-4 pb-12 sm:px-6 lg:px-8">
       <div className="flex flex-col gap-1">
@@ -71,12 +69,10 @@ export default function ArchivesPage() {
           {(data?.pagination?.total ?? 0) === 1 ? "" : "s"} in the archive
         </p>
       </div>
-
       <SearchFilterBar
         onSearch={handleSearchChange}
         onFilterChange={handleFilterChange}
       />
-
       {isLoading ? (
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
           {Array.from({ length: ITEMS_PER_PAGE }).map((_, i) => (
@@ -102,7 +98,6 @@ export default function ArchivesPage() {
           </p>
         </div>
       )}
-
       {totalPages > 1 && (
         <div className="flex items-center justify-center gap-4 pt-2">
           <button

@@ -3,11 +3,14 @@
 import Link from "next/link";
 import { useSelector } from "react-redux";
 import { FiEdit3, FiUsers, FiFileText } from "react-icons/fi";
-import { myGroups } from "../../../_mock/blackxcross"; 
+import { myGroups } from "../../../_mock/blackxcross";
 import CaseCard from "../../../components/CaseCard";
 import ProfileAvatar from "../../../components/ProfileAvatar";
 import type { RootState } from "../../../state/redux/store";
-import { useGetUserQuery, useGetUserCasesQuery } from "../../../state/redux/api/users";
+import {
+  useGetUserQuery,
+  useGetUserCasesQuery,
+} from "../../../state/redux/api/users";
 
 const SkeletonCaseCard = () => (
   <div className="flex w-60 shrink-0 snap-start flex-col gap-8 rounded-xl border border-border bg-card p-5 px-3 sm:w-72 sm:gap-10 sm:px-4 md:w-92 animate-pulse">
@@ -30,15 +33,19 @@ const SkeletonCaseCard = () => (
 export default function DossierPage() {
   const userId = useSelector((state: RootState) => state.auth?.user?.id);
 
-  const { data: user, isLoading: isUserLoading } = useGetUserQuery(userId as string, {
-    skip: !userId,
-  });
-  const { data: casesData, isLoading: isCasesLoading } = useGetUserCasesQuery(userId as string, {
-    skip: !userId,
-  });
-  
+  const { data: user, isLoading: isUserLoading } = useGetUserQuery(
+    userId as string,
+    {
+      skip: !userId,
+    },
+  );
+  const { data: casesData, isLoading: isCasesLoading } = useGetUserCasesQuery(
+    userId as string,
+    {
+      skip: !userId,
+    },
+  );
   const myCaseFiles = casesData || [];
-
   return (
     <div className="flex w-full flex-col gap-6 px-4 pb-8 sm:px-6 lg:px-8">
       <section className="flex flex-col gap-4 rounded-xl border border-border bg-card p-5 sm:flex-row sm:items-center sm:justify-between sm:p-6">
@@ -46,10 +53,10 @@ export default function DossierPage() {
           {isUserLoading ? (
             <div className="h-16 w-16 animate-pulse rounded-full bg-muted" />
           ) : (
-            <ProfileAvatar 
-              src={user?.avatar || "/image/hero1.jpg"} 
-              alt={user?.username || "Your profile"} 
-              size={64} 
+            <ProfileAvatar
+              src={user?.avatar || "/image/hero1.jpg"}
+              alt={user?.username || "Your profile"}
+              size={64}
             />
           )}
           <div className="flex flex-col gap-1">
@@ -65,7 +72,6 @@ export default function DossierPage() {
             </p>
           </div>
         </div>
-
         <Link
           href="/dossier/edit"
           className="flex items-center justify-center gap-2 rounded-lg border border-primary/40 bg-primary/10 px-4 py-2.5 text-sm font-medium text-primary hover:bg-primary/20 sm:self-start"
@@ -74,7 +80,6 @@ export default function DossierPage() {
           Edit Dossier
         </Link>
       </section>
-
       <section className="flex flex-col gap-4">
         <div className="flex items-center gap-2">
           <FiFileText size={18} className="text-muted" />
@@ -82,7 +87,6 @@ export default function DossierPage() {
             My Case Files
           </h2>
         </div>
-
         {isCasesLoading ? (
           <div className="flex w-full snap-x gap-4 overflow-x-auto pb-2">
             {Array.from({ length: 3 }).map((_, i) => (
@@ -101,7 +105,6 @@ export default function DossierPage() {
           </p>
         )}
       </section>
-
       <section className="flex flex-col gap-4">
         <div className="flex items-center gap-2">
           <FiUsers size={18} className="text-muted" />
@@ -109,7 +112,6 @@ export default function DossierPage() {
             My Groups
           </h2>
         </div>
-
         <ul className="grid w-full grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
           {myGroups.map((group) => (
             <li

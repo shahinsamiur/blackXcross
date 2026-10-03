@@ -9,11 +9,8 @@ import {
   useBanUserMutation 
 } from "../../../../state/redux/api/admin";
 import { Skeleton } from "../../../../components/ui/Skeleton";
-
 type UserStatus = "ACTIVE" | "SUSPENDED" | "BANNED" | "Active" | "Suspended" | "Banned";
-
 const statusFilters: (UserStatus | "All")[] = ["All", "ACTIVE", "SUSPENDED", "BANNED"];
-
 const statusStyles: Record<string, string> = {
   ACTIVE: "border-success text-success bg-success/10",
   Active: "border-success text-success bg-success/10",
@@ -22,13 +19,11 @@ const statusStyles: Record<string, string> = {
   BANNED: "border-border text-muted bg-card",
   Banned: "border-border text-muted bg-card",
 };
-
 export default function AdminUsersPage() {
   const [query, setQuery] = useState("");
   const [statusFilter, setStatusFilter] = useState<UserStatus | "All">("All");
   const [page, setPage] = useState(1);
   const limit = 20;
-
   const { data, isLoading, error } = useGetAdminUsersQuery({
     page,
     limit,
@@ -38,10 +33,8 @@ export default function AdminUsersPage() {
 
   const [suspendUser, { isLoading: isSuspending }] = useSuspendUserMutation();
   const [banUser, { isLoading: isBanning }] = useBanUserMutation();
-
   const users = data?.data?.items || [];
   const totalPages = data?.data?.pagination?.totalPages || 0;
-
   const handleSuspend = async (id: string) => {
     if (confirm("Are you sure you want to suspend this user?")) {
       try {
@@ -65,7 +58,6 @@ export default function AdminUsersPage() {
   return (
     <div className="flex w-full flex-col gap-6">
       <h1 className="text-xl font-semibold text-foreground sm:text-2xl">Users</h1>
-
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <div className="relative w-full max-w-sm">
           <FiSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-muted" size={16} />

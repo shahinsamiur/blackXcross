@@ -107,10 +107,12 @@ function getInitials(name: string): string {
 export default function Header() {
   const router = useRouter();
   const dispatch = useDispatch();
-  const { isAuthenticated, user } = useSelector((state: RootState) => state.auth);
+  const { isAuthenticated, user } = useSelector(
+    (state: RootState) => state.auth,
+  );
   const [openMenu, setOpenMenu] = useState<OpenMenu>(null);
   const containerRef = useRef<HTMLDivElement>(null);
-  
+
   // Fix: Use the RTK Query logout mutation to hit the backend
   const [logoutMutation] = useLogoutMutation();
 

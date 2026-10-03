@@ -29,9 +29,7 @@ export default function AdminReportDetailPage() {
   const { data, isLoading, isError } = useGetAdminReportByIdQuery(params.id);
   const [updateReport, { isLoading: isUpdating }] = useUpdateReportMutation();
   const [adminNotes, setAdminNotes] = useState<string | null>(null);
-
   const report = data?.data;
-
   if (isLoading) {
     return (
       <div className="flex w-full flex-col gap-6">
@@ -40,7 +38,6 @@ export default function AdminReportDetailPage() {
       </div>
     );
   }
-
   if (isError || !report) {
     return (
       <div className="flex w-full flex-col items-center gap-3 py-16 text-center">
@@ -57,9 +54,7 @@ export default function AdminReportDetailPage() {
       </div>
     );
   }
-
   const notes = adminNotes ?? report.adminNotes ?? "";
-
   const handleUpdate = async (status: string) => {
     try {
       await updateReport({
@@ -71,7 +66,6 @@ export default function AdminReportDetailPage() {
       alert("Failed to update report. Please try again.");
     }
   };
-
   return (
     <div className="flex w-full flex-col gap-6">
       <Link
@@ -81,7 +75,6 @@ export default function AdminReportDetailPage() {
         <FiArrowLeft size={16} />
         Back to Reports
       </Link>
-
       <div className="flex flex-col gap-6 rounded-xl border border-border bg-card p-5 sm:p-6">
         <div className="flex flex-wrap items-center justify-between gap-4">
           <div className="flex flex-col gap-1">
@@ -99,7 +92,6 @@ export default function AdminReportDetailPage() {
             {statusLabels[report.status]}
           </span>
         </div>
-
         <div className="flex flex-col gap-2 rounded-lg border border-border p-4">
           <span className="text-xs font-semibold uppercase tracking-wide text-muted">
             Reason
@@ -125,7 +117,6 @@ export default function AdminReportDetailPage() {
             className="w-full rounded-lg border border-border bg-background p-3 text-sm text-foreground placeholder:text-muted focus:border-primary/50 focus:outline-none"
           />
         </div>
-
         <div className="flex flex-wrap gap-3 border-t border-border pt-5">
           <button
             type="button"

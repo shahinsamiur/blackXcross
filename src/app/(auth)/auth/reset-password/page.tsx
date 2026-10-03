@@ -16,29 +16,23 @@ function ResetPasswordContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const token = searchParams.get("token") || "";
-
   const [values, setValues] = useState(initialValues);
   const { errors, setMultipleErrors, clearError, clearAllErrors } = useFormErrors();
-  
   const [resetPassword, { isLoading: isSubmitting }] = useResetPasswordMutation();
-
   const handleChange = (field: keyof typeof values, value: string) => {
     setValues((prev) => ({ ...prev, [field]: value }));
     clearError(field);
     clearError("general");
   };
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!token) {
       setMultipleErrors({ general: "Invalid or missing reset token." });
       return;
     }
-
     try {
       await resetPasswordSchema.validate(values, { abortEarly: false });
       clearAllErrors();
-      
       await resetPassword({ ...values, token }).unwrap();
       router.push("/auth/login");
     } catch (err: any) {
@@ -69,7 +63,6 @@ function ResetPasswordContent() {
           {errors.general}
         </div>
       )}
-
       <div>
         <label
           htmlFor="password"
@@ -85,7 +78,6 @@ function ResetPasswordContent() {
           placeholder="••••••••"
         />
       </div>
-
       <div>
         <label
           htmlFor="confirmPassword"
@@ -101,7 +93,6 @@ function ResetPasswordContent() {
           placeholder="••••••••"
         />
       </div>
-
       <Button
         type="submit"
         disabled={isSubmitting}
@@ -113,7 +104,6 @@ function ResetPasswordContent() {
     </form>
   );
 }
-
 export default function ResetPasswordPage() {
   return (
     <Suspense fallback={<div className="flex w-full items-center justify-center p-6 text-muted">Loading form...</div>}>

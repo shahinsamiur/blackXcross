@@ -10,7 +10,6 @@ import {
   getChannelById,
   getMessagesByChannel,
 } from "../../../../../../_mock/groups";
-
 export default function ChannelPage() {
   const params = useParams<{ groupId: string; channelId: string }>();
   const group = getGroupById(params.groupId);
@@ -19,7 +18,6 @@ export default function ChannelPage() {
     channel ? getMessagesByChannel(channel.id) : [],
   );
   const [draft, setDraft] = useState("");
-
   if (!group || !channel) {
     return (
       <div className="px-4 py-6 sm:px-6 lg:px-10">
@@ -27,7 +25,6 @@ export default function ChannelPage() {
       </div>
     );
   }
-
   const handleSend = (e: React.FormEvent) => {
     e.preventDefault();
     const text = draft.trim();
@@ -62,7 +59,6 @@ export default function ChannelPage() {
         </h1>
         <span className="text-xs text-muted">in {group.name}</span>
       </div>
-
       <ul className="flex flex-1 flex-col gap-4 overflow-y-auto px-4 py-5 sm:px-6 lg:px-10">
         {messages.map((message) => (
           <li key={message.id} className="flex items-start gap-3">
@@ -90,7 +86,6 @@ export default function ChannelPage() {
           </p>
         )}
       </ul>
-
       <form
         onSubmit={handleSend}
         className="flex items-center gap-2 border-t border-border px-4 py-4 sm:px-6 lg:px-10"

@@ -12,32 +12,25 @@ import { loginSchema } from "../../../../validations/login.schema";
 import { useLoginMutation } from "../../../../state/redux/api/auth";
 import { setCredentials } from "../../../../state/redux/slices/authSlice";
 import PasswordInput from "../../../../components/ui/PasswordInput";
-
 const initialValues = { email: "", password: "" };
-
 function LoginContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const dispatch = useDispatch();
   const [values, setValues] = useState(initialValues);
   const { errors, setMultipleErrors, clearError, clearAllErrors } = useFormErrors();
-
   const [login, { isLoading: isLoggingIn }] = useLoginMutation();
-
   const handleChange = (field: keyof typeof values, value: string) => {
     setValues((prev) => ({ ...prev, [field]: value }));
     clearError(field);
     clearError("general");
   };
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
       await loginSchema.validate(values, { abortEarly: false });
       clearAllErrors();
-
       const result = await login(values).unwrap();
-
       if (result.refreshToken) {
         document.cookie = `refreshToken=${result.refreshToken}; path=/; max-age=${60 * 60 * 24 * 30}`;
       }

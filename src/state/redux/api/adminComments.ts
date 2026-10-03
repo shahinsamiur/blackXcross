@@ -42,7 +42,10 @@ export interface AdminComment {
 
 export const adminCommentsApi = api.injectEndpoints({
   endpoints: (build) => ({
-    getAdminComments: build.query<ApiResponse<PaginatedResponse<AdminComment>>, { page?: number; limit?: number; search?: string }>({
+    getAdminComments: build.query<
+      ApiResponse<PaginatedResponse<AdminComment>>,
+      { page?: number; limit?: number; search?: string }
+    >({
       query: ({ page = 1, limit = 20, search }) => ({
         url: "/comments",
         params: { page, limit, search },
@@ -60,4 +63,5 @@ export const adminCommentsApi = api.injectEndpoints({
   overrideExisting: false,
 });
 
-export const { useGetAdminCommentsQuery, useDeleteAdminCommentMutation } = adminCommentsApi;
+export const { useGetAdminCommentsQuery, useDeleteAdminCommentMutation } =
+  adminCommentsApi;

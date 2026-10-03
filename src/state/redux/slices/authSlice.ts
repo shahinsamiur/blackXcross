@@ -8,7 +8,11 @@ export interface User {
   avatarUrl?: string | null;
 }
 
-export type AuthStatus = "idle" | "loading" | "authenticated" | "unauthenticated";
+export type AuthStatus =
+  | "idle"
+  | "loading"
+  | "authenticated"
+  | "unauthenticated";
 
 interface AuthState {
   isAuthenticated: boolean;

@@ -5,7 +5,6 @@ import Link from "next/link";
 import { useParams } from "next/navigation";
 import { FiHash, FiPlus } from "react-icons/fi";
 import { getGroupById, getChannelsByGroup } from "../../../../../_mock/groups";
-
 export default function GroupChannelsPage() {
   const params = useParams<{ groupId: string }>();
   const group = getGroupById(params.groupId);
@@ -13,7 +12,6 @@ export default function GroupChannelsPage() {
     group ? getChannelsByGroup(group.id) : [],
   );
   const [newChannel, setNewChannel] = useState("");
-
   if (!group) {
     return (
       <div className="px-4 py-6 sm:px-6 lg:px-10">
@@ -21,7 +19,6 @@ export default function GroupChannelsPage() {
       </div>
     );
   }
-
   const handleAddChannel = (e: React.FormEvent) => {
     e.preventDefault();
     const name = newChannel.trim().toLowerCase().replace(/\s+/g, "-");
@@ -44,7 +41,6 @@ export default function GroupChannelsPage() {
       <h1 className="font-display text-2xl text-foreground/90">
         {group.name} · Channels
       </h1>
-
       <ul className="flex flex-col gap-2">
         {channelList.map((channel) => (
           <li key={channel.id}>

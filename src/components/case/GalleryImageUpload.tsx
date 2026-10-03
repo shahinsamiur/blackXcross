@@ -16,13 +16,11 @@ export function GalleryImageUpload({
   onRemove,
 }: GalleryImageUploadProps) {
   const atLimit = images.length >= max;
-
   return (
     <div className="flex flex-col gap-3 border-t border-border pt-6">
       <span className="text-sm font-medium text-foreground/80">
         Gallery Images ({images.length}/{max})
       </span>
-
       {images.length > 0 && (
         <ul className="grid grid-cols-3 gap-3 sm:grid-cols-4">
           {images.map((url, i) => (
@@ -49,7 +47,6 @@ export function GalleryImageUpload({
           ))}
         </ul>
       )}
-
       <label
         className={`flex w-full items-center justify-center gap-2 rounded-lg border border-dashed border-border px-3 py-4 text-xs font-semibold text-foreground/80 ${
           atLimit
@@ -72,7 +69,6 @@ export function GalleryImageUpload({
           className="hidden"
         />
       </label>
-
       {atLimit && (
         <p className="text-xs text-muted">
           Maximum of {max} gallery images reached.

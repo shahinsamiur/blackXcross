@@ -11,7 +11,7 @@ export const tagTypes = [
   "Report",
   "Moderation",
   "Auth",
-  "Analytics"
+  "Analytics",
 ] as const;
 
 export type TagType = (typeof tagTypes)[number];
@@ -19,7 +19,7 @@ export type TagType = (typeof tagTypes)[number];
 export const api = createApi({
   reducerPath: "api",
   baseQuery: fetchBaseQuery({
-    baseUrl: "/api", 
+    baseUrl: "/api",
     credentials: "include",
   }),
   tagTypes: [...tagTypes],

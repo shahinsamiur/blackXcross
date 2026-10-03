@@ -22,9 +22,7 @@ export default function RegisterPage() {
   const router = useRouter();
   const [values, setValues] = useState(initialValues);
   const { errors, setMultipleErrors, clearError, clearAllErrors } = useFormErrors();
-  
   const [register, { isLoading: isRegistering }] = useRegisterMutation();
-
   const handleChange = (field: keyof typeof values, value: string) => {
     setValues((prev) => ({ ...prev, [field]: value }));
     clearError(field);
@@ -36,9 +34,7 @@ export default function RegisterPage() {
     try {
       await registerSchema.validate(values, { abortEarly: false });
       clearAllErrors();
-      
       await register(values).unwrap();
-      // Fix: Redirect to login page after successful signup
       router.push("/auth/login");
     } catch (err: any) {
       if (err instanceof yup.ValidationError) {
@@ -134,7 +130,6 @@ export default function RegisterPage() {
               <p className="mt-1.5 text-xs text-destructive">{errors.email}</p>
             )}
           </div>
-
           <div>
             <label
               htmlFor="password"
@@ -150,7 +145,6 @@ export default function RegisterPage() {
               placeholder="••••••••"
             />
           </div>
-
           <div>
             <label
               htmlFor="confirmPassword"
@@ -167,7 +161,6 @@ export default function RegisterPage() {
             />
           </div>
         </div>
-
         <Button
           type="submit"
           disabled={isRegistering}
@@ -176,7 +169,6 @@ export default function RegisterPage() {
           <FiUserPlus size={16} />
           {isRegistering ? "Creating account..." : "Create Account"}
         </Button>
-
         <p className="text-center text-sm text-muted">
           Already have an account?
           <Link

@@ -83,7 +83,10 @@ export const authApi = api.injectEndpoints({
         body: data,
       }),
     }),
-    forgotPassword: builder.mutation<{ message: string }, ForgotPasswordRequest>({
+    forgotPassword: builder.mutation<
+      { message: string },
+      ForgotPasswordRequest
+    >({
       query: (data) => ({
         url: "/auth/forgot-password",
         method: "POST",
@@ -104,7 +107,6 @@ export const authApi = api.injectEndpoints({
         body: data,
       }),
     }),
-    // Fix: Added logout mutation to hit backend and invalidate User cache
     logout: builder.mutation<{ message: string }, void>({
       query: () => ({
         url: "/auth/logout",

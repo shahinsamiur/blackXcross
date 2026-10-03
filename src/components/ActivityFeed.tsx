@@ -34,14 +34,20 @@ function ActivityIndicator({ type }: { type: string }) {
   );
 }
 
-export default function ActivityFeed({ activities, isLoading }: ActivityFeedProps) {
+export default function ActivityFeed({
+  activities,
+  isLoading,
+}: ActivityFeedProps) {
   if (isLoading) {
     return (
       <section className="flex flex-col gap-5 rounded-xl border border-border bg-card p-5">
         <div className="h-4 w-48 animate-pulse rounded bg-muted" />
         <div className="flex flex-col gap-5">
           {[...Array(4)].map((_, i) => (
-            <div key={i} className="flex w-full items-start justify-between gap-3">
+            <div
+              key={i}
+              className="flex w-full items-start justify-between gap-3"
+            >
               <div className="h-12 w-12 animate-pulse rounded-full bg-muted" />
               <div className="flex flex-1 flex-col gap-2">
                 <div className="h-3 w-32 animate-pulse rounded bg-muted" />
@@ -73,12 +79,21 @@ export default function ActivityFeed({ activities, isLoading }: ActivityFeedProp
       ) : (
         <ul className="flex flex-col gap-5">
           {activities.map((item) => {
-            const actorName = item.author.name || item.author.username || "Anonymous";
-            const actionText = item.type === "COMMENT" ? "commented on" : item.type === "CASE" ? "created case" : "posted theory";
+            const actorName =
+              item.author.name || item.author.username || "Anonymous";
+            const actionText =
+              item.type === "COMMENT"
+                ? "commented on"
+                : item.type === "CASE"
+                  ? "created case"
+                  : "posted theory";
             const target = item.caseTitle || item.theoryTitle || "Unknown";
 
             return (
-              <li key={item.id} className="flex w-full items-start justify-between gap-3">
+              <li
+                key={item.id}
+                className="flex w-full items-start justify-between gap-3"
+              >
                 <div className="relative shrink-0">
                   <div className="h-12 w-12 overflow-hidden rounded-full border border-border bg-card">
                     {item.author.avatarUrl ? (
@@ -99,7 +114,9 @@ export default function ActivityFeed({ activities, isLoading }: ActivityFeedProp
                 </div>
                 <div className="flex min-w-0 flex-1 flex-col">
                   <div className="text-sm leading-relaxed text-foreground/90">
-                    <span className="text-xs text-foreground/80">{actorName}</span>{" "}
+                    <span className="text-xs text-foreground/80">
+                      {actorName}
+                    </span>{" "}
                     {actionText}
                   </div>
                   <div className="text-base font-medium leading-relaxed text-foreground/80 sm:text-lg truncate">

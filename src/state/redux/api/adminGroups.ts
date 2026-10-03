@@ -38,7 +38,10 @@ export interface AdminGroup {
 
 export const adminGroupsApi = api.injectEndpoints({
   endpoints: (build) => ({
-    getAdminGroups: build.query<ApiResponse<PaginatedResponse<AdminGroup>>, { page?: number; limit?: number; search?: string }>({
+    getAdminGroups: build.query<
+      ApiResponse<PaginatedResponse<AdminGroup>>,
+      { page?: number; limit?: number; search?: string }
+    >({
       query: ({ page = 1, limit = 20, search }) => ({
         url: "/groups",
         params: { page, limit, search },

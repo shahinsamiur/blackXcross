@@ -57,7 +57,6 @@ export function CaseImageUpload({
           />
         </label>
       )}
-
       {error && <p className="mt-1 text-xs text-primary">{error}</p>}
     </div>
   );

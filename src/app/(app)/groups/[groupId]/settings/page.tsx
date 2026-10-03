@@ -1,15 +1,12 @@
 "use client";
-
 import { useState } from "react";
 import { useParams } from "next/navigation";
 import { ValidationError } from "yup";
 import { groupSchema } from "../../../../../validations/group.schema";
 import { getGroupById, groupCategories } from "../../../../../_mock/groups";
-
 export default function GroupSettingsPage() {
   const params = useParams<{ groupId: string }>();
   const group = getGroupById(params.groupId);
-
   const [values, setValues] = useState({
     name: group?.name ?? "",
     category: group?.category ?? "",
@@ -18,7 +15,6 @@ export default function GroupSettingsPage() {
   });
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [saved, setSaved] = useState(false);
-
   if (!group) {
     return (
       <div className="px-4 py-6 sm:px-6 lg:px-10">
@@ -26,12 +22,10 @@ export default function GroupSettingsPage() {
       </div>
     );
   }
-
   const handleChange = (field: keyof typeof values, value: string) => {
     setValues((prev) => ({ ...prev, [field]: value }));
     setSaved(false);
   };
-
   const handleSave = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
@@ -48,18 +42,15 @@ export default function GroupSettingsPage() {
       }
     }
   };
-
   const handleDelete = () => {
     if (window.confirm(`Delete "${group.name}"? This cannot be undone.`)) {
     }
   };
-
   return (
     <div className="mx-auto flex w-full flex-col gap-6 px-4 py-6 sm:px-6 lg:px-10">
       <h1 className="font-display text-2xl text-foreground/90">
         Group Settings
       </h1>
-
       <form
         onSubmit={handleSave}
         noValidate
@@ -81,7 +72,6 @@ export default function GroupSettingsPage() {
           />
           {errors.name && <p className="text-xs text-danger">{errors.name}</p>}
         </div>
-
         <div className="flex flex-col gap-1.5">
           <label
             htmlFor="category"
@@ -124,7 +114,6 @@ export default function GroupSettingsPage() {
             <p className="text-xs text-danger">{errors.description}</p>
           )}
         </div>
-
         <fieldset className="flex flex-col gap-2">
           <legend className="text-sm font-medium text-foreground/80">
             Visibility
@@ -148,7 +137,6 @@ export default function GroupSettingsPage() {
             ))}
           </div>
         </fieldset>
-
         <div className="flex items-center gap-3">
           <button
             type="submit"
@@ -161,7 +149,6 @@ export default function GroupSettingsPage() {
           )}
         </div>
       </form>
-
       <div className="flex flex-col gap-3 rounded-lg border border-danger/40 bg-danger/5 p-5">
         <h2 className="text-sm font-semibold text-danger">Danger Zone</h2>
         <p className="text-xs text-muted">

@@ -24,7 +24,7 @@ const navIcons = {
   archives: FiCalendar,
   "community-hub": FiUsers,
   "my-dossier": FiUser,
-  "case": IoBriefcaseSharp
+  case: IoBriefcaseSharp,
 };
 
 function SidebarContent() {

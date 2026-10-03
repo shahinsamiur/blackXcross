@@ -22,13 +22,11 @@ export default function AdminSettingsPage() {
     e.preventDefault();
     setSaved(true);
   };
-
   return (
     <div className="flex w-full flex-col gap-6 ">
       <h1 className="text-xl font-semibold text-foreground sm:text-2xl">
         Settings
       </h1>
-
       <form
         onSubmit={handleSave}
         className="flex w-full flex-col gap-6 rounded-xl border border-border p-5 sm:p-6"

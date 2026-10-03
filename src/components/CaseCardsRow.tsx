@@ -5,7 +5,7 @@ import { FiChevronLeft, FiChevronRight } from "react-icons/fi";
 import CaseCard from "./CaseCard";
 
 interface CaseCardsRowProps {
-  cases: any[]; 
+  cases: any[];
   isLoading?: boolean;
 }
 
@@ -35,15 +35,20 @@ export default function CaseCardsRow({ cases, isLoading }: CaseCardsRowProps) {
     };
   }, [cases]);
 
-  const scrollPrev = () => scrollRef.current?.scrollBy({ left: -320, behavior: "smooth" });
-  const scrollNext = () => scrollRef.current?.scrollBy({ left: 320, behavior: "smooth" });
+  const scrollPrev = () =>
+    scrollRef.current?.scrollBy({ left: -320, behavior: "smooth" });
+  const scrollNext = () =>
+    scrollRef.current?.scrollBy({ left: 320, behavior: "smooth" });
 
   if (isLoading) {
     return (
       <div className="relative px-4 pb-8 sm:px-6 lg:px-8">
         <div className="flex snap-x snap-mandatory gap-4 overflow-x-auto pb-2 scrollbar-none [&::-webkit-scrollbar]:hidden">
           {[...Array(4)].map((_, i) => (
-            <div key={i} className="h-64 w-80 shrink-0 animate-pulse rounded-xl bg-muted" />
+            <div
+              key={i}
+              className="h-64 w-80 shrink-0 animate-pulse rounded-xl bg-muted"
+            />
           ))}
         </div>
       </div>
@@ -76,7 +81,10 @@ export default function CaseCardsRow({ cases, isLoading }: CaseCardsRowProps) {
         className="flex snap-x snap-mandatory gap-4 overflow-x-auto pb-2 scrollbar-none [&::-webkit-scrollbar]:hidden"
       >
         {cases.map((caseFile) => (
-          <div key={caseFile.id} className="w-60 shrink-0 snap-start sm:w-72 md:w-92">
+          <div
+            key={caseFile.id}
+            className="w-60 shrink-0 snap-start sm:w-72 md:w-92"
+          >
             <CaseCard caseFile={caseFile} />
           </div>
         ))}

@@ -7,14 +7,11 @@ import TornCard from "../../../components/ui/TornCard";
 import ProfileAvatar from "../../../components/ProfileAvatar";
 import GroupBadge from "../../../components/GroupBadge";
 import { groups } from "../../../_mock/groups";
-
 const filters = ["All", "Joined", "Public", "Private"] as const;
 type Filter = (typeof filters)[number];
-
 export default function GroupsPage() {
   const [query, setQuery] = useState("");
   const [filter, setFilter] = useState<Filter>("All");
-
   const filtered = useMemo(() => {
     return groups.filter((g) => {
       const matchesQuery = g.name.toLowerCase().includes(query.toLowerCase());
@@ -26,7 +23,6 @@ export default function GroupsPage() {
       return matchesQuery && matchesFilter;
     });
   }, [query, filter]);
-
   return (
     <div className="flex flex-col gap-6 px-4 py-6 sm:px-6 lg:px-10">
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
@@ -46,7 +42,6 @@ export default function GroupsPage() {
           Start New Group
         </Link>
       </div>
-
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
         <label className="relative flex flex-1 items-center">
           <FiSearch
@@ -79,7 +74,6 @@ export default function GroupsPage() {
           ))}
         </div>
       </div>
-
       <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 xl:grid-cols-3">
         {filtered.map((group) => (
           <TornCard key={group.id} className="flex flex-col gap-4 p-5">

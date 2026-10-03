@@ -20,13 +20,11 @@ export const caseSchema = yup.object({
     .oneOf(["COLD CASE", "OPEN CASE"], "Select a valid status")
     .required("Status is required"),
 
-  image: yup.mixed<File | string>().test(
-    "image-required",
-    "Case image is required",
-    function (value) {
+  image: yup
+    .mixed<File | string>()
+    .test("image-required", "Case image is required", function (value) {
       if (value instanceof File) return true;
       if (typeof value === "string" && value.trim() !== "") return true;
       return false;
-    }
-  ),
+    }),
 });

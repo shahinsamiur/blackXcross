@@ -11,7 +11,6 @@ export default function AdminTheoriesPage() {
   const [page, setPage] = useState(1);
   const [query, setQuery] = useState("");
   const [search, setSearch] = useState("");
-
   const { data, isLoading, isFetching, isError } = useGetAdminTheoriesQuery({
     page,
     limit: 20,
@@ -19,16 +18,13 @@ export default function AdminTheoriesPage() {
   });
   const [deleteTheory, { isLoading: isDeleting }] = useDeleteAdminTheoryMutation();
   const [deletingId, setDeletingId] = useState<string | null>(null);
-
   const items = data?.data.items ?? [];
   const pagination = data?.data.pagination;
-
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
     setSearch(query);
     setPage(1);
   };
-
   const handleRemove = async (id: string) => {
     setDeletingId(id);
     try {
@@ -39,13 +35,11 @@ export default function AdminTheoriesPage() {
       setDeletingId(null);
     }
   };
-
   return (
     <div className="flex w-full flex-col gap-6">
       <h1 className="text-xl font-semibold text-foreground sm:text-2xl">
         Theories
       </h1>
-
       <form onSubmit={handleSearch} className="relative w-full max-w-sm">
         <FiSearch
           className="absolute left-3 top-1/2 -translate-y-1/2 text-muted"
@@ -59,7 +53,6 @@ export default function AdminTheoriesPage() {
           className="w-full rounded-lg border border-border bg-card py-2.5 pl-9 pr-3 text-sm text-foreground placeholder:text-muted focus:border-primary/50 focus:outline-none"
         />
       </form>
-
       <div className="rounded-xl border border-border bg-card">
         <ul className="flex flex-col">
           {isLoading &&
@@ -68,7 +61,6 @@ export default function AdminTheoriesPage() {
                 <div className="h-5 w-full animate-pulse rounded bg-border" />
               </li>
             ))}
-
           {!isLoading &&
             items.map((theory, i) => (
               <li

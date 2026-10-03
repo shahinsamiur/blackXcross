@@ -1,7 +1,5 @@
 import GrungeOverlay from "../../components/GrungeOverlay";
 import AuthWrapper from "../../components/AuthWrapper";
-// import SkullMark from "../../components/icons/SkullMark";
-
 export default function AuthLayout({
   children,
 }: {

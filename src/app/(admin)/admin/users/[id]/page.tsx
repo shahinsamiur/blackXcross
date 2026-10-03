@@ -10,7 +10,6 @@ import {
   useReactivateUserMutation,
 } from "../../../../../state/redux/api/admin";
 import { Skeleton } from "../../../../../components/ui/Skeleton";
-
 const statusStyles: Record<string, string> = {
   ACTIVE: "border-success text-success bg-success/10",
   Active: "border-success text-success bg-success/10",
@@ -27,7 +26,6 @@ export default function AdminUserDetailPage() {
   const [suspendUser, { isLoading: isSuspending }] = useSuspendUserMutation();
   const [banUser, { isLoading: isBanning }] = useBanUserMutation();
   const [reactivateUser, { isLoading: isReactivating }] = useReactivateUserMutation();
-
   const user = data?.data;
   const handleReactivate = async () => {
     if (confirm("Reactivate this user?")) {
@@ -47,7 +45,6 @@ export default function AdminUserDetailPage() {
       }
     }
   };
-
   const handleBan = async () => {
     if (confirm("Are you sure you want to ban this user permanently?")) {
       try {
@@ -57,7 +54,6 @@ export default function AdminUserDetailPage() {
       }
     }
   };
-
   if (isLoading) {
     return (
       <div className="flex w-full flex-col gap-6">
@@ -73,7 +69,6 @@ export default function AdminUserDetailPage() {
       </div>
     );
   }
-
   if (error || !user) {
     return (
       <div className="flex w-full flex-col items-center gap-3 py-16 text-center">
@@ -90,7 +85,6 @@ export default function AdminUserDetailPage() {
       </div>
     );
   }
-
   return (
     <div className="flex w-full flex-col gap-6">
       <Link
@@ -115,7 +109,6 @@ export default function AdminUserDetailPage() {
             {user.status.toLowerCase()}
           </span>
         </div>
-
         <div className="grid grid-cols-2 gap-4 sm:grid-cols-4">
           <div className="flex flex-col gap-1 rounded-lg border border-border p-3">
             <span className="text-xs text-muted">Role</span>
@@ -142,7 +135,6 @@ export default function AdminUserDetailPage() {
             </span>
           </div>
         </div>
-
         <div className="flex flex-wrap gap-3 border-t border-border pt-5">
           {user.status !== "ACTIVE" && user.status !== "Active" && (
             <button

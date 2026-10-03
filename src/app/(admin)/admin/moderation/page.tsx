@@ -1,50 +1,41 @@
 "use client";
-
 import { useState } from "react";
 import Link from "next/link";
 import {
   useGetModerationQueueQuery,
   type ModerationItem,
 } from "../../../../state/redux/api/moderation";
-
 const statusFilters = ["All", "PENDING", "APPROVED", "REJECTED"] as const;
 const targetTypeFilters = ["All", "CASE", "THEORY", "COMMENT"] as const;
-
 const statusStyles: Record<ModerationItem["status"], string> = {
   PENDING: "border-primary text-primary bg-primary/10",
   APPROVED: "border-success text-success bg-success/10",
   REJECTED: "border-border text-muted bg-card",
 };
-
 const statusLabels: Record<ModerationItem["status"], string> = {
   PENDING: "Pending",
   APPROVED: "Approved",
   REJECTED: "Rejected",
 };
-
 export default function AdminModerationPage() {
   const [page, setPage] = useState(1);
   const [statusFilter, setStatusFilter] =
     useState<(typeof statusFilters)[number]>("All");
   const [targetTypeFilter, setTargetTypeFilter] =
     useState<(typeof targetTypeFilters)[number]>("All");
-
   const { data, isLoading, isFetching, isError } = useGetModerationQueueQuery({
     page,
     limit: 20,
     status: statusFilter === "All" ? undefined : statusFilter,
     targetType: targetTypeFilter === "All" ? undefined : targetTypeFilter,
   });
-
   const items = data?.data.items ?? [];
   const pagination = data?.data.pagination;
-
   return (
     <div className="flex w-full flex-col gap-6">
       <h1 className="text-xl font-semibold text-foreground sm:text-2xl">
         Moderation
       </h1>
-
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <div className="flex flex-wrap gap-2">
           {statusFilters.map((status) => (
@@ -65,7 +56,6 @@ export default function AdminModerationPage() {
             </button>
           ))}
         </div>
-
         <div className="flex flex-wrap gap-2">
           {targetTypeFilters.map((type) => (
             <button
@@ -86,7 +76,6 @@ export default function AdminModerationPage() {
           ))}
         </div>
       </div>
-
       <div className="overflow-x-auto rounded-xl border border-border bg-card">
         <table className="w-full min-w-160 text-left text-sm">
           <thead>
@@ -139,7 +128,6 @@ export default function AdminModerationPage() {
                   </td>
                 </tr>
               ))}
-
             {!isLoading && isError && (
               <tr>
                 <td colSpan={6} className="px-4 py-6 text-center text-muted">
@@ -147,7 +135,6 @@ export default function AdminModerationPage() {
                 </td>
               </tr>
             )}
-
             {!isLoading && !isError && items.length === 0 && (
               <tr>
                 <td colSpan={6} className="px-4 py-6 text-center text-muted">
@@ -158,7 +145,6 @@ export default function AdminModerationPage() {
           </tbody>
         </table>
       </div>
-
       {pagination && pagination.totalPages > 1 && (
         <div className="flex items-center justify-between text-xs text-muted">
           <span>

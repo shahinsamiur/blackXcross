@@ -3,10 +3,8 @@
 import { useState } from "react";
 import Link from "next/link";
 import { useGetAdminReportsQuery } from "../../../../state/redux/api/admin";
-
 const statusFilters = ["All", "PENDING", "REVIEWED", "RESOLVED", "DISMISSED"] as const;
 const targetTypeFilters = ["All", "CASE", "THEORY", "COMMENT", "USER", "MESSAGE"] as const;
-
 const statusStyles: Record<string, string> = {
   PENDING: "border-primary text-primary bg-primary/10",
   REVIEWED: "border-primary text-primary bg-primary/10",
@@ -27,23 +25,19 @@ export default function AdminReportsPage() {
     useState<(typeof statusFilters)[number]>("All");
   const [targetTypeFilter, setTargetTypeFilter] =
     useState<(typeof targetTypeFilters)[number]>("All");
-
   const { data, isLoading, isFetching, isError } = useGetAdminReportsQuery({
     page,
     limit: 20,
     status: statusFilter === "All" ? undefined : statusFilter,
     targetType: targetTypeFilter === "All" ? undefined : targetTypeFilter,
   });
-
   const items = data?.data.items ?? [];
   const pagination = data?.data.pagination;
-
   return (
     <div className="flex w-full flex-col gap-6">
       <h1 className="text-xl font-semibold text-foreground sm:text-2xl">
         Reports
       </h1>
-
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <div className="flex flex-wrap gap-2">
           {statusFilters.map((status) => (
@@ -64,7 +58,6 @@ export default function AdminReportsPage() {
             </button>
           ))}
         </div>
-
         <div className="flex flex-wrap gap-2">
           {targetTypeFilters.map((type) => (
             <button

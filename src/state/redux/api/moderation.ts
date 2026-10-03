@@ -37,7 +37,10 @@ export interface ModerationItem {
 
 export const moderationApi = api.injectEndpoints({
   endpoints: (build) => ({
-    getModerationQueue: build.query<ApiResponse<PaginatedResponse<ModerationItem>>, { page?: number; limit?: number; status?: string; targetType?: string }>({
+    getModerationQueue: build.query<
+      ApiResponse<PaginatedResponse<ModerationItem>>,
+      { page?: number; limit?: number; status?: string; targetType?: string }
+    >({
       query: ({ page = 1, limit = 20, status, targetType }) => ({
         url: "/moderation/queue",
         params: { page, limit, status, targetType },

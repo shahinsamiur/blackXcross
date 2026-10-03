@@ -2,9 +2,7 @@
 
 import { useState } from "react";
 import { FiBell, FiPaperclip, FiMessageCircle, FiMapPin } from "react-icons/fi";
-
 type NotificationIcon = "attachment" | "message" | "pin";
-
 interface Notification {
   id: string;
   icon: NotificationIcon;
@@ -12,7 +10,6 @@ interface Notification {
   time: string;
   read: boolean;
 }
-
 const initialNotifications: Notification[] = [
   {
     id: "n1",
@@ -47,19 +44,15 @@ export default function NotificationsPage() {
   const [notifications, setNotifications] = useState<Notification[]>(
     initialNotifications.map((n) => ({ ...n })),
   );
-
   const unreadCount = notifications.filter((n) => !n.read).length;
-
   const toggleRead = (id: string) => {
     setNotifications((prev) =>
       prev.map((n) => (n.id === id ? { ...n, read: !n.read } : n)),
     );
   };
-
   const markAllAsRead = () => {
     setNotifications((prev) => prev.map((n) => ({ ...n, read: true })));
   };
-
   return (
     <div className="flex w-full flex-col gap-6 px-4 pb-8 sm:px-6 lg:px-8">
       <div className="flex items-center justify-between">
@@ -74,7 +67,6 @@ export default function NotificationsPage() {
             </span>
           )}
         </div>
-
         {unreadCount > 0 && (
           <button
             type="button"
@@ -85,7 +77,6 @@ export default function NotificationsPage() {
           </button>
         )}
       </div>
-
       {notifications.length > 0 ? (
         <ul className="flex flex-col gap-2">
           {notifications.map((n) => {

@@ -44,7 +44,10 @@ export default function SearchFilterBar({
           Search Cases
         </span>
         <label className="relative flex w-full items-center sm:w-96">
-          <FiSearch className="pointer-events-none absolute left-4 text-muted" size={18} />
+          <FiSearch
+            className="pointer-events-none absolute left-4 text-muted"
+            size={18}
+          />
           <input
             type="text"
             value={searchValue}

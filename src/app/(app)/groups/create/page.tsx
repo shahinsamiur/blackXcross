@@ -6,7 +6,6 @@ import { ValidationError } from "yup";
 import { groupSchema } from "../../../../validations/group.schema";
 import { slugify } from "../../../../_mock/blackxcross";
 import { groupCategories } from "../../../../_mock/groups";
-
 export default function CreateGroupPage() {
   const router = useRouter();
   const [values, setValues] = useState({
@@ -17,11 +16,9 @@ export default function CreateGroupPage() {
   });
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [submitting, setSubmitting] = useState(false);
-
   const handleChange = (field: keyof typeof values, value: string) => {
     setValues((prev) => ({ ...prev, [field]: value }));
   };
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setSubmitting(true);
@@ -52,7 +49,6 @@ export default function CreateGroupPage() {
           Create a space to collaborate on an investigation.
         </p>
       </div>
-
       <form
         onSubmit={handleSubmit}
         noValidate
@@ -80,7 +76,6 @@ export default function CreateGroupPage() {
             </p>
           )}
         </div>
-
         <div className="flex flex-col gap-1.5">
           <label
             htmlFor="category"
@@ -106,7 +101,6 @@ export default function CreateGroupPage() {
             <p className="text-xs text-danger">{errors.category}</p>
           )}
         </div>
-
         <div className="flex flex-col gap-1.5">
           <label
             htmlFor="description"
@@ -126,7 +120,6 @@ export default function CreateGroupPage() {
             <p className="text-xs text-danger">{errors.description}</p>
           )}
         </div>
-
         <fieldset className="flex flex-col gap-2">
           <legend className="text-sm font-medium text-foreground/80">
             Visibility
@@ -150,7 +143,6 @@ export default function CreateGroupPage() {
             ))}
           </div>
         </fieldset>
-
         <button
           type="submit"
           disabled={submitting}

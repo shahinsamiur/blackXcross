@@ -36,7 +36,8 @@ function AuthWrapperInner({ children, mode }: AuthWrapperProps) {
   }, [status, mode, pathname, searchParams, router]);
 
   const isPending = status === "idle" || status === "loading";
-  const blockedForProtected = mode === "protected" && status !== "authenticated";
+  const blockedForProtected =
+    mode === "protected" && status !== "authenticated";
   const blockedForAuth = mode === "auth" && status === "authenticated";
 
   if (isPending || blockedForProtected || blockedForAuth) {

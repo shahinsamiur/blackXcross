@@ -3,15 +3,15 @@
 import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
 import { FiArrowLeft, FiThumbsUp } from "react-icons/fi";
-import { caseFiles, trendingTheories } from "../../../../../../_mock/blackxcross";
-
+import {
+  caseFiles,
+  trendingTheories,
+} from "../../../../../../_mock/blackxcross";
 export default function TheoryDetailsPage() {
   const router = useRouter();
   const params = useParams<{ id: string; theoryId: string }>();
-
   const theory = trendingTheories.find((t) => t.id === params.theoryId);
   const caseFile = caseFiles.find((c) => c.id === params.id);
-
   if (!theory || !caseFile) {
     return (
       <div className="flex w-full flex-col items-center gap-3 px-4 py-16 text-center sm:px-6 lg:px-8">
@@ -28,7 +28,6 @@ export default function TheoryDetailsPage() {
       </div>
     );
   }
-
   return (
     <div className="flex w-full flex-col gap-6 px-4 pb-8 sm:px-6 lg:px-8">
       <Link
@@ -38,7 +37,6 @@ export default function TheoryDetailsPage() {
         <FiArrowLeft size={16} />
         Back to {caseFile.title}
       </Link>
-
       <div className="grid w-full grid-cols-1 gap-4 lg:grid-cols-3">
         <div className="flex flex-col gap-4 lg:col-span-2">
           <section className="flex flex-col gap-3 rounded-xl border border-border bg-card p-5 sm:p-6">
@@ -52,15 +50,12 @@ export default function TheoryDetailsPage() {
             <h1 className="text-xl font-light leading-tight tracking-tight text-foreground sm:text-2xl">
               {theory.text}
             </h1>
-            <p className="text-sm leading-relaxed text-muted">
-              {theory.body}
-            </p>
+            <p className="text-sm leading-relaxed text-muted">{theory.body}</p>
             <div className="flex items-center gap-1.5 pt-2 text-xs font-medium text-muted">
               <FiThumbsUp size={14} />
               {theory.likes} upvotes
             </div>
           </section>
-
           <section className="flex flex-col gap-4 rounded-xl border border-border bg-card p-5 shadow-sm sm:p-6">
             <div className="flex items-center justify-between">
               <h2 className="text-sm font-bold tracking-wide text-foreground/80 uppercase">
@@ -72,7 +67,6 @@ export default function TheoryDetailsPage() {
                 </span>
               )}
             </div>
-
             {theory.comments && theory.comments.length > 0 ? (
               <ul className="flex flex-col">
                 {theory.comments.map((comment, i) => {
@@ -82,7 +76,6 @@ export default function TheoryDetailsPage() {
                     .join("")
                     .slice(0, 2)
                     .toUpperCase();
-
                   return (
                     <li
                       key={comment.id}
@@ -119,7 +112,6 @@ export default function TheoryDetailsPage() {
             )}
           </section>
         </div>
-
         <div className="flex flex-col gap-4">
           <section className="flex flex-col gap-3 rounded-xl border border-border bg-card p-5">
             <h2 className="text-sm font-bold tracking-wide text-foreground/80 uppercase">

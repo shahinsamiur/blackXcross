@@ -21,7 +21,6 @@ import {
   useAddCaseFileMutation,
   useAddCaseGalleryImageMutation,
 } from "../../../../../state/redux/api/cases";
-
 type FormValues = {
   title: string;
   description: string;
@@ -33,9 +32,7 @@ type FormValues = {
   gallery: string[];
   evidence: CaseEvidenceItem[];
 };
-
 const MAX_GALLERY_IMAGES = 7;
-const MAX_EVIDENCE_FILES = 7;
 export default function EditCasePage() {
   const router = useRouter();
   const params = useParams<{ id: string }>();
@@ -47,28 +44,21 @@ export default function EditCasePage() {
   const handleEvidenceFilesSelected = (files: File[]) => {
     setValues((prev) => {
       const remainingSlots = 7 - prev.evidence.length;
-
       if (remainingSlots <= 0) return prev;
-
       const selectedFiles = files.slice(0, remainingSlots);
       const newFilesMap: Record<string, File> = {};
-
       const newEvidence: CaseEvidenceItem[] = selectedFiles.map((file) => {
         let type: CaseEvidenceItem["type"] = "document";
-
         if (file.type.startsWith("image/")) {
           type = "image";
         } else if (file.type.startsWith("audio/")) {
           type = "audio";
         }
-
         const id = `ev-${Date.now()}-${file.name}`;
         newFilesMap[id] = file;
         return { id, label: file.name, type };
       });
-
       setEvidenceFiles((prevFiles) => ({ ...prevFiles, ...newFilesMap }));
-
       return {
         ...prev,
         evidence: [...prev.evidence, ...newEvidence],
@@ -87,18 +77,17 @@ export default function EditCasePage() {
     evidence: [],
   });
 
-
-  const [galleryItems, setGalleryItems] = useState<{ file: File; url: string }[]>([]);
+  const [galleryItems, setGalleryItems] = useState<
+    { file: File; url: string }[]
+  >([]);
   const [evidenceFiles, setEvidenceFiles] = useState<Record<string, File>>({});
   const [submitting, setSubmitting] = useState(false);
   const { errors, setMultipleErrors, clearError, clearAllErrors } =
     useFormErrors();
-
   const [uploadCaseImage] = useUploadCaseImageMutation();
   const [updateCase] = useUpdateCaseMutation();
   const [addCaseFile] = useAddCaseFileMutation();
   const [addCaseGalleryImage] = useAddCaseGalleryImageMutation();
-
   useEffect(() => {
     if (caseData) {
       setValues({
@@ -126,19 +115,16 @@ export default function EditCasePage() {
       });
     }
   }, [caseData]);
-
   type EditableTextField =
     | "title"
     | "description"
     | "status"
     | "narrative"
     | "location";
-
   const handleChange = (field: EditableTextField, value: string) => {
     setValues((prev) => ({ ...prev, [field]: value }));
     clearError(field);
   };
-
   const handleCaseImageSelect = (file: File) => {
     if (values.imagePreviewUrl?.startsWith("blob:"))
       URL.revokeObjectURL(values.imagePreviewUrl);
@@ -149,7 +135,6 @@ export default function EditCasePage() {
     }));
     clearError("image");
   };
-
   const handleRemoveCaseImage = () => {
     if (values.imagePreviewUrl?.startsWith("blob:"))
       URL.revokeObjectURL(values.imagePreviewUrl);
@@ -159,23 +144,19 @@ export default function EditCasePage() {
       imagePreviewUrl: caseData?.imageUrl || "",
     }));
   };
-
   const handleGalleryFilesSelected = (files: File[]) => {
     setGalleryItems((prev) => {
       const remainingSlots = MAX_GALLERY_IMAGES - prev.length;
       if (remainingSlots <= 0) return prev;
-
       const filesToAdd = files.slice(0, remainingSlots);
       const newItems = filesToAdd.map((file) => ({
         file,
         url: URL.createObjectURL(file),
       }));
-
       setValues((prevValues) => ({
         ...prevValues,
         gallery: [...prevValues.gallery, ...newItems.map((item) => item.url)],
       }));
-
       return [...prev, ...newItems];
     });
   };
@@ -184,18 +165,14 @@ export default function EditCasePage() {
     setGalleryItems((prev) => {
       const removed = prev[index];
       if (removed?.url?.startsWith("blob:")) URL.revokeObjectURL(removed.url);
-
       const newItems = prev.filter((_, i) => i !== index);
-
       setValues((prevValues) => ({
         ...prevValues,
         gallery: newItems.map((item) => item.url),
       }));
-
       return newItems;
     });
   };
-
 
   const handleRemoveEvidence = (id: string) => {
     setValues((prev) => ({
@@ -212,7 +189,6 @@ export default function EditCasePage() {
     e.preventDefault();
     setSubmitting(true);
     clearAllErrors();
-
     try {
       await caseSchema.validate(
         {
@@ -223,13 +199,11 @@ export default function EditCasePage() {
         },
         { abortEarly: false },
       );
-
       let finalImageUrl = values.imagePreviewUrl;
       if (values.imageFile) {
         const uploadResult = await uploadCaseImage(values.imageFile).unwrap();
         finalImageUrl = uploadResult.imageUrl;
       }
-
       await updateCase({
         id: params.id,
         data: {
@@ -241,21 +215,25 @@ export default function EditCasePage() {
           location: values.location,
         },
       }).unwrap();
-
       const galleryUploads = galleryItems.map((item) =>
-        addCaseGalleryImage({ caseId: params.id, file: item.file }).unwrap()
+        addCaseGalleryImage({ caseId: params.id, file: item.file }).unwrap(),
       );
-
       const evidenceUploads = values.evidence
         .filter((item) => evidenceFiles[item.id])
-        .map((item) => addCaseFile({ caseId: params.id, file: evidenceFiles[item.id] }).unwrap());
-
+        .map((item) =>
+          addCaseFile({
+            caseId: params.id,
+            file: evidenceFiles[item.id],
+          }).unwrap(),
+        );
       const allUploads = [...galleryUploads, ...evidenceUploads];
       if (allUploads.length) {
         const results = await Promise.allSettled(allUploads);
         const failed = results.filter((r) => r.status === "rejected").length;
         if (failed > 0) {
-          alert(`Case updated successfully, but ${failed} file(s) failed to upload to the server.`);
+          alert(
+            `Case updated successfully, but ${failed} file(s) failed to upload to the server.`,
+          );
         }
       }
 
@@ -307,7 +285,6 @@ export default function EditCasePage() {
           Edit Case
         </h1>
       </div>
-
       <form
         onSubmit={handleSubmit}
         className="flex w-full flex-col gap-6 rounded-xl border border-border bg-card p-5 sm:p-6"
@@ -318,7 +295,6 @@ export default function EditCasePage() {
           onRemove={handleRemoveCaseImage}
           error={errors.image}
         />
-
         <div>
           <label
             htmlFor="description"
@@ -337,7 +313,6 @@ export default function EditCasePage() {
             <p className="mt-1 text-xs text-primary">{errors.description}</p>
           )}
         </div>
-
         <div>
           <label
             htmlFor="narrative"
@@ -354,7 +329,6 @@ export default function EditCasePage() {
             className="w-full resize-none rounded-lg border border-border bg-background px-3 py-2.5 text-sm text-foreground placeholder:text-muted focus:border-primary/50 focus:outline-none"
           />
         </div>
-
         <div>
           <label
             htmlFor="location"
@@ -371,7 +345,6 @@ export default function EditCasePage() {
             className="w-full rounded-lg border border-border bg-background px-3 py-2.5 text-sm text-foreground placeholder:text-muted focus:border-primary/50 focus:outline-none"
           />
         </div>
-
         <div>
           <label
             htmlFor="status"
@@ -392,7 +365,6 @@ export default function EditCasePage() {
             <p className="mt-1 text-xs text-primary">{errors.status}</p>
           )}
         </div>
-
         <GalleryImageUpload
           images={values.gallery}
           max={MAX_GALLERY_IMAGES}

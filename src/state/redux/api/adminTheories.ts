@@ -43,7 +43,10 @@ export interface AdminTheory {
 
 export const adminTheoriesApi = api.injectEndpoints({
   endpoints: (build) => ({
-    getAdminTheories: build.query<ApiResponse<PaginatedResponse<AdminTheory>>, { page?: number; limit?: number; search?: string }>({
+    getAdminTheories: build.query<
+      ApiResponse<PaginatedResponse<AdminTheory>>,
+      { page?: number; limit?: number; search?: string }
+    >({
       query: ({ page = 1, limit = 20, search }) => ({
         url: "/theories",
         params: { page, limit, search },
@@ -61,4 +64,5 @@ export const adminTheoriesApi = api.injectEndpoints({
   overrideExisting: false,
 });
 
-export const { useGetAdminTheoriesQuery, useDeleteAdminTheoryMutation } = adminTheoriesApi;
+export const { useGetAdminTheoriesQuery, useDeleteAdminTheoryMutation } =
+  adminTheoriesApi;

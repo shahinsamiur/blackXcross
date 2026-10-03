@@ -12,22 +12,21 @@ import { useForgotPasswordMutation } from "../../../../state/redux/api/auth";
 export default function ForgotPasswordPage() {
   const [email, setEmail] = useState("");
   const [sent, setSent] = useState(false);
-  const { errors, setMultipleErrors, clearError, clearAllErrors } = useFormErrors();
-  
-  const [forgotPassword, { isLoading: isSubmitting }] = useForgotPasswordMutation();
-
+  const { errors, setMultipleErrors, clearError, clearAllErrors } =
+    useFormErrors();
+  const [forgotPassword, { isLoading: isSubmitting }] =
+    useForgotPasswordMutation();
   const handleChange = (value: string) => {
     setEmail(value);
     clearError("email");
     clearError("general");
   };
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
       await forgotPasswordSchema.validate({ email }, { abortEarly: false });
       clearAllErrors();
-      
+
       await forgotPassword({ email }).unwrap();
       setSent(true);
     } catch (err: any) {
@@ -38,7 +37,8 @@ export default function ForgotPasswordPage() {
         });
         setMultipleErrors(fieldErrors);
       } else {
-        const errorMessage = err.data?.message || err.message || "Failed to send reset link.";
+        const errorMessage =
+          err.data?.message || err.message || "Failed to send reset link.";
         setMultipleErrors({ email: errorMessage });
       }
     }

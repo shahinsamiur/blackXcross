@@ -8,7 +8,6 @@ export default function MemberProfilePage() {
   const router = useRouter();
   const params = useParams<{ username: string }>();
   const member = allMembers.find((m) => m.username === params.username);
-
   if (!member) {
     return (
       <div className="flex w-full flex-col items-center gap-3 px-4 py-16 text-center sm:px-6 lg:px-8">
@@ -40,7 +39,6 @@ export default function MemberProfilePage() {
           <p className="text-sm text-muted">{member.role}</p>
         </div>
       </section>
-
       <section className="flex items-center gap-3 rounded-xl border border-border bg-card p-5">
         <FiAward size={20} className="shrink-0 text-primary" />
         <div>

@@ -33,7 +33,6 @@ console.log("AUTH DEBUG:", { isAuthenticated, user, canEdit, canInteract });
       </div>
     );
   }
-
   if (isError || !caseData) {
     return (
       <div className="flex w-full flex-col items-center gap-3 px-4 py-16 text-center sm:px-6 lg:px-8">
@@ -42,12 +41,9 @@ console.log("AUTH DEBUG:", { isAuthenticated, user, canEdit, canInteract });
       </div>
     );
   }
-
   const isOpen = caseData.investigationStatus === "OPEN" || caseData.investigationStatus === "SOLVED";
-  
   const imageFiles = caseData.files?.filter((file) => file.mimeType.startsWith("image/")) || [];
   const otherFiles = caseData.files?.filter((file) => !file.mimeType.startsWith("image/")) || [];
-
   return (
     <div className="flex w-full flex-col gap-6 px-4 pb-8 sm:px-6 lg:px-8">
       <div className="flex items-center justify-between">
@@ -60,7 +56,6 @@ console.log("AUTH DEBUG:", { isAuthenticated, user, canEdit, canInteract });
           </Link>
         )}
       </div>
-
       <div className="relative flex h-56 w-full items-end overflow-hidden rounded-xl border border-border bg-cover bg-center p-5 sm:h-72 sm:p-6" style={{ backgroundImage: `linear-gradient(to bottom, rgba(0,0,0,0.3), rgba(0,0,0,0.9)), url(${caseData.imageUrl || "/image/hero1.jpg"})` }}>
         <div className="flex flex-col gap-3">
           <div className="flex items-center gap-2">
@@ -77,14 +72,12 @@ console.log("AUTH DEBUG:", { isAuthenticated, user, canEdit, canInteract });
           )}
         </div>
       </div>
-
       <div className="grid w-full grid-cols-1 gap-4 lg:grid-cols-3">
         <div className="flex flex-col gap-4 lg:col-span-2">
           <section className="flex flex-col gap-3 rounded-xl border border-border bg-card p-5">
             <h2 className="text-sm font-bold tracking-wide text-foreground/80 uppercase">Case Narrative</h2>
             <p className="text-sm leading-relaxed text-muted">{caseData.narrative || caseData.description}</p>
           </section>
-
           {caseData.files && caseData.files.length > 0 && (
             <section className="flex flex-col gap-4 rounded-xl border border-border bg-card p-5 shadow-sm sm:p-6">
               <h2 className="text-xs font-bold tracking-widest text-primary uppercase">Evidence & Gallery</h2>
@@ -105,7 +98,6 @@ console.log("AUTH DEBUG:", { isAuthenticated, user, canEdit, canInteract });
                   ))}
                 </div>
               )}
-      
               {otherFiles.length > 0 && (
                 <ul className="flex flex-col">
                   {otherFiles.map((item, i) => {
@@ -137,7 +129,6 @@ console.log("AUTH DEBUG:", { isAuthenticated, user, canEdit, canInteract });
           )}
               <TheoriesSection caseId={caseData.id} canInteract={canInteract} />
         </div>
-
         <div className="flex flex-col gap-4">
           <section className="flex flex-col gap-3 rounded-xl border border-border bg-card p-5">
             <h2 className="text-sm font-bold tracking-wide text-foreground/80 uppercase">Quick Facts</h2>

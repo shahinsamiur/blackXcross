@@ -60,7 +60,10 @@ export default function LeafletMap() {
       center={[20, 0]}
       zoom={2}
       minZoom={2}
-      maxBounds={[[-85, -180], [85, 180]]}
+      maxBounds={[
+        [-85, -180],
+        [85, 180],
+      ]}
       maxBoundsViscosity={1.0}
       zoomControl={false}
       attributionControl={false}

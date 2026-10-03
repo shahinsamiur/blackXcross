@@ -37,23 +37,41 @@ export const theoriesApi = api.injectEndpoints({
       transformResponse: (response: ApiResponse<TheoryItem[]>) => response.data,
       providesTags: (result, error, caseId) =>
         result
-          ? [...result.map(({ id }) => ({ type: "Theory" as const, id })), { type: "Theory", id: `CASE-${caseId}` }]
+          ? [
+              ...result.map(({ id }) => ({ type: "Theory" as const, id })),
+              { type: "Theory", id: `CASE-${caseId}` },
+            ]
           : [{ type: "Theory", id: `CASE-${caseId}` }],
     }),
-    createTheory: builder.mutation<TheoryItem, { caseId: string; data: CreateTheoryRequest }>({
-      query: ({ caseId, data }) => ({ url: `/theories/cases/${caseId}/theories`, method: "POST", body: data }),
+    createTheory: builder.mutation<
+      TheoryItem,
+      { caseId: string; data: CreateTheoryRequest }
+    >({
+      query: ({ caseId, data }) => ({
+        url: `/theories/cases/${caseId}/theories`,
+        method: "POST",
+        body: data,
+      }),
       transformResponse: (response: ApiResponse<TheoryItem>) => response.data,
-      invalidatesTags: (result, error, { caseId }) => [{ type: "Theory", id: `CASE-${caseId}` }],
+      invalidatesTags: (result, error, { caseId }) => [
+        { type: "Theory", id: `CASE-${caseId}` },
+      ],
     }),
     upvoteTheory: builder.mutation<void, { id: string; caseId: string }>({
-      query: ({ id }) => ({ url: `/theories/theories/${id}/upvote`, method: "POST" }),
+      query: ({ id }) => ({
+        url: `/theories/theories/${id}/upvote`,
+        method: "POST",
+      }),
       invalidatesTags: (result, error, { id, caseId }) => [
         { type: "Theory", id },
         { type: "Theory", id: `CASE-${caseId}` },
       ],
     }),
     removeTheoryUpvote: builder.mutation<void, { id: string; caseId: string }>({
-      query: ({ id }) => ({ url: `/theories/theories/${id}/upvote`, method: "DELETE" }),
+      query: ({ id }) => ({
+        url: `/theories/theories/${id}/upvote`,
+        method: "DELETE",
+      }),
       invalidatesTags: (result, error, { id, caseId }) => [
         { type: "Theory", id },
         { type: "Theory", id: `CASE-${caseId}` },

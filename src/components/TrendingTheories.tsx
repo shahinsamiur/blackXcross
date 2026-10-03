@@ -8,14 +8,20 @@ interface TrendingTheoriesProps {
   isLoading?: boolean;
 }
 
-export default function TrendingTheories({ theories, isLoading }: TrendingTheoriesProps) {
+export default function TrendingTheories({
+  theories,
+  isLoading,
+}: TrendingTheoriesProps) {
   if (isLoading) {
     return (
       <section className="flex flex-col gap-5 rounded-xl border border-border bg-card p-5">
         <div className="h-4 w-40 animate-pulse rounded bg-muted" />
         <div className="flex flex-col">
           {[...Array(4)].map((_, i) => (
-            <div key={i} className={`flex items-center gap-3 py-4 ${i !== 3 ? "border-b border-border" : ""}`}>
+            <div
+              key={i}
+              className={`flex items-center gap-3 py-4 ${i !== 3 ? "border-b border-border" : ""}`}
+            >
               <div className="h-9 w-9 animate-pulse rounded-full bg-muted" />
               <div className="h-4 flex-1 animate-pulse rounded bg-muted" />
               <div className="h-4 w-8 animate-pulse rounded bg-muted" />
@@ -52,7 +58,11 @@ export default function TrendingTheories({ theories, isLoading }: TrendingTheori
               }`}
             >
               {theory.author?.avatarUrl ? (
-                <ProfileAvatar src={theory.author.avatarUrl} alt={theory.author.name || "Author"} size={36} />
+                <ProfileAvatar
+                  src={theory.author.avatarUrl}
+                  alt={theory.author.name || "Author"}
+                  size={36}
+                />
               ) : (
                 <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-primary/10 text-primary">
                   <FaFire size={16} />
@@ -61,7 +71,9 @@ export default function TrendingTheories({ theories, isLoading }: TrendingTheori
 
               <div className="flex min-w-0 flex-1 flex-col gap-0.5">
                 <span className="truncate text-xs font-semibold text-foreground/90">
-                  {theory.author?.name || theory.author?.username || "Anonymous"}
+                  {theory.author?.name ||
+                    theory.author?.username ||
+                    "Anonymous"}
                 </span>
                 <p className="truncate text-sm leading-snug text-muted">
                   {theory.content}
