@@ -113,7 +113,7 @@ export default function AdminCasesPage() {
             <p className="text-sm text-muted">No cases found.</p>
           </div>
         ) : (
-          <table className="w-full min-w-[640px] text-sm">
+          <table className="w-full min-w-160 text-sm">
             <thead>
               <tr className="border-b border-border text-left text-xs font-semibold uppercase tracking-wide text-muted">
                 <th className="px-5 py-3">Title</th>
@@ -126,7 +126,7 @@ export default function AdminCasesPage() {
             <tbody>
               {cases.map((c: AdminCase) => (
                 <tr key={c.id} className="border-b border-border last:border-0">
-                  <td className="max-w-[280px] truncate px-5 py-3 font-medium text-foreground/90">{c.title}</td>
+                  <td className="max-w-70 truncate px-5 py-3 font-medium text-foreground/90">{c.title}</td>
                   <td className="px-5 py-3 text-muted">{c.category}</td>
                   <td className="px-5 py-3">
                     <span

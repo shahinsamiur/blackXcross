@@ -100,7 +100,10 @@ export default function AdminModerationPage() {
 
             {!isLoading &&
               items.map((item) => (
-                <tr key={item.id} className="border-b border-border last:border-0">
+                <tr
+                  key={item.id}
+                  className="border-b border-border last:border-0"
+                >
                   <td className="px-4 py-3 font-medium text-foreground/90">
                     {item.targetType}
                   </td>

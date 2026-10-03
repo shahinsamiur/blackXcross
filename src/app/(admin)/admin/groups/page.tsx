@@ -68,7 +68,10 @@ export default function AdminGroupsPage() {
               items.map((group) => {
                 const owner = group.members?.[0]?.user;
                 return (
-                  <tr key={group.id} className="border-b border-border last:border-0">
+                  <tr
+                    key={group.id}
+                    className="border-b border-border last:border-0"
+                  >
                     <td className="px-4 py-3 font-medium text-foreground/90">
                       {group.name}
                     </td>
