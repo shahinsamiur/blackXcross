@@ -14,7 +14,7 @@ export default function CaseCard({ caseFile }: { caseFile: CaseItem }) {
 
   return (
     <article
-      className={`flex w-full flex-col gap-8 rounded-xl border ${
+      className={`flex w-full flex-col gap-8 rounded-xl border bg-red-500 ${
         isOpen ? "border-[#3d0a12]/50" : "border-gray-800/80"
       } bg-card p-5 px-3 bg-cover bg-center sm:gap-10 sm:px-4`}
       style={{

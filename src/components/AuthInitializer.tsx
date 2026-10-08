@@ -12,13 +12,10 @@ import type { RootState } from "../state/redux/store";
 
 export default function AuthInitializer() {
   const dispatch = useDispatch();
-
   const user = useSelector((state: RootState) => state.auth?.user);
-
   const { data, isSuccess, isError } = useGetMeQuery(undefined, {
     skip: !!user,
   });
-  console.log("getMe:", { isSuccess, isError, data });
   useEffect(() => {
     if (!user) {
       dispatch(setAuthLoading());

@@ -63,7 +63,7 @@ export default function SearchFilterBar({
         <span className="text-xs font-semibold tracking-widest text-muted uppercase">
           Filter Cases
         </span>
-        <div className="flex flex-wrap gap-2">
+        <div className="flex flex-nowrap gap-2 overflow-x-auto [-ms-overflow-style:none] scrollbar-none [&::-webkit-scrollbar]:hidden sm:flex-wrap sm:overflow-visible">
           {caseFilters.map((filter) => {
             const isActive = filter === activeFilter;
             return (
@@ -71,7 +71,7 @@ export default function SearchFilterBar({
                 key={filter}
                 type="button"
                 onClick={() => handleFilterChange(filter)}
-                className={`rounded-lg border px-4 py-2.5 text-sm font-medium transition-colors cursor-pointer ${
+                className={`shrink-0 whitespace-nowrap rounded-lg border px-4 py-2.5 text-sm font-medium transition-colors cursor-pointer ${
                   isActive
                     ? "border-[#9b1b30] bg-[rgba(196,30,58,0.25)] text-red-400 hover:border-primary/40"
                     : "border-gray-700 bg-transparent text-gray-400 hover:border-primary/40"

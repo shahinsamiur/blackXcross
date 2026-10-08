@@ -68,7 +68,6 @@ export default function TrendingTheories({
                   <FaFire size={16} />
                 </span>
               )}
-
               <div className="flex min-w-0 flex-1 flex-col gap-0.5">
                 <span className="truncate text-xs font-semibold text-foreground/90">
                   {theory.author?.name ||
@@ -79,7 +78,6 @@ export default function TrendingTheories({
                   {theory.content}
                 </p>
               </div>
-
               <span className="flex shrink-0 items-center gap-1 text-xs font-medium text-muted">
                 <FiThumbsUp size={12} />
                 {theory._count.theoryUpvotes}

@@ -112,8 +112,8 @@ export default function ActivityFeed({
                   <span className="absolute -left-0.5 top-0.5 h-2 w-2 rounded-full bg-primary" />
                 </div>
                 <div className="flex min-w-0 flex-1 flex-col">
-                  <div className="text-sm leading-relaxed text-gray-300">
-                    <span className="text-xs text-white">{actorName}</span>
+                  <div className="truncate text-sm leading-relaxed text-gray-300">
+                    <span className="font-medium text-white">{actorName}</span>{" "}
                     {actionText}
                   </div>
                   <div className="text-base font-medium leading-relaxed text-gray-300 sm:text-lg truncate">

@@ -11,11 +11,9 @@ export function useFetch<T>(url: string) {
 
   useEffect(() => {
     let isMounted = true;
-
     const fetchData = async () => {
       try {
         const { data } = await axios.get<T>(url);
-
         if (isMounted) {
           setState({ data, loading: false, error: null });
         }
@@ -28,14 +26,12 @@ export function useFetch<T>(url: string) {
           } else if (err instanceof Error) {
             errorMessage = err.message;
           }
-
           setState({ data: null, loading: false, error: errorMessage });
         }
       }
     };
 
     fetchData();
-
     return () => {
       isMounted = false;
     };
