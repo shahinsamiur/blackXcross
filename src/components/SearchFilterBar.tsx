@@ -45,7 +45,7 @@ export default function SearchFilterBar({
         </span>
         <label className="relative flex w-full items-center sm:w-96">
           <FiSearch
-            className="pointer-events-none absolute left-4 text-muted"
+            className="pointer-events-none absolute left-4 text-gray-600"
             size={18}
           />
           <input
@@ -54,7 +54,7 @@ export default function SearchFilterBar({
             onChange={(e) => setSearchValue(e.target.value)}
             onKeyDown={handleKeyDown}
             placeholder="Search case files, locations, or details..."
-            className="w-full rounded-lg border border-border bg-card py-3 pl-11 pr-4 text-sm text-foreground placeholder:text-muted focus:border-primary/50 focus:outline-none"
+            className="w-full rounded-lg border border-border bg-card py-3 pl-11 pr-4 text-sm text-foreground placeholder:text-gray-600 focus:border-[#7a1526] focus:outline-none"
           />
         </label>
       </div>
@@ -73,8 +73,8 @@ export default function SearchFilterBar({
                 onClick={() => handleFilterChange(filter)}
                 className={`rounded-lg border px-4 py-2.5 text-sm font-medium transition-colors cursor-pointer ${
                   isActive
-                    ? "border-primary text-primary hover:border-primary/40"
-                    : "border-border bg-card text-foreground/80 hover:border-primary/40"
+                    ? "border-[#9b1b30] bg-[rgba(196,30,58,0.25)] text-red-400 hover:border-primary/40"
+                    : "border-gray-700 bg-transparent text-gray-400 hover:border-primary/40"
                 }`}
               >
                 {filter}

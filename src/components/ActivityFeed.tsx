@@ -40,7 +40,7 @@ export default function ActivityFeed({
 }: ActivityFeedProps) {
   if (isLoading) {
     return (
-      <section className="flex flex-col gap-5 rounded-xl border border-border bg-card p-5">
+      <section className="flex flex-col gap-5 rounded-xl border border-gray-800/80 bg-card p-5">
         <div className="h-4 w-48 animate-pulse rounded bg-muted" />
         <div className="flex flex-col gap-5">
           {[...Array(4)].map((_, i) => (
@@ -59,16 +59,15 @@ export default function ActivityFeed({
       </section>
     );
   }
-
   return (
-    <section className="flex flex-col gap-5 rounded-xl border border-border bg-card p-5">
+    <section className="flex flex-col gap-5 rounded-xl border border-gray-800/80 bg-card p-5">
       <div className="flex items-center justify-between">
-        <h2 className="text-sm font-tight tracking-wide text-foreground/80 uppercase">
+        <h2 className="text-sm font-tight tracking-wide text-gray-400 uppercase">
           Latest Community Activity
         </h2>
         <button
           type="button"
-          className="text-xs font-semibold text-foreground/80 hover:opacity-80 border border-border px-4 py-2 rounded-lg hover:bg-primary/10 cursor-pointer"
+          className="text-xs font-semibold text-primary hover:opacity-80 border border-border px-4 py-2 rounded-lg hover:bg-primary/10 cursor-pointer"
         >
           View All
         </button>
@@ -113,16 +112,14 @@ export default function ActivityFeed({
                   <span className="absolute -left-0.5 top-0.5 h-2 w-2 rounded-full bg-primary" />
                 </div>
                 <div className="flex min-w-0 flex-1 flex-col">
-                  <div className="text-sm leading-relaxed text-foreground/90">
-                    <span className="text-xs text-foreground/80">
-                      {actorName}
-                    </span>{" "}
+                  <div className="text-sm leading-relaxed text-gray-300">
+                    <span className="text-xs text-white">{actorName}</span>
                     {actionText}
                   </div>
-                  <div className="text-base font-medium leading-relaxed text-foreground/80 sm:text-lg truncate">
+                  <div className="text-base font-medium leading-relaxed text-gray-300 sm:text-lg truncate">
                     {target}
                   </div>
-                  <span className="mt-0.5 text-xs text-muted">
+                  <span className="mt-0.5 text-xs text-gray-600">
                     {formatTimeAgo(item.createdAt)}
                   </span>
                 </div>

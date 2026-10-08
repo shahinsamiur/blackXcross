@@ -23,7 +23,7 @@ import ProfileAvatar from "./ProfileAvatar";
 function IconBadge({ count }: { count: number }) {
   if (!count) return null;
   return (
-    <span className="absolute -top-1 -right-1 flex h-5 min-w-5 items-center justify-center rounded-full bg-primary px-1 text-[11px] font-semibold text-foreground">
+    <span className="absolute -top-1 -right-1 flex h-5 min-w-5 items-center justify-center rounded-full bg-[#9b1b30] px-1 text-[11px] font-semibold text-white">
       {count}
     </span>
   );
@@ -72,15 +72,15 @@ function DropdownPanel({
   children: React.ReactNode;
 }) {
   return (
-    <div className="absolute right-0 top-full z-50 mt-2 w-[min(20rem,calc(100vw-2rem))] overflow-hidden rounded-xl border border-border bg-card shadow-xl">
-      <div className="flex items-center justify-between border-b border-border px-4 py-3">
+    <div className="absolute right-0 top-full z-50 mt-2 w-[min(20rem,calc(100vw-2rem))] max-h-[calc(100vh-100px)] overflow-hidden rounded-xl border border-border bg-card shadow-xl flex flex-col">
+      <div className="flex items-center justify-between border-b border-border px-4 py-3 shrink-0">
         <h3 className="text-sm font-semibold text-foreground">{title}</h3>
       </div>
-      {children}
+      <div className="overflow-y-auto flex-1">{children}</div>
       {footerHref && footerLabel && (
         <Link
           href={footerHref}
-          className="block border-t border-border px-4 py-2.5 text-center text-xs font-semibold text-primary hover:bg-background"
+          className="block border-t border-border px-4 py-2.5 text-center text-xs font-semibold text-primary hover:bg-background shrink-0"
         >
           {footerLabel}
         </Link>
@@ -112,10 +112,7 @@ export default function Header() {
   );
   const [openMenu, setOpenMenu] = useState<OpenMenu>(null);
   const containerRef = useRef<HTMLDivElement>(null);
-
-  // Fix: Use the RTK Query logout mutation to hit the backend
   const [logoutMutation] = useLogoutMutation();
-
   useEffect(() => {
     function handleClickOutside(e: MouseEvent) {
       if (
@@ -132,8 +129,6 @@ export default function Header() {
   const toggleMenu = (menu: OpenMenu) => {
     setOpenMenu((current) => (current === menu ? null : menu));
   };
-
-  // Fix: Call backend API, then update Redux state and redirect
   const handleLogout = async () => {
     try {
       await logoutMutation().unwrap();
@@ -151,15 +146,15 @@ export default function Header() {
       <div className="relative flex flex-col gap-6 px-4 py-6 sm:px-6 sm:py-8 lg:flex-row lg:items-start lg:justify-between lg:px-10">
         <div
           ref={containerRef}
-          className="flex items-center justify-end gap-3 lg:order-2 lg:shrink-0"
+          className="relative sm:static flex items-center justify-end gap-3 lg:order-2 lg:shrink-0"
         >
           {isAuthenticated && (
-            <div className="relative">
+            <div className="static sm:relative">
               <button
                 type="button"
                 aria-label="Notifications"
                 onClick={() => toggleMenu("notifications")}
-                className="relative flex h-9 w-9 items-center justify-center rounded-full border border-border bg-card text-foreground/80 hover:text-primary sm:h-10 sm:w-10 cursor-pointer"
+                className="relative flex h-9 w-9 items-center justify-center rounded-full border border-border bg-card text-gray-400 hover:text-white sm:h-10 sm:w-10 cursor-pointer"
               >
                 <FiBell size={16} className="sm:hidden" />
                 <FiBell size={18} className="hidden sm:block" />
@@ -175,7 +170,7 @@ export default function Header() {
                   {placeholderNotifications.length === 0 ? (
                     <EmptyDropdownState label="You're all caught up." />
                   ) : (
-                    <ul className="max-h-80 overflow-y-auto">
+                    <ul>
                       {placeholderNotifications.map((n) => (
                         <li
                           key={n.id}
@@ -200,12 +195,12 @@ export default function Header() {
           )}
 
           {isAuthenticated && (
-            <div className="relative">
+            <div className="static sm:relative">
               <button
                 type="button"
                 aria-label="Messages"
                 onClick={() => toggleMenu("messages")}
-                className="relative flex h-9 w-9 items-center justify-center rounded-full border border-border bg-card text-foreground/80 hover:text-primary sm:h-10 sm:w-10 cursor-pointer"
+                className="relative flex h-9 w-9 items-center justify-center rounded-full border border-border bg-card text-gray-400 hover:text-white sm:h-10 sm:w-10 cursor-pointer"
               >
                 <FiMail size={16} className="sm:hidden" />
                 <FiMail size={18} className="hidden sm:block" />
@@ -221,7 +216,7 @@ export default function Header() {
                   {placeholderMessages.length === 0 ? (
                     <EmptyDropdownState label="No messages yet." />
                   ) : (
-                    <ul className="max-h-80 overflow-y-auto">
+                    <ul>
                       {placeholderMessages.map((m) => (
                         <li
                           key={m.id}
@@ -264,7 +259,7 @@ export default function Header() {
                 <button
                   type="button"
                   onClick={() => toggleMenu("profile")}
-                  className="flex items-center gap-1.5 text-foreground/80 hover:text-primary cursor-pointer"
+                  className="flex items-center gap-1.5 text-gray-400 hover:text-white cursor-pointer"
                 >
                   {user?.avatarUrl ? (
                     <ProfileAvatar
@@ -280,7 +275,7 @@ export default function Header() {
                   <FiChevronDown size={16} />
                 </button>
                 {openMenu === "profile" && (
-                  <div className="absolute right-0 top-full z-50 mt-2 w-[min(16rem,calc(100vw-2rem))] overflow-hidden rounded-xl border border-border bg-card shadow-xl">
+                  <div className="absolute right-0 top-full z-50 mt-2 w-[min(16rem,calc(100vw-2rem))] max-h-[calc(100vh-100px)] overflow-hidden rounded-xl border border-border bg-card shadow-xl">
                     <ul className="py-1">
                       <li>
                         <Link

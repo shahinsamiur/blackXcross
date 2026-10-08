@@ -52,8 +52,8 @@ function SidebarContent() {
               onClick={(e) => handleNavClick(e, item.href)}
               className={`flex items-center gap-3 rounded-lg border px-4 py-3 text-sm font-medium transition-colors ${
                 isActive
-                  ? "border-primary/40 bg-primary/10 text-primary"
-                  : "border-transparent text-foreground/80 hover:bg-card"
+                  ? "border-transparent border-l-primary bg-[linear-gradient(90deg,rgba(196,30,58,0.25),transparent)] text-red-400"
+                  : "border-transparent text-gray-400 hover:bg-primary/10 hover:text-white"
               }`}
             >
               <Icon size={18} />
@@ -94,10 +94,10 @@ function SidebarContent() {
                   <FiUsers size={14} />
                 )}
               </span>
-              <span className="flex-1 truncate text-foreground/80 text-nowrap">
+              <span className="flex-1 truncate text-gray-300 text-nowrap">
                 {group.name}
               </span>
-              <span className="flex shrink-0 items-center gap-1.5 text-xs text-foreground/50">
+              <span className="flex shrink-0 items-center gap-1.5 text-xs text-muted">
                 <span className="h-1.5 w-1.5 rounded-full bg-success" />
                 {group.memberCount}
               </span>
@@ -123,7 +123,7 @@ function SidebarContent() {
           {myContacts.map((contact, i) => (
             <li
               key={`${contact.id}-${i}`}
-              className="flex items-center gap-2 text-sm text-foreground/80"
+              className="flex items-center gap-2 text-sm text-gray-300"
             >
               <span className="relative flex h-7 w-7 shrink-0 items-center justify-center overflow-hidden rounded-full bg-card text-muted">
                 {contact.avatar ? (
@@ -149,7 +149,7 @@ function SidebarContent() {
       <Link
         href="/groups/create"
         type="button"
-        className="flex items-center justify-center gap-2 rounded-lg border border-border px-4 py-2.5 text-sm font-medium text-foreground/80 hover:border-primary/40 hover:text-primary"
+        className="flex items-center justify-center gap-2 rounded-lg border border-gray-200 bg-[#3d0a12]/40 px-4 py-2.5 text-sm font-medium text-gray-200 hover:border-primary/40 hover:text-primary"
       >
         <FiPlus size={16} />
         Start New Group
@@ -163,15 +163,15 @@ function SidebarContent() {
         <input
           type="text"
           placeholder="Find Contacts"
-          className="w-full rounded-lg border border-border bg-background py-2.5 pl-9 pr-3 text-sm text-foreground placeholder:text-muted focus:border-primary/50 focus:outline-none"
+          className="w-full rounded-lg border border-border bg-[#1a1a1a] py-2.5 pl-9 pr-3 text-sm text-foreground placeholder:text-gray-600 focus:border-[#7a1526] focus:outline-none"
         />
       </label>
 
-      <div className="mt-auto rounded-lg border border-border bg-card p-5">
-        <p className="text-sm italic leading-relaxed text-foreground/80">
+      <div className="mt-auto rounded-lg border border-[#3d0a12]/20 bg-card p-5">
+        <p className="text-sm italic leading-relaxed text-gray-500">
           &ldquo;The truth is out there. The cases are here.&rdquo;
         </p>
-        <p className="mt-2 text-xs text-muted">— BLACK×CROSS</p>
+        <p className="mt-2 text-xs text-[#9b1b30]">— BLACK×CROSS</p>
       </div>
 
       {authModalTarget && (
@@ -190,7 +190,7 @@ export default function Sidebar() {
 
   return (
     <>
-      <div className="flex h-16 items-center gap-3 border-b border-border px-4 sm:px-6 lg:hidden">
+      <div className="flex h-16 items-center gap-3 border-b border-[#3d0a12]/30 px-4 sm:px-6 lg:hidden">
         <button
           type="button"
           aria-label="Toggle navigation"
@@ -199,15 +199,17 @@ export default function Sidebar() {
         >
           {mobileOpen ? <FiX size={22} /> : <FiMenu size={22} />}
         </button>
-        <span className="text-base font-black tracking-wide sm:text-lg">
+        <span className="text-base font-black tracking-wide text-white sm:text-lg">
           BLACK×CROSS
         </span>
       </div>
 
-      <aside className="hidden w-64 shrink-0 border-r border-border lg:flex lg:flex-col xl:w-72">
-        <div className="flex h-20 items-center gap-3 border-b border-border px-6">
+      <aside className="hidden w-64 shrink-0 border-r border-[#3d0a12]/40 bg-card lg:flex lg:flex-col xl:w-72">
+        <div className="flex h-20 items-center gap-3 border-b border-[#3d0a12]/30 px-6">
           {/* <FiMenu size={20} className="text-muted" /> */}
-          <span className="text-xl font-black tracking-wide">BLACKXCROSS</span>
+          <span className="text-xl font-black tracking-wide text-white">
+            BLACKXCROSS
+          </span>
         </div>
         <SidebarContent />
       </aside>
@@ -217,12 +219,12 @@ export default function Sidebar() {
           <button
             type="button"
             aria-label="Close navigation"
-            className="absolute inset-0 bg-background/80"
+            className="absolute inset-0 bg-black/60"
             onClick={() => setMobileOpen(false)}
           />
-          <aside className="relative z-50 flex h-full w-[85%] max-w-xs flex-col border-r border-border bg-background sm:w-80 md:w-96">
-            <div className="flex h-16 shrink-0 items-center justify-between border-b border-border px-4 sm:h-20 sm:px-6">
-              <span className="text-base font-black tracking-wide sm:text-lg">
+          <aside className="relative z-50 flex h-full w-[85%] max-w-xs flex-col border-r border-[#3d0a12]/40 bg-card sm:w-80 md:w-96">
+            <div className="flex h-16 shrink-0 items-center justify-between border-b border-[#3d0a12]/30 px-4 sm:h-20 sm:px-6">
+              <span className="text-base font-black tracking-wide text-white sm:text-lg">
                 BLACK×CROSS
               </span>
               <button

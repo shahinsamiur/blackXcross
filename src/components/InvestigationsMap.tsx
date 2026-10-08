@@ -33,7 +33,7 @@ export default function InvestigationsMap() {
         <button
           type="button"
           onClick={() => setIsFullMapOpen(true)}
-          className=" text-xs font-semibold text-foreground/80  hover:opacity-90 border border-border px-4 py-2 rounded-lg hover:bg-primary/10 cursor-pointer"
+          className="text-xs font-semibold text-red-500 hover:text-red-400 cursor-pointer"
         >
           View Full Map
         </button>
@@ -52,8 +52,8 @@ export default function InvestigationsMap() {
               className="flex flex-col items-center gap-1 px-3 text-center first:pl-0 last:pr-0"
             >
               <div className="flex items-center gap-2">
-                <Icon className="text-primary" size={20} />
-                <span className="text-lg font-bold text-foreground/80">
+                <Icon className="text-red-500" size={20} />
+                <span className="text-lg font-bold text-foreground">
                   {stat.value}
                 </span>
               </div>

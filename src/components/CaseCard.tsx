@@ -14,7 +14,9 @@ export default function CaseCard({ caseFile }: { caseFile: CaseItem }) {
 
   return (
     <article
-      className="flex w-full flex-col gap-8 rounded-xl border border-border bg-card p-5 px-3 bg-cover bg-center sm:gap-10 sm:px-4"
+      className={`flex w-full flex-col gap-8 rounded-xl border ${
+        isOpen ? "border-[#3d0a12]/50" : "border-gray-800/80"
+      } bg-card p-5 px-3 bg-cover bg-center sm:gap-10 sm:px-4`}
       style={{
         backgroundImage: `
           linear-gradient(
@@ -30,8 +32,8 @@ export default function CaseCard({ caseFile }: { caseFile: CaseItem }) {
         <span
           className={`rounded-md px-2.5 py-1 text-[11px] font-bold tracking-wide uppercase ${
             isOpen
-              ? "bg-success/15 text-success border border-success"
-              : "bg-primary/10 border border-primary text-primary"
+              ? "bg-red-900/80 text-red-400 border border-red-800/50"
+              : "bg-[#3d0a12]/80 border border-gray-200 text-gray-200"
           }`}
         >
           {displayStatus}
@@ -43,7 +45,7 @@ export default function CaseCard({ caseFile }: { caseFile: CaseItem }) {
       </div>
 
       <div className="flex flex-col gap-6 sm:gap-10">
-        <h3 className="text-xl font-light leading-tight tracking-tight text-foreground/80 sm:text-2xl">
+        <h3 className="text-xl font-light leading-tight tracking-tight text-white sm:text-2xl">
           {caseFile.title}
         </h3>
 

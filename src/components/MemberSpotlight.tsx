@@ -11,7 +11,7 @@ export default function MemberSpotlight() {
         </h2>
         <button
           type="button"
-          className="rounded-lg border border-border px-4 py-2 text-xs font-semibold text-foreground/80 hover:bg-primary/10 hover:opacity-90 cursor-pointer"
+          className="text-xs font-semibold text-red-500 hover:text-red-400 cursor-pointer"
         >
           View All
         </button>
@@ -33,12 +33,12 @@ export default function MemberSpotlight() {
               />
             </div>
             <div className="flex min-w-0 flex-col gap-0.5">
-              <p className="truncate text-sm font-semibold text-primary">
+              <p className="truncate text-sm font-semibold text-foreground">
                 {member.name}
               </p>
               <p className="text-xs text-muted">{member.role}</p>
-              <span className="flex items-center gap-1 text-xs font-medium text-foreground/80">
-                <FiStar size={12} className="text-primary" />
+              <span className="flex items-center gap-1 text-xs font-medium text-red-500">
+                <FiStar size={12} className="text-red-500" />
                 {member.contributions} Contributions
               </span>
             </div>

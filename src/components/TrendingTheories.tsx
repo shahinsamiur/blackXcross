@@ -40,7 +40,7 @@ export default function TrendingTheories({
         </h2>
         <button
           type="button"
-          className=" text-xs font-semibold text-foreground/80 hover:opacity-90 border border-border px-4 py-2 rounded-lg hover:bg-primary/10 cursor-pointer"
+          className="text-xs font-semibold text-red-500 hover:text-red-400 cursor-pointer"
         >
           View All
         </button>
@@ -64,7 +64,7 @@ export default function TrendingTheories({
                   size={36}
                 />
               ) : (
-                <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-primary/10 text-primary">
+                <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-red-500/10 text-red-500">
                   <FaFire size={16} />
                 </span>
               )}
@@ -75,7 +75,7 @@ export default function TrendingTheories({
                     theory.author?.username ||
                     "Anonymous"}
                 </span>
-                <p className="truncate text-sm leading-snug text-muted">
+                <p className="truncate text-sm leading-snug text-foreground/80">
                   {theory.content}
                 </p>
               </div>
