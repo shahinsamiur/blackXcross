@@ -107,6 +107,17 @@ function SidebarContent() {
       </div>
 
       <div className="flex flex-col gap-3">
+        <label className="relative flex items-center">
+          <FiSearch
+            className="pointer-events-none absolute left-3 text-muted"
+            size={16}
+          />
+          <input
+            type="text"
+            placeholder="Find Contacts"
+            className="w-full rounded-lg border border-border bg-[#1a1a1a] py-2.5 pl-9 pr-3 text-sm text-foreground placeholder:text-gray-600 focus:border-[#7a1526] focus:outline-none"
+          />
+        </label>
         <div className="flex items-center justify-between px-1">
           <h2 className="text-xs font-semibold tracking-widest text-muted uppercase">
             My Contacts
@@ -149,23 +160,11 @@ function SidebarContent() {
       <Link
         href="/groups/create"
         type="button"
-        className="flex items-center justify-center gap-2 rounded-lg border border-gray-200 bg-[#3d0a12]/40 px-4 py-2.5 text-sm font-medium text-gray-200 hover:border-primary/40 hover:text-primary"
+        className="flex items-center justify-center gap-2 rounded-lg border border-gray-800 bg-[#3d0a12]/40 px-4 py-2.5 text-sm font-medium text-gray-200 hover:border-primary/40 hover:text-primary"
       >
         <FiPlus size={16} />
         Start New Group
       </Link>
-
-      <label className="relative flex items-center">
-        <FiSearch
-          className="pointer-events-none absolute left-3 text-muted"
-          size={16}
-        />
-        <input
-          type="text"
-          placeholder="Find Contacts"
-          className="w-full rounded-lg border border-border bg-[#1a1a1a] py-2.5 pl-9 pr-3 text-sm text-foreground placeholder:text-gray-600 focus:border-[#7a1526] focus:outline-none"
-        />
-      </label>
 
       <div className="mt-auto rounded-lg border border-[#3d0a12]/20 bg-card p-5">
         <p className="text-sm italic leading-relaxed text-gray-500">
