@@ -4,6 +4,7 @@ import {
   Manrope,
   IBM_Plex_Mono,
   League_Gothic,
+  Cinzel,
 } from "next/font/google";
 import "../styles/globals.css";
 import StateWraper from "../state/stateWraper";
@@ -32,6 +33,12 @@ const leagueGothic = League_Gothic({
   variable: "--font-league-gothic",
 });
 
+const cinzel = Cinzel({
+  subsets: ["latin"],
+  weight: ["400", "500"],
+  variable: "--font-cinzel",
+});
+
 export const metadata: Metadata = {
   title: "BlackXCross",
   description: "BlackXCross finance solution",
@@ -45,14 +52,14 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${spaceGrotesk.variable} ${manrope.variable} ${plexMono.variable} ${leagueGothic.variable}`}
+      className={`${spaceGrotesk.variable} ${manrope.variable} ${plexMono.variable} ${leagueGothic.variable} ${cinzel.variable}`}
     >
       <body className="font-body antialiased">
         <StateWraper>
           <AuthInitializer />
           {children}
         </StateWraper>
-        </body>
+      </body>
     </html>
   );
 }

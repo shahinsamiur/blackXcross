@@ -11,6 +11,15 @@ interface AuthWrapperProps {
   mode: "protected" | "auth";
 }
 
+const PUBLIC_ROUTE_PATTERNS: RegExp[] = [
+  /^\/$/,
+  /^\/archives$/,
+  /^\/cases\/(?!create$|drafts$)[^/]+$/,
+];
+
+const isPublicRoute = (pathname: string) =>
+  PUBLIC_ROUTE_PATTERNS.some((pattern) => pattern.test(pathname));
+
 function LoadingFallback() {
   return (
     <div className="flex min-h-screen w-full items-center justify-center">
@@ -24,20 +33,21 @@ function AuthWrapperInner({ children, mode }: AuthWrapperProps) {
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const status = useSelector((state: RootState) => state.auth.status);
+  const isPublic = isPublicRoute(pathname);
 
   useEffect(() => {
-    if (mode === "protected" && status === "unauthenticated") {
+    if (mode === "protected" && !isPublic && status === "unauthenticated") {
       router.replace(`/auth/login?redirect=${encodeURIComponent(pathname)}`);
     }
     if (mode === "auth" && status === "authenticated") {
       const redirect = searchParams.get("redirect") || "/";
       router.replace(redirect);
     }
-  }, [status, mode, pathname, searchParams, router]);
+  }, [status, mode, isPublic, pathname, searchParams, router]);
 
   const isPending = status === "idle" || status === "loading";
   const blockedForProtected =
-    mode === "protected" && status !== "authenticated";
+    mode === "protected" && !isPublic && status !== "authenticated";
   const blockedForAuth = mode === "auth" && status === "authenticated";
 
   if (isPending || blockedForProtected || blockedForAuth) {

@@ -23,7 +23,11 @@ export default function CaseDetailsPage() {
   const { user, isAuthenticated } = useSelector(
     (state: RootState) => state.auth,
   );
-  const canEdit = isAuthenticated && !!user && caseData?.userId === user.id;
+  const canEdit =
+  isAuthenticated &&
+  !!user &&
+  caseData?.userId === user.id &&
+  caseData?.publishState !== "PUBLISHED";
   const canInteract = isAuthenticated;
   if (isLoading) {
     return (

@@ -4,10 +4,11 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { ValidationError } from "yup";
 import { groupSchema } from "../../../../validations/group.schema";
-import { slugify } from "../../../../_mock/blackxcross";
+import { useCreateGroupMutation } from "../../../../state/redux/api/groups";
 import { groupCategories } from "../../../../_mock/groups";
 export default function CreateGroupPage() {
   const router = useRouter();
+  const [createGroup] = useCreateGroupMutation();
   const [values, setValues] = useState({
     name: "",
     category: "",
@@ -23,9 +24,16 @@ export default function CreateGroupPage() {
     e.preventDefault();
     setSubmitting(true);
     try {
-      await groupSchema.validate(values, { abortEarly: false });
+      const validated = await groupSchema.validate(values, {
+        abortEarly: false,
+      });
       setErrors({});
-      router.push(`/groups/${slugify(values.name)}`);
+      const created = await createGroup({
+        name: validated.name,
+        description: validated.description,
+        isPrivate: validated.visibility === "private",
+      }).unwrap();
+      router.push(`/groups/${created.id}`);
     } catch (err) {
       if (err instanceof ValidationError) {
         const fieldErrors: Record<string, string> = {};
@@ -33,6 +41,9 @@ export default function CreateGroupPage() {
           if (e.path && !fieldErrors[e.path]) fieldErrors[e.path] = e.message;
         });
         setErrors(fieldErrors);
+      } else {
+        const message = (err as { data?: { message?: string } })?.data?.message;
+        alert(message || "Failed to create group. Please try again.");
       }
     } finally {
       setSubmitting(false);

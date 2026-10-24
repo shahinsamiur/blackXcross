@@ -4,12 +4,10 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { FiSearch } from "react-icons/fi";
 import { caseFilters } from "../_mock/blackxcross";
-
 interface SearchFilterBarProps {
   onSearch?: (value: string) => void;
   onFilterChange?: (filter: (typeof caseFilters)[number]) => void;
 }
-
 export default function SearchFilterBar({
   onSearch,
   onFilterChange,
@@ -31,7 +29,6 @@ export default function SearchFilterBar({
       }
     }
   };
-
   const handleFilterChange = (filter: (typeof caseFilters)[number]) => {
     setActiveFilter(filter);
     onFilterChange?.(filter);

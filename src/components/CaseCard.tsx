@@ -1,5 +1,4 @@
 import Link from "next/link";
-import { FiArrowRight } from "react-icons/fi";
 import type { CaseItem } from "../state/redux/api/cases";
 
 export default function CaseCard({ caseFile }: { caseFile: CaseItem }) {
@@ -13,59 +12,45 @@ export default function CaseCard({ caseFile }: { caseFile: CaseItem }) {
         : caseFile.investigationStatus || "UNKNOWN";
 
   return (
-    <article
-      className={`flex w-full flex-col gap-8 rounded-xl border bg-red-500 ${
-        isOpen ? "border-[#3d0a12]/50" : "border-gray-800/80"
-      } bg-card p-5 px-3 bg-cover bg-center sm:gap-10 sm:px-4`}
-      style={{
-        backgroundImage: `
-          linear-gradient(
-            to bottom,
-            rgba(0, 0, 0, 0.8),
-            rgba(0, 0, 0, 1)
-          ),
-          url(${caseFile.imageUrl || "/image/hero1.jpg"})
-        `,
-      }}
-    >
-      <div className="flex items-center justify-between gap-2">
+    <article className="group relative w-full overflow-hidden rounded-xl border border-gray-800/80 bg-card transition-all duration-300 hover:border-primary/40">
+      <div className="absolute left-3 top-3 z-10">
         <span
-          className={`rounded-md px-2.5 py-1 text-[11px] font-bold tracking-wide uppercase ${
+          className={`rounded border px-2 py-0.5 text-[10px] font-semibold tracking-wider uppercase ${
             isOpen
-              ? "bg-red-900/80 text-red-400 border border-red-800/50"
-              : "bg-[#3d0a12]/80 border border-gray-200 text-gray-200"
+              ? "border-red-800/50 bg-red-900/80 text-red-400"
+              : "border-primary/50 bg-primary/20 text-primary"
           }`}
         >
           {displayStatus}
         </span>
-
-        <span className="shrink-0 text-xs font-medium text-muted">
-          {caseFile.caseNumber || `#${caseFile.id.slice(0, 6)}`}
-        </span>
       </div>
 
-      <div className="flex flex-col gap-6 sm:gap-10">
-        <h3 className="text-xl font-light leading-tight tracking-tight text-white sm:text-2xl">
+      <div className="absolute right-3 top-3 z-10 font-mono text-[10px] text-muted">
+        {caseFile.caseNumber || `#${caseFile.id.slice(0, 6)}`}
+      </div>
+
+      <div className="relative h-28 overflow-hidden bg-linear-to-b from-gray-900 to-card">
+        <div className="absolute bottom-0 left-0 right-0 h-16 bg-linear-to-t from-card to-transparent" />
+      </div>
+
+      <div className="p-4 pt-2">
+        <h3 className="mb-1 font-display text-sm text-white transition group-hover:text-primary">
           {caseFile.title}
         </h3>
-
-        <p className="text-sm leading-relaxed text-muted line-clamp-3">
+        <p className="line-clamp-2 text-xs leading-relaxed text-muted">
           {caseFile.description}
         </p>
-      </div>
-
-      <div className="mt-auto flex items-center justify-between gap-2 pt-2">
-        <Link
-          href={`/cases/${caseFile.id}`}
-          className="flex shrink-0 items-center gap-1.5 text-sm font-semibold text-primary hover:opacity-80"
-        >
-          View Case
-          <FiArrowRight size={14} />
-        </Link>
-
-        <span className="shrink-0 text-xs text-muted">
-          {caseFile._count?.theories || 0} Theories
-        </span>
+        <div className="mt-3 flex items-center justify-between">
+          <Link
+            href={`/cases/${caseFile.id}`}
+            className="text-[11px] font-medium text-primary hover:opacity-80"
+          >
+            Open Dossier →
+          </Link>
+          <span className="text-[11px] text-gray-600">
+            {caseFile._count?.theories || 0} Theories
+          </span>
+        </div>
       </div>
     </article>
   );

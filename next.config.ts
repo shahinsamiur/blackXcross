@@ -9,7 +9,6 @@ const nextConfig: NextConfig = {
         port: "5000",
         pathname: "/uploads/**",
       },
-      // Add this for production if your backend serves images over HTTPS
       {
         protocol: "https",
         hostname: "api.sardarit.cloud",
@@ -17,7 +16,6 @@ const nextConfig: NextConfig = {
       },
     ],
   },
-  // FIX: Add rewrites to proxy API requests
   async rewrites() {
     return [
       {

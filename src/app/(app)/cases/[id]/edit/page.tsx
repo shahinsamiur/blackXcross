@@ -277,7 +277,22 @@ export default function EditCasePage() {
       </div>
     );
   }
-
+  if (caseData.publishState === "PUBLISHED") {
+    return (
+      <div className="flex w-full flex-col items-center gap-3 px-4 py-16 text-center sm:px-6 lg:px-8">
+        <p className="text-sm text-muted">
+          This case is public and can no longer be edited.
+        </p>
+        <button
+          type="button"
+          onClick={() => router.push(`/cases/${params.id}`)}
+          className="text-sm font-semibold text-primary hover:opacity-80"
+        >
+          Back to Case
+        </button>
+      </div>
+    );
+  }
   return (
     <div className="flex w-full flex-col gap-6 px-4 pb-8 sm:px-6 lg:px-8">
       <div className="flex items-center justify-between">
