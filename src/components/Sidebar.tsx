@@ -18,7 +18,6 @@ import {
 import { IoBriefcaseSharp } from "react-icons/io5";
 import { myGroups, myContacts, sidebarNav } from "../_mock/blackxcross";
 import RequireAuthModal from "@/src/components/ui/RequireAuthModal";
-
 const navIcons = {
   home: FiHome,
   archives: FiCalendar,
@@ -26,12 +25,10 @@ const navIcons = {
   "my-dossier": FiUser,
   case: IoBriefcaseSharp,
 };
-
 function SidebarContent() {
   const pathname = usePathname();
   const { isAuthenticated } = useSelector((state: RootState) => state.auth);
   const [authModalTarget, setAuthModalTarget] = useState<string | null>(null);
-
   const handleNavClick = (e: React.MouseEvent, href: string) => {
     if (!isAuthenticated) {
       e.preventDefault();

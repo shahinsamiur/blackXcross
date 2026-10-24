@@ -28,7 +28,6 @@ function IconBadge({ count }: { count: number }) {
     </span>
   );
 }
-
 const placeholderNotifications = [
   {
     id: "n1",
@@ -42,7 +41,6 @@ const placeholderNotifications = [
     time: "3 hours ago",
   },
 ];
-
 const placeholderMessages = [
   {
     id: "m1",
@@ -57,9 +55,7 @@ const placeholderMessages = [
     time: "2 hours ago",
   },
 ];
-
 type OpenMenu = "notifications" | "messages" | "profile" | null;
-
 function DropdownPanel({
   title,
   footerHref,
@@ -88,13 +84,11 @@ function DropdownPanel({
     </div>
   );
 }
-
 function EmptyDropdownState({ label }: { label: string }) {
   return (
     <div className="px-4 py-8 text-center text-xs text-muted">{label}</div>
   );
 }
-
 function getInitials(name: string): string {
   return name
     .split(/\s+/)
@@ -103,7 +97,6 @@ function getInitials(name: string): string {
     .map((part) => part[0]?.toUpperCase())
     .join("");
 }
-
 export default function Header() {
   const router = useRouter();
   const dispatch = useDispatch();
@@ -125,7 +118,6 @@ export default function Header() {
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
-
   const toggleMenu = (menu: OpenMenu) => {
     setOpenMenu((current) => (current === menu ? null : menu));
   };
@@ -139,7 +131,6 @@ export default function Header() {
       router.push("/");
     }
   };
-
   return (
     <header className="relative bg-background flex-1">
       <GrungeOverlay />
@@ -193,7 +184,6 @@ export default function Header() {
               )}
             </div>
           )}
-
           {isAuthenticated && (
             <div className="static sm:relative">
               <button
@@ -206,7 +196,6 @@ export default function Header() {
                 <FiMail size={18} className="hidden sm:block" />
                 <IconBadge count={placeholderMessages.length} />
               </button>
-
               {openMenu === "messages" && (
                 <DropdownPanel
                   title="Messages"
@@ -244,7 +233,6 @@ export default function Header() {
               )}
             </div>
           )}
-
           <div className="relative">
             {!isAuthenticated ? (
               <Link
@@ -312,7 +300,6 @@ export default function Header() {
             )}
           </div>
         </div>
-
         <div className="flex min-w-0 flex-col gap-2 lg:order-1 w-full">
           <div className="flex min-w-0 flex-wrap items-center justify-center gap-2 sm:gap-4  w-full">
             <Image

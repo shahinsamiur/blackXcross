@@ -15,6 +15,7 @@ import {
 import { useGetCaseQuery } from "../../../../state/redux/api/cases";
 import type { RootState } from "../../../../state/redux/store";
 import { TheoriesSection } from "../../../../components/case/TheoriesSection";
+import Image from "next/image";
 const evidenceIcons = { image: FiImage, document: FiFileText, audio: FiMic };
 export default function CaseDetailsPage() {
   const router = useRouter();
@@ -138,7 +139,7 @@ export default function CaseDetailsPage() {
                       key={file.id}
                       className="group relative aspect-square overflow-hidden rounded-lg border border-border bg-muted"
                     >
-                      <img
+                      <Image
                         src={file.url}
                         alt={file.filename}
                         className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"

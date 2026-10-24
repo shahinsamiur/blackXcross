@@ -31,7 +31,6 @@ export default function TrendingTheories({
       </section>
     );
   }
-
   return (
     <section className="flex flex-col gap-5 rounded-xl border border-border bg-card p-5">
       <div className="flex items-center justify-between">

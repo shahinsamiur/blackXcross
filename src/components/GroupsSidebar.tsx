@@ -11,9 +11,7 @@ import { joinedGroups } from "../_mock/groups";
 export default function GroupsSidebar() {
   const pathname = usePathname();
   const [query, setQuery] = useState("");
-
   const activeGroupId = pathname.split("/")[2] ?? null;
-
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase();
     if (!q) return joinedGroups;
@@ -48,7 +46,6 @@ export default function GroupsSidebar() {
           className="w-full rounded-lg border border-border bg-background py-2.5 pl-9 pr-3 text-sm text-foreground placeholder:text-muted focus:border-primary/50 focus:outline-none"
         />
       </label>
-
       <ul className="flex gap-3 overflow-x-auto pb-1 lg:flex-col lg:gap-2 lg:overflow-visible lg:pb-0">
         {filtered.map((group) => {
           const isActive = activeGroupId === group.id;
@@ -86,7 +83,6 @@ export default function GroupsSidebar() {
           <li className="px-1 text-sm text-muted">No groups found.</li>
         )}
       </ul>
-
       <Link
         href="/groups/create"
         className="flex items-center justify-center gap-2 rounded-lg border border-border px-4 py-2.5 text-sm font-medium text-foreground/80 hover:border-primary/40 hover:text-primary"

@@ -10,7 +10,6 @@ export default function CaseCard({ caseFile }: { caseFile: CaseItem }) {
       : caseFile.investigationStatus === "OPEN"
         ? "OPEN CASE"
         : caseFile.investigationStatus || "UNKNOWN";
-
   return (
     <article className="group relative w-full overflow-hidden rounded-xl border border-gray-800/80 bg-card transition-all duration-300 hover:border-primary/40">
       <div className="absolute left-3 top-3 z-10">
@@ -24,15 +23,12 @@ export default function CaseCard({ caseFile }: { caseFile: CaseItem }) {
           {displayStatus}
         </span>
       </div>
-
       <div className="absolute right-3 top-3 z-10 font-mono text-[10px] text-muted">
         {caseFile.caseNumber || `#${caseFile.id.slice(0, 6)}`}
       </div>
-
       <div className="relative h-28 overflow-hidden bg-linear-to-b from-gray-900 to-card">
         <div className="absolute bottom-0 left-0 right-0 h-16 bg-linear-to-t from-card to-transparent" />
       </div>
-
       <div className="p-4 pt-2">
         <h3 className="mb-1 font-display text-sm text-white transition group-hover:text-primary">
           {caseFile.title}

@@ -15,7 +15,6 @@ export default function SearchFilterBar({
   const router = useRouter();
   const [activeFilter, setActiveFilter] = useState<string>(caseFilters[0]);
   const [searchValue, setSearchValue] = useState("");
-
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter") {
       e.preventDefault();
@@ -33,7 +32,6 @@ export default function SearchFilterBar({
     setActiveFilter(filter);
     onFilterChange?.(filter);
   };
-
   return (
     <div className="flex flex-col gap-4 px-4 pb-8 sm:px-6 lg:flex-row lg:items-center lg:justify-between lg:px-8">
       <div className="flex flex-col gap-2">
@@ -55,7 +53,6 @@ export default function SearchFilterBar({
           />
         </label>
       </div>
-
       <div className="flex flex-col gap-2">
         <span className="text-xs font-semibold tracking-widest text-muted uppercase">
           Filter Cases

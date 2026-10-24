@@ -13,7 +13,6 @@ export default function CaseCardsRow({ cases, isLoading }: CaseCardsRowProps) {
   const scrollRef = useRef<HTMLDivElement>(null);
   const [showLeft, setShowLeft] = useState(false);
   const [showRight, setShowRight] = useState(false);
-
   const checkScroll = () => {
     if (scrollRef.current) {
       const { scrollLeft, scrollWidth, clientWidth } = scrollRef.current;
@@ -21,7 +20,6 @@ export default function CaseCardsRow({ cases, isLoading }: CaseCardsRowProps) {
       setShowRight(scrollLeft < scrollWidth - clientWidth - 10);
     }
   };
-
   useEffect(() => {
     checkScroll();
     const el = scrollRef.current;
@@ -34,12 +32,10 @@ export default function CaseCardsRow({ cases, isLoading }: CaseCardsRowProps) {
       window.removeEventListener("resize", checkScroll);
     };
   }, [cases]);
-
   const scrollPrev = () =>
     scrollRef.current?.scrollBy({ left: -320, behavior: "smooth" });
   const scrollNext = () =>
     scrollRef.current?.scrollBy({ left: 320, behavior: "smooth" });
-
   if (isLoading) {
     return (
       <div className="relative px-4 pb-8 sm:px-6 lg:px-8">
@@ -62,7 +58,6 @@ export default function CaseCardsRow({ cases, isLoading }: CaseCardsRowProps) {
       </div>
     );
   }
-
   return (
     <div className="relative px-4 pb-8 sm:px-6 lg:px-8">
       {showLeft && (
@@ -75,7 +70,6 @@ export default function CaseCardsRow({ cases, isLoading }: CaseCardsRowProps) {
           <FiChevronLeft size={18} />
         </button>
       )}
-
       <div
         ref={scrollRef}
         className="flex snap-x snap-mandatory flex-col items-center gap-4 pb-2 scrollbar-none [&::-webkit-scrollbar]:hidden sm:flex-row sm:items-stretch sm:overflow-x-auto"
@@ -89,7 +83,6 @@ export default function CaseCardsRow({ cases, isLoading }: CaseCardsRowProps) {
           </div>
         ))}
       </div>
-
       {showRight && (
         <button
           type="button"

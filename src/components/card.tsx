@@ -4,7 +4,6 @@ import Image from "next/image";
 export default function FloatingCard({
   side,
   name,
-  caption,
   delay,
   imageUrl,
 }: {

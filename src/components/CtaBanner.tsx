@@ -14,7 +14,6 @@ export default function CtaBanner() {
           Share. Investigate. Uncover the truth.
         </p>
       </div>
-
       <button
         type="button"
         className="flex w-full shrink-0 items-center justify-center gap-2 rounded-lg border border-primary/60 bg-linear-to-b from-primary/80 to-primary/40 px-4 py-2.5 text-xs font-bold uppercase tracking-normal text-foreground/80 hover:opacity-90 cursor-pointer sm:w-auto sm:px-6 sm:py-3 sm:text-sm sm:tracking-wide"
