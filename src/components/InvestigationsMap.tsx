@@ -5,6 +5,7 @@ import dynamic from "next/dynamic";
 import { FiUser, FiUsers, FiX } from "react-icons/fi";
 import { FaStar } from "react-icons/fa6";
 import { investigationStats } from "../_mock/blackxcross";
+import { useCaseMarkers } from "../hooks/useCaseMarkers";
 
 const LeafletMap = dynamic(() => import("./LeafletMap"), {
   ssr: false,
@@ -23,6 +24,7 @@ const statIcons = {
 
 export default function InvestigationsMap() {
   const [isFullMapOpen, setIsFullMapOpen] = useState(false);
+  const markers = useCaseMarkers();
 
   return (
     <section className="flex flex-col gap-5 rounded-xl border border-border bg-card p-5">
@@ -40,7 +42,7 @@ export default function InvestigationsMap() {
       </div>
 
       <div className="relative h-56 w-full overflow-hidden rounded-lg border border-border sm:h-64">
-        <LeafletMap />
+        <LeafletMap markers={markers} />
       </div>
 
       <div className="grid grid-cols-3 divide-x divide-border">
@@ -82,7 +84,7 @@ export default function InvestigationsMap() {
               </button>
             </div>
             <div className="relative h-[70vh] w-full overflow-hidden rounded-lg border border-border">
-              <LeafletMap />
+              <LeafletMap markers={markers} />
             </div>
           </div>
         </div>

@@ -4,13 +4,13 @@ import { FiPlus, FiMinus, FiCrosshair } from "react-icons/fi";
 import { MapContainer, TileLayer, Marker, useMap } from "react-leaflet";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
-import { mapMarkers } from "../_mock/blackxcross";
+import type { CaseMarker } from "../hooks/useCaseMarkers";
 
 const pinIcon = L.divIcon({
   className: "",
-  html: `<div style="width:14px;height:14px;border-radius:9999px;background:var(--primary);box-shadow:0 0 6px var(--primary);border:2px solid rgba(0,0,0,0.6)"></div>`,
-  iconSize: [14, 14],
-  iconAnchor: [7, 7],
+  html: `<svg width="28" height="36" viewBox="0 0 24 32" xmlns="http://www.w3.org/2000/svg"><path d="M12 0C5.4 0 0 5.4 0 12c0 9 12 20 12 20s12-11 12-20C24 5.4 18.6 0 12 0z" style="fill:var(--primary);stroke:rgba(0,0,0,0.6);stroke-width:1.5"/><circle cx="12" cy="12" r="4.5" fill="rgba(0,0,0,0.65)"/></svg>`,
+  iconSize: [28, 36],
+  iconAnchor: [14, 36],
 });
 
 function MapControls() {
@@ -46,15 +46,11 @@ function MapControls() {
   );
 }
 
-function percentToLatLng(top: string, left: string): [number, number] {
-  const t = parseFloat(top) / 100;
-  const l = parseFloat(left) / 100;
-  const lat = 85 - t * 170;
-  const lng = -180 + l * 360;
-  return [lat, lng];
-}
+type LeafletMapProps = {
+  markers?: CaseMarker[];
+};
 
-export default function LeafletMap() {
+export default function LeafletMap({ markers = [] }: LeafletMapProps) {
   return (
     <MapContainer
       center={[20, 0]}
@@ -70,15 +66,13 @@ export default function LeafletMap() {
       className="h-full w-full bg-background"
     >
       <TileLayer
-        url="https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png"
+        url="https://tile.openstreetmap.org/{z}/{x}/{y}.png"
+        attribution="&copy; OpenStreetMap contributors"
+        className="filter-[invert(1)_hue-rotate(180deg)_brightness(0.9)_contrast(0.9)]"
         noWrap
       />
-      {mapMarkers.map((marker) => (
-        <Marker
-          key={marker.id}
-          position={percentToLatLng(marker.top, marker.left)}
-          icon={pinIcon}
-        />
+      {markers.map((marker) => (
+        <Marker key={marker.id} position={marker.position} icon={pinIcon} />
       ))}
       <MapControls />
     </MapContainer>
