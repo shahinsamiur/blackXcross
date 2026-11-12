@@ -1,0 +1,52 @@
+
+name: Deploy BlackXcross Frontend
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup SSH
+        run: |
+          mkdir -p ~/.ssh
+          printf '%s\n' "${{ secrets.BLACKXCROSS_VPS_SSH_KEY }}" > ~/.ssh/deploy_key
+          chmod 600 ~/.ssh/deploy_key
+          ssh-keyscan -H "${{ secrets.BLACKXCROSS_VPS_HOST }}" >> ~/.ssh/known_hosts
+
+      - name: Upload source code
+        run: |
+          rsync -az --delete \
+            --exclude='.git/' \
+            --exclude='.github/' \
+            --exclude='node_modules/' \
+            --exclude='.next/' \
+            --exclude='out/' \
+            --exclude='.env' \
+            --exclude='.env.*' \
+            -e "ssh -i ~/.ssh/deploy_key" \
+            ./ \
+            "${{ secrets.BLACKXCROSS_VPS_USER }}@${{ secrets.BLACKXCROSS_VPS_HOST }}:/var/www/blackxcross/frontend/"
+
+      - name: Build and restart frontend
+        run: |
+          ssh -i ~/.ssh/deploy_key \
+            "${{ secrets.BLACKXCROSS_VPS_USER }}@${{ secrets.BLACKXCROSS_VPS_HOST }}" << 'EOFSSH'
+            set -e
+            cd /var/www/blackxcross/frontend
+
+            npm ci
+            npm run build
+
+            pm2 restart blackxcross-frontend
+            pm2 save
+
+            echo "Frontend deployment completed."
+          EOFSSH
