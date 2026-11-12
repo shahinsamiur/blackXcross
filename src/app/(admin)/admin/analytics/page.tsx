@@ -1,13 +1,5 @@
-import {
-  FiUsers,
-  FiFileText,
-  FiFlag,
-  FiAlertTriangle,
-} from "react-icons/fi";
-import {
-  analyticsOverview,
-  signupsOverTime,
-} from "../../../../_mock/admin";
+import { FiUsers, FiFileText, FiFlag, FiAlertTriangle } from "react-icons/fi";
+import { analyticsOverview, signupsOverTime } from "../../../../_mock/admin";
 
 const overviewCards = [
   {

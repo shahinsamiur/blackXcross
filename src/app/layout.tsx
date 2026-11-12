@@ -41,7 +41,30 @@ const cinzel = Cinzel({
 
 export const metadata: Metadata = {
   title: "BlackXCross",
-  description: "BlackXCross finance solution",
+  description: "BlackXCross",
+
+  openGraph: {
+    title: "BlackXCross",
+    description: "BlackXCross",
+    siteName: "BlackXCross",
+    url: "https://blackcross.net",
+    type: "website",
+    images: [
+      {
+        url: "/og-image.png",
+        width: 1200,
+        height: 630,
+        alt: "BlackXCross",
+      },
+    ],
+  },
+
+  twitter: {
+    card: "summary_large_image",
+    title: "BlackXCross",
+    description: "BlackXCross",
+    images: ["/og-image.png"],
+  },
 };
 
 export default function RootLayout({
