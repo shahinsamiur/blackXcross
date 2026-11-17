@@ -1,3 +1,4 @@
+
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
@@ -12,6 +13,11 @@ const nextConfig: NextConfig = {
       {
         protocol: "https",
         hostname: "api.sardarit.cloud",
+        pathname: "/uploads/**",
+      },
+      {
+        protocol: "https",
+        hostname: "blackcross.net",
         pathname: "/uploads/**",
       },
     ],
