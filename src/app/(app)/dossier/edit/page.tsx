@@ -11,7 +11,7 @@ import { dossierSchema } from "../../../../validations/dossier.schema";
 import type { RootState } from "../../../../state/redux/store";
 import { Skeleton, SkeletonCircle } from "../../../../components/ui/Skeleton";
 import {
-  useGetMeQuery,
+  useGetMyProfileQuery,
   useUploadAvatarMutation,
   useUpdateUserMutation,
   useDeleteUserMutation,
@@ -23,8 +23,11 @@ export default function DossierEditPage() {
     data: userData,
     isLoading: isUserLoading,
     error: userError,
-  } = useGetMeQuery();
-  const userId = userData?.id;
+  } = useGetMyProfileQuery();
+  const authUserId = useSelector(
+    (state: RootState) => (state as any).auth?.user?.id,
+  ) as string | undefined;
+  const userId = userData?.id || authUserId;
   const userEmail =
     useSelector((state: RootState) => (state as any).auth?.user?.email) || "";
   const [uploadAvatar] = useUploadAvatarMutation();

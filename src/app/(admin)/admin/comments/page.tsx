@@ -16,7 +16,8 @@ export default function AdminCommentsPage() {
     limit: 20,
     search: search || undefined,
   });
-  const [deleteComment, { isLoading: isDeleting }] = useDeleteAdminCommentMutation();
+  const [deleteComment, { isLoading: isDeleting }] =
+    useDeleteAdminCommentMutation();
   const [deletingId, setDeletingId] = useState<string | null>(null);
   const items = data?.data.items ?? [];
   const pagination = data?.data.pagination;
@@ -76,7 +77,9 @@ export default function AdminCommentsPage() {
                 <div className="flex min-w-0 flex-col gap-1">
                   <div className="flex flex-wrap items-center gap-2">
                     <span className="text-sm font-semibold text-foreground/90">
-                      {comment.user?.username || comment.user?.name || "Unknown"}
+                      {comment.user?.username ||
+                        comment.user?.name ||
+                        "Unknown"}
                     </span>
                     <span className="text-xs text-muted">
                       on {comment.theory?.title || "Unknown theory"} ·{" "}

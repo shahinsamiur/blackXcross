@@ -82,8 +82,9 @@ export default function AdminReportDetailPage() {
               {report.targetType} Report
             </span>
             <span className="text-sm text-muted">
-              Reported by {report.reporter?.username || report.reporter?.name || "Unknown"} ·{" "}
-              {new Date(report.createdAt).toLocaleDateString()}
+              Reported by{" "}
+              {report.reporter?.username || report.reporter?.name || "Unknown"}{" "}
+              · {new Date(report.createdAt).toLocaleDateString()}
             </span>
           </div>
           <span

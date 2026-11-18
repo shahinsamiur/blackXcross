@@ -13,9 +13,10 @@ import type { RootState } from "../state/redux/store";
 export default function AuthInitializer() {
   const dispatch = useDispatch();
   const user = useSelector((state: RootState) => state.auth?.user);
-  const { data, isSuccess, isError } = useGetMeQuery(undefined, {
+  const { data, isSuccess, isError, error } = useGetMeQuery(undefined, {
     skip: !!user,
   });
+
   useEffect(() => {
     if (!user) {
       dispatch(setAuthLoading());
@@ -29,10 +30,12 @@ export default function AuthInitializer() {
   }, [isSuccess, data, dispatch]);
 
   useEffect(() => {
-    if (isError) {
+    if (!isError) return;
+    const status = error && "status" in error ? error.status : undefined;
+    if (status === 401) {
       dispatch(logout());
     }
-  }, [isError, dispatch]);
+  }, [isError, error, dispatch]);
 
   return null;
 }

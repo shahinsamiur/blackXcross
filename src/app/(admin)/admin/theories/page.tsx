@@ -1,7 +1,12 @@
 "use client";
 
 import { useState } from "react";
-import { FiSearch, FiThumbsUp, FiMessageSquare, FiTrash2 } from "react-icons/fi";
+import {
+  FiSearch,
+  FiThumbsUp,
+  FiMessageSquare,
+  FiTrash2,
+} from "react-icons/fi";
 import {
   useGetAdminTheoriesQuery,
   useDeleteAdminTheoryMutation,
@@ -16,7 +21,8 @@ export default function AdminTheoriesPage() {
     limit: 20,
     search: search || undefined,
   });
-  const [deleteTheory, { isLoading: isDeleting }] = useDeleteAdminTheoryMutation();
+  const [deleteTheory, { isLoading: isDeleting }] =
+    useDeleteAdminTheoryMutation();
   const [deletingId, setDeletingId] = useState<string | null>(null);
   const items = data?.data.items ?? [];
   const pagination = data?.data.pagination;
@@ -74,8 +80,8 @@ export default function AdminTheoriesPage() {
                     {theory.title}
                   </p>
                   <span className="text-xs text-muted">
-                    by {theory.user?.username || theory.user?.name || "Unknown"} on{" "}
-                    {theory.case?.title || "Unknown case"}
+                    by {theory.user?.username || theory.user?.name || "Unknown"}{" "}
+                    on {theory.case?.title || "Unknown case"}
                   </span>
                 </div>
                 <span className="flex shrink-0 items-center gap-1 text-xs font-medium text-muted">
@@ -94,7 +100,9 @@ export default function AdminTheoriesPage() {
                   className="flex shrink-0 items-center gap-1.5 rounded-lg border border-border px-2.5 py-1.5 text-xs font-semibold text-foreground/80 hover:border-primary/40 hover:text-primary disabled:opacity-50"
                 >
                   <FiTrash2 size={13} />
-                  {isDeleting && deletingId === theory.id ? "Removing..." : "Remove"}
+                  {isDeleting && deletingId === theory.id
+                    ? "Removing..."
+                    : "Remove"}
                 </button>
               </li>
             ))}

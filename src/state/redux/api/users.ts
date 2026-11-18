@@ -46,7 +46,7 @@ export const usersApi = api.injectEndpoints({
       transformResponse: (response: ApiResponse<PublicUser>) => response.data,
       providesTags: (result, error, id) => [{ type: "User", id }],
     }),
-    getMe: builder.query<PublicUser, void>({
+    getMyProfile: builder.query<PublicUser, void>({
       query: () => `/users/me`,
       transformResponse: (response: ApiResponse<PublicUser>) => response.data,
       providesTags: (result) =>
@@ -95,7 +95,7 @@ export const usersApi = api.injectEndpoints({
 });
 
 export const {
-  useGetMeQuery,
+  useGetMyProfileQuery,
   useGetUserQuery,
   useGetUserCasesQuery,
   useGetUserTheoriesQuery,

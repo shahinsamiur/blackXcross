@@ -1,8 +1,11 @@
-
 import type { NextConfig } from "next";
+
+const API_URL =
+  process.env.NEXT_PUBLIC_API_URL || "https://api.sardarit.cloud/api";
 
 const nextConfig: NextConfig = {
   images: {
+    unoptimized: process.env.NODE_ENV === "development",
     remotePatterns: [
       {
         protocol: "http",
@@ -26,7 +29,7 @@ const nextConfig: NextConfig = {
     return [
       {
         source: "/api/:path*",
-        destination: "https://api.sardarit.cloud/api/:path*",
+        destination: `${API_URL}/:path*`,
       },
     ];
   },

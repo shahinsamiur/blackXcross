@@ -25,7 +25,8 @@ export default function AdminUserDetailPage() {
   const { data, isLoading, error } = useGetAdminUserByIdQuery(params.id);
   const [suspendUser, { isLoading: isSuspending }] = useSuspendUserMutation();
   const [banUser, { isLoading: isBanning }] = useBanUserMutation();
-  const [reactivateUser, { isLoading: isReactivating }] = useReactivateUserMutation();
+  const [reactivateUser, { isLoading: isReactivating }] =
+    useReactivateUserMutation();
   const user = data?.data;
   const handleReactivate = async () => {
     if (confirm("Reactivate this user?")) {
@@ -147,17 +148,20 @@ export default function AdminUserDetailPage() {
               Reactivate
             </button>
           )}
-          {user.status !== "SUSPENDED" && user.status !== "Suspended" && user.status !== "BANNED" && user.status !== "Banned" && (
-            <button
-              type="button"
-              onClick={handleSuspend}
-              disabled={isSuspending}
-              className="flex items-center gap-1.5 rounded-lg border border-primary px-3 py-2 text-xs font-semibold text-primary hover:bg-primary/10 disabled:opacity-50"
-            >
-              <FiUserX size={14} />
-              Suspend
-            </button>
-          )}
+          {user.status !== "SUSPENDED" &&
+            user.status !== "Suspended" &&
+            user.status !== "BANNED" &&
+            user.status !== "Banned" && (
+              <button
+                type="button"
+                onClick={handleSuspend}
+                disabled={isSuspending}
+                className="flex items-center gap-1.5 rounded-lg border border-primary px-3 py-2 text-xs font-semibold text-primary hover:bg-primary/10 disabled:opacity-50"
+              >
+                <FiUserX size={14} />
+                Suspend
+              </button>
+            )}
           {user.status !== "BANNED" && user.status !== "Banned" && (
             <button
               type="button"

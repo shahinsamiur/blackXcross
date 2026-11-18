@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
 import { useSelector } from "react-redux";
@@ -15,6 +16,7 @@ import {
 import { useGetCaseQuery } from "../../../../state/redux/api/cases";
 import type { RootState } from "../../../../state/redux/store";
 import { TheoriesSection } from "../../../../components/case/TheoriesSection";
+import { ImageLightbox } from "../../../../components/case/ImageLightbox";
 import Image from "next/image";
 const evidenceIcons = { image: FiImage, document: FiFileText, audio: FiMic };
 export default function CaseDetailsPage() {
@@ -25,11 +27,15 @@ export default function CaseDetailsPage() {
     (state: RootState) => state.auth,
   );
   const canEdit =
-  isAuthenticated &&
-  !!user &&
-  caseData?.userId === user.id &&
-  caseData?.publishState !== "PUBLISHED";
+    isAuthenticated &&
+    !!user &&
+    caseData?.userId === user.id &&
+    caseData?.publishState !== "PUBLISHED";
   const canInteract = isAuthenticated;
+  const [selectedImage, setSelectedImage] = useState<{
+    url: string;
+    filename: string;
+  } | null>(null);
   if (isLoading) {
     return (
       <div className="flex w-full flex-col gap-6 px-4 pb-8 sm:px-6 lg:px-8">
@@ -137,11 +143,30 @@ export default function CaseDetailsPage() {
                   {imageFiles.map((file) => (
                     <div
                       key={file.id}
-                      className="group relative aspect-square overflow-hidden rounded-lg border border-border bg-muted"
+                      role="button"
+                      tabIndex={0}
+                      aria-label={`View ${file.filename}`}
+                      onClick={() =>
+                        setSelectedImage({
+                          url: file.url,
+                          filename: file.filename,
+                        })
+                      }
+                      onKeyDown={(e) => {
+                        if (e.key === "Enter" || e.key === " ") {
+                          e.preventDefault();
+                          setSelectedImage({
+                            url: file.url,
+                            filename: file.filename,
+                          });
+                        }
+                      }}
+                      className="group relative aspect-square cursor-zoom-in overflow-hidden rounded-lg border border-border bg-muted"
                     >
                       <Image
                         src={file.url}
                         alt={file.filename}
+                        fill
                         className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
                       />
                       <div className="absolute inset-0 flex items-end bg-linear-to-t from-black/70 to-transparent p-3 opacity-0 transition-opacity group-hover:opacity-100">
@@ -219,6 +244,12 @@ export default function CaseDetailsPage() {
           </section>
         </div>
       </div>
+      {selectedImage && (
+        <ImageLightbox
+          image={selectedImage}
+          onClose={() => setSelectedImage(null)}
+        />
+      )}
     </div>
   );
 }

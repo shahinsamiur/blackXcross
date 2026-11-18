@@ -3,8 +3,21 @@
 import { useState } from "react";
 import Link from "next/link";
 import { useGetAdminReportsQuery } from "../../../../state/redux/api/admin";
-const statusFilters = ["All", "PENDING", "REVIEWED", "RESOLVED", "DISMISSED"] as const;
-const targetTypeFilters = ["All", "CASE", "THEORY", "COMMENT", "USER", "MESSAGE"] as const;
+const statusFilters = [
+  "All",
+  "PENDING",
+  "REVIEWED",
+  "RESOLVED",
+  "DISMISSED",
+] as const;
+const targetTypeFilters = [
+  "All",
+  "CASE",
+  "THEORY",
+  "COMMENT",
+  "USER",
+  "MESSAGE",
+] as const;
 const statusStyles: Record<string, string> = {
   PENDING: "border-primary text-primary bg-primary/10",
   REVIEWED: "border-primary text-primary bg-primary/10",
@@ -103,7 +116,10 @@ export default function AdminReportsPage() {
 
             {!isLoading &&
               items.map((report) => (
-                <tr key={report.id} className="border-b border-border last:border-0">
+                <tr
+                  key={report.id}
+                  className="border-b border-border last:border-0"
+                >
                   <td className="px-4 py-3 font-medium text-foreground/90">
                     {report.targetType}
                   </td>

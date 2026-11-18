@@ -3,14 +3,25 @@
 import { useState } from "react";
 import Link from "next/link";
 import { FiSearch } from "react-icons/fi";
-import { 
-  useGetAdminUsersQuery, 
-  useSuspendUserMutation, 
-  useBanUserMutation 
+import {
+  useGetAdminUsersQuery,
+  useSuspendUserMutation,
+  useBanUserMutation,
 } from "../../../../state/redux/api/admin";
 import { Skeleton } from "../../../../components/ui/Skeleton";
-type UserStatus = "ACTIVE" | "SUSPENDED" | "BANNED" | "Active" | "Suspended" | "Banned";
-const statusFilters: (UserStatus | "All")[] = ["All", "ACTIVE", "SUSPENDED", "BANNED"];
+type UserStatus =
+  | "ACTIVE"
+  | "SUSPENDED"
+  | "BANNED"
+  | "Active"
+  | "Suspended"
+  | "Banned";
+const statusFilters: (UserStatus | "All")[] = [
+  "All",
+  "ACTIVE",
+  "SUSPENDED",
+  "BANNED",
+];
 const statusStyles: Record<string, string> = {
   ACTIVE: "border-success text-success bg-success/10",
   Active: "border-success text-success bg-success/10",
@@ -57,10 +68,15 @@ export default function AdminUsersPage() {
 
   return (
     <div className="flex w-full flex-col gap-6">
-      <h1 className="text-xl font-semibold text-foreground sm:text-2xl">Users</h1>
+      <h1 className="text-xl font-semibold text-foreground sm:text-2xl">
+        Users
+      </h1>
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <div className="relative w-full max-w-sm">
-          <FiSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-muted" size={16} />
+          <FiSearch
+            className="absolute left-3 top-1/2 -translate-y-1/2 text-muted"
+            size={16}
+          />
           <input
             type="text"
             value={query}
@@ -85,7 +101,9 @@ export default function AdminUsersPage() {
                   : "border-border text-foreground/80 hover:border-primary/40"
               }`}
             >
-              {status === "All" ? "All" : status.charAt(0) + status.slice(1).toLowerCase()}
+              {status === "All"
+                ? "All"
+                : status.charAt(0) + status.slice(1).toLowerCase()}
             </button>
           ))}
         </div>
@@ -120,12 +138,24 @@ export default function AdminUsersPage() {
                       <Skeleton className="h-3 w-48" />
                     </div>
                   </td>
-                  <td className="px-4 py-3"><Skeleton className="h-4 w-20" /></td>
-                  <td className="px-4 py-3"><Skeleton className="h-6 w-20 rounded-md" /></td>
-                  <td className="px-4 py-3"><Skeleton className="h-4 w-24" /></td>
-                  <td className="px-4 py-3"><Skeleton className="h-4 w-8" /></td>
-                  <td className="px-4 py-3"><Skeleton className="h-4 w-8" /></td>
-                  <td className="px-4 py-3 text-right"><Skeleton className="h-8 w-20 ml-auto" /></td>
+                  <td className="px-4 py-3">
+                    <Skeleton className="h-4 w-20" />
+                  </td>
+                  <td className="px-4 py-3">
+                    <Skeleton className="h-6 w-20 rounded-md" />
+                  </td>
+                  <td className="px-4 py-3">
+                    <Skeleton className="h-4 w-24" />
+                  </td>
+                  <td className="px-4 py-3">
+                    <Skeleton className="h-4 w-8" />
+                  </td>
+                  <td className="px-4 py-3">
+                    <Skeleton className="h-4 w-8" />
+                  </td>
+                  <td className="px-4 py-3 text-right">
+                    <Skeleton className="h-8 w-20 ml-auto" />
+                  </td>
                 </tr>
               ))
             ) : users.length === 0 ? (
@@ -136,49 +166,66 @@ export default function AdminUsersPage() {
               </tr>
             ) : (
               users.map((user) => (
-                <tr key={user.id} className="border-b border-border last:border-0">
+                <tr
+                  key={user.id}
+                  className="border-b border-border last:border-0"
+                >
                   <td className="px-4 py-3">
                     <div className="flex flex-col">
-                      <span className="font-medium text-foreground/90">{user.username}</span>
+                      <span className="font-medium text-foreground/90">
+                        {user.username}
+                      </span>
                       <span className="text-xs text-muted">{user.email}</span>
                     </div>
                   </td>
                   <td className="px-4 py-3 text-foreground/80">{user.role}</td>
                   <td className="px-4 py-3">
-                    <span className={`rounded-md border px-2 py-1 text-[11px] font-semibold uppercase ${statusStyles[user.status] || "border-border text-muted bg-card"}`}>
+                    <span
+                      className={`rounded-md border px-2 py-1 text-[11px] font-semibold uppercase ${statusStyles[user.status] || "border-border text-muted bg-card"}`}
+                    >
                       {user.status.toLowerCase()}
                     </span>
                   </td>
                   <td className="px-4 py-3 text-foreground/80">
-                    {new Date(user.createdAt ?? user.joinDate).toLocaleDateString()}
+                    {new Date(
+                      user.createdAt ?? user.joinDate,
+                    ).toLocaleDateString()}
                   </td>
-                  <td className="px-4 py-3 text-foreground/80">{user.casesSubmitted}</td>
-                  <td className="px-4 py-3 text-foreground/80">{user.reportsFiled}</td>
+                  <td className="px-4 py-3 text-foreground/80">
+                    {user.casesSubmitted}
+                  </td>
+                  <td className="px-4 py-3 text-foreground/80">
+                    {user.reportsFiled}
+                  </td>
                   <td className="px-4 py-3 text-right">
                     <div className="flex items-center justify-end gap-3">
-                      <Link href={`/admin/users/${user.id}`} className="text-xs font-semibold text-primary hover:opacity-80">
+                      <Link
+                        href={`/admin/users/${user.id}`}
+                        className="text-xs font-semibold text-primary hover:opacity-80"
+                      >
                         View
                       </Link>
-                      {user.status !== "SUSPENDED" && user.status !== "BANNED" && (
-                        <>
-                          <button
-                            onClick={() => handleSuspend(user.id)}
-                            disabled={isSuspending}
-                            className="text-xs font-semibold text-yellow-600 hover:opacity-80 disabled:opacity-50"
-                            title="Suspend User"
-                          >
-                            Suspend
-                          </button>
-                          <button
-                            onClick={() => handleBan(user.id)}
-                            disabled={isBanning}
-                            className="text-xs font-semibold text-red-600 hover:opacity-80 disabled:opacity-50"
-                            title="Ban User"
-                          >
-                            Ban
-                          </button>
-                        </>
-                      )}
+                      {user.status !== "SUSPENDED" &&
+                        user.status !== "BANNED" && (
+                          <>
+                            <button
+                              onClick={() => handleSuspend(user.id)}
+                              disabled={isSuspending}
+                              className="text-xs font-semibold text-yellow-600 hover:opacity-80 disabled:opacity-50"
+                              title="Suspend User"
+                            >
+                              Suspend
+                            </button>
+                            <button
+                              onClick={() => handleBan(user.id)}
+                              disabled={isBanning}
+                              className="text-xs font-semibold text-red-600 hover:opacity-80 disabled:opacity-50"
+                              title="Ban User"
+                            >
+                              Ban
+                            </button>
+                          </>
+                        )}
                     </div>
                   </td>
                 </tr>
@@ -190,7 +237,9 @@ export default function AdminUsersPage() {
 
       {!isLoading && users.length > 0 && totalPages > 1 && (
         <div className="flex items-center justify-between">
-          <span className="text-sm text-muted">Page {page} of {totalPages}</span>
+          <span className="text-sm text-muted">
+            Page {page} of {totalPages}
+          </span>
           <div className="flex gap-2">
             <button
               onClick={() => setPage((p) => Math.max(1, p - 1))}

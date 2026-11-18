@@ -11,11 +11,21 @@ import {
 } from "../../../../../state/redux/api/cases";
 import Skeleton from "../../../../../components/ui/Skeleton";
 
-const renderEvidencePreview = (file: { id: string; url: string; filename: string; mimeType: string }) => {
+const renderEvidencePreview = (file: {
+  id: string;
+  url: string;
+  filename: string;
+  mimeType: string;
+}) => {
   if (file.mimeType.startsWith("image/")) {
     return (
       <div className="relative aspect-video w-full overflow-hidden rounded-lg border border-border bg-background">
-        <Image src={file.url} alt={file.filename} fill className="object-cover" />
+        <Image
+          src={file.url}
+          alt={file.filename}
+          fill
+          className="object-cover"
+        />
       </div>
     );
   }
@@ -24,7 +34,11 @@ const renderEvidencePreview = (file: { id: string; url: string; filename: string
   }
   if (file.mimeType.startsWith("video/")) {
     return (
-      <video controls src={file.url} className="aspect-video w-full rounded-lg border border-border bg-background" />
+      <video
+        controls
+        src={file.url}
+        className="aspect-video w-full rounded-lg border border-border bg-background"
+      />
     );
   }
   return (
@@ -147,7 +161,12 @@ export default function AdminCaseDetailPage() {
             <div className="flex items-center gap-2">
               {caseFile.user.avatar && (
                 <div className="relative h-8 w-8 overflow-hidden rounded-full border border-border">
-                  <Image src={caseFile.user.avatar} alt={caseFile.user.username} fill className="object-cover" />
+                  <Image
+                    src={caseFile.user.avatar}
+                    alt={caseFile.user.username}
+                    fill
+                    className="object-cover"
+                  />
                 </div>
               )}
               <span className="text-xs text-muted">
@@ -159,7 +178,12 @@ export default function AdminCaseDetailPage() {
 
         {caseFile.imageUrl && (
           <div className="relative aspect-video w-full max-w-md overflow-hidden rounded-lg border border-border bg-background">
-            <Image src={caseFile.imageUrl} alt={caseFile.title} fill className="object-cover" />
+            <Image
+              src={caseFile.imageUrl}
+              alt={caseFile.title}
+              fill
+              className="object-cover"
+            />
           </div>
         )}
 

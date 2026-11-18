@@ -3,8 +3,14 @@
 import Link from "next/link";
 import { useState } from "react";
 import { FiSearch, FiCheck, FiX, FiEye } from "react-icons/fi";
-import { useGetAdminCasesQuery, type AdminCase } from "../../../../state/redux/api/admin";
-import { usePublishCaseMutation, useDraftCaseMutation } from "../../../../state/redux/api/cases";
+import {
+  useGetAdminCasesQuery,
+  type AdminCase,
+} from "../../../../state/redux/api/admin";
+import {
+  usePublishCaseMutation,
+  useDraftCaseMutation,
+} from "../../../../state/redux/api/cases";
 import { useDebounce } from "../../../../hooks";
 import Skeleton from "../../../../components/ui/Skeleton";
 
@@ -13,20 +19,24 @@ const PUBLISH_STATES = ["ALL", "DRAFT", "PUBLISHED"] as const;
 export default function AdminCasesPage() {
   const [page, setPage] = useState(1);
   const [search, setSearch] = useState("");
-  const [publishState, setPublishState] = useState<(typeof PUBLISH_STATES)[number]>("ALL");
+  const [publishState, setPublishState] =
+    useState<(typeof PUBLISH_STATES)[number]>("ALL");
   const debouncedSearch = useDebounce(search, 400);
 
-  const { data, isLoading, isFetching, isError, refetch } = useGetAdminCasesQuery({
-    page,
-    limit: 20,
-    search: debouncedSearch || undefined,
-    publishState: publishState === "ALL" ? undefined : publishState,
-  });
+  const { data, isLoading, isFetching, isError, refetch } =
+    useGetAdminCasesQuery({
+      page,
+      limit: 20,
+      search: debouncedSearch || undefined,
+      publishState: publishState === "ALL" ? undefined : publishState,
+    });
 
   const [publishCase] = usePublishCaseMutation();
   const [draftCase] = useDraftCaseMutation();
   const [isMutating, setIsMutating] = useState<string | null>(null);
-  const [lastAction, setLastAction] = useState<"approve" | "reject" | null>(null);
+  const [lastAction, setLastAction] = useState<"approve" | "reject" | null>(
+    null,
+  );
 
   const cases = data?.data.items ?? [];
   const pagination = data?.data.pagination;
@@ -58,10 +68,15 @@ export default function AdminCasesPage() {
   return (
     <div className="flex w-full flex-col gap-6">
       <div className="flex flex-wrap items-center justify-between gap-3">
-        <h1 className="text-xl font-semibold text-foreground sm:text-2xl">Cases</h1>
+        <h1 className="text-xl font-semibold text-foreground sm:text-2xl">
+          Cases
+        </h1>
         <div className="flex flex-wrap items-center gap-3">
           <div className="relative">
-            <FiSearch size={14} className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-muted" />
+            <FiSearch
+              size={14}
+              className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-muted"
+            />
             <input
               type="text"
               value={search}
@@ -126,7 +141,9 @@ export default function AdminCasesPage() {
             <tbody>
               {cases.map((c: AdminCase) => (
                 <tr key={c.id} className="border-b border-border last:border-0">
-                  <td className="max-w-70 truncate px-5 py-3 font-medium text-foreground/90">{c.title}</td>
+                  <td className="max-w-70 truncate px-5 py-3 font-medium text-foreground/90">
+                    {c.title}
+                  </td>
                   <td className="px-5 py-3 text-muted">{c.category}</td>
                   <td className="px-5 py-3">
                     <span
@@ -139,7 +156,9 @@ export default function AdminCasesPage() {
                       {c.publishState}
                     </span>
                   </td>
-                  <td className="px-5 py-3 text-muted">{new Date(c.createdAt).toLocaleDateString()}</td>
+                  <td className="px-5 py-3 text-muted">
+                    {new Date(c.createdAt).toLocaleDateString()}
+                  </td>
                   <td className="px-5 py-3">
                     <div className="flex items-center justify-end gap-2">
                       <Link
@@ -151,21 +170,29 @@ export default function AdminCasesPage() {
                       </Link>
                       <button
                         type="button"
-                        disabled={isMutating === c.id || c.publishState === "PUBLISHED"}
+                        disabled={
+                          isMutating === c.id || c.publishState === "PUBLISHED"
+                        }
                         onClick={() => handleApprove(c.id)}
                         className="flex items-center gap-1 rounded-lg border border-success px-2.5 py-1.5 text-xs font-semibold text-success hover:bg-success/10 disabled:opacity-50"
                       >
                         <FiCheck size={13} />
-                        {isMutating === c.id && lastAction === "approve" ? "..." : "Approve"}
+                        {isMutating === c.id && lastAction === "approve"
+                          ? "..."
+                          : "Approve"}
                       </button>
                       <button
                         type="button"
-                        disabled={isMutating === c.id || c.publishState === "DRAFT"}
+                        disabled={
+                          isMutating === c.id || c.publishState === "DRAFT"
+                        }
                         onClick={() => handleReject(c.id)}
                         className="flex items-center gap-1 rounded-lg border border-primary px-2.5 py-1.5 text-xs font-semibold text-primary hover:bg-primary/10 disabled:opacity-50"
                       >
                         <FiX size={13} />
-                        {isMutating === c.id && lastAction === "reject" ? "..." : "Reject"}
+                        {isMutating === c.id && lastAction === "reject"
+                          ? "..."
+                          : "Reject"}
                       </button>
                     </div>
                   </td>
@@ -179,7 +206,8 @@ export default function AdminCasesPage() {
       {pagination && pagination.totalPages > 1 && (
         <div className="flex items-center justify-between text-sm text-muted">
           <span>
-            Page {pagination.page} of {pagination.totalPages} ({pagination.total} total)
+            Page {pagination.page} of {pagination.totalPages} (
+            {pagination.total} total)
           </span>
           <div className="flex gap-2">
             <button

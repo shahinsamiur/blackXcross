@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import { FiSearch } from "react-icons/fi";
 import { caseFilters } from "../_mock/blackxcross";
 interface SearchFilterBarProps {
-  onSearch?: (value: string) => void;
+  onSearch?: (value: string, filter?: string) => void;
   onFilterChange?: (filter: (typeof caseFilters)[number]) => void;
 }
 export default function SearchFilterBar({
@@ -15,22 +15,28 @@ export default function SearchFilterBar({
   const router = useRouter();
   const [activeFilter, setActiveFilter] = useState<string>(caseFilters[0]);
   const [searchValue, setSearchValue] = useState("");
+
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === "Enter") {
-      e.preventDefault();
-      const trimmed = searchValue.trim();
-      if (trimmed) {
-        if (onSearch) {
-          onSearch(trimmed);
-        } else {
-          router.push(`/cases?search=${encodeURIComponent(trimmed)}`);
-        }
-      }
-    }
+    if (e.key !== "Enter") return;
+    e.preventDefault();
+    go(searchValue, activeFilter);
   };
+
   const handleFilterChange = (filter: (typeof caseFilters)[number]) => {
     setActiveFilter(filter);
     onFilterChange?.(filter);
+  };
+
+  const go = (value: string, filter: string) => {
+    if (onSearch) {
+      onSearch(value, filter);
+      return;
+    }
+    const params = new URLSearchParams();
+    if (value.trim()) params.set("search", value.trim());
+    if (filter && filter !== caseFilters[0]) params.set("filter", filter);
+    const qs = params.toString();
+    router.push(qs ? `/cases?${qs}` : "/cases");
   };
   return (
     <div className="flex flex-col gap-4 px-4 pb-8 sm:px-6 lg:flex-row lg:items-center lg:justify-between lg:px-8">
@@ -46,8 +52,11 @@ export default function SearchFilterBar({
           <input
             type="text"
             value={searchValue}
-            onChange={(e) => setSearchValue(e.target.value)}
-            onKeyDown={handleKeyDown}
+            onChange={(e) => {
+              const next = e.target.value;
+              setSearchValue(next);
+              onSearch?.(next);
+            }}
             placeholder="Search case files, locations, or details..."
             className="w-full rounded-lg border border-border bg-card py-3 pl-11 pr-4 text-sm text-foreground placeholder:text-gray-600 focus:border-[#7a1526] focus:outline-none"
           />

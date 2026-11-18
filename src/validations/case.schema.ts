@@ -12,8 +12,7 @@ export const caseSchema = yup.object({
     .string()
     .required("Description is required")
     .trim()
-    .min(10, "Description must be at least 10 characters")
-    .max(500, "Description must be under 500 characters"),
+    .min(10, "Description must be at least 10 characters"),
 
   status: yup
     .mixed<"COLD CASE" | "OPEN CASE">()

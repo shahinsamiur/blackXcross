@@ -13,7 +13,12 @@ export default function AdminSettingsPage() {
   });
   const [saved, setSaved] = useState(false);
 
-  const handleToggle = (field: "aiModerationEnabled" | "requireApprovalForNewCases" | "allowGuestBrowsing") => {
+  const handleToggle = (
+    field:
+      | "aiModerationEnabled"
+      | "requireApprovalForNewCases"
+      | "allowGuestBrowsing",
+  ) => {
     setSettings((prev) => ({ ...prev, [field]: !prev[field] }));
     setSaved(false);
   };

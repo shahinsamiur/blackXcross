@@ -12,7 +12,7 @@ type Coords = [number, number] | null;
 type GeoCache = Record<string, Coords>;
 
 const CACHE_KEY = "bxc_geocode_cache_v1";
-const REQUEST_GAP_MS = 1100; // Nominatim allows max 1 request/second
+const REQUEST_GAP_MS = 1100;
 
 const normalize = (value: string) => value.trim().toLowerCase();
 
@@ -27,9 +27,7 @@ function readCache(): GeoCache {
 function writeCache(cache: GeoCache) {
   try {
     localStorage.setItem(CACHE_KEY, JSON.stringify(cache));
-  } catch {
-    // storage unavailable, ignore
-  }
+  } catch {}
 }
 
 async function searchPlace(query: string): Promise<Coords> {
@@ -45,8 +43,6 @@ async function searchPlace(query: string): Promise<Coords> {
 async function geocode(location: string): Promise<Coords> {
   const full = await searchPlace(location);
   if (full) return full;
-
-  // Fallback: use the last part, e.g. "Alpine Region, Switzerland" -> "Switzerland"
   const parts = location.split(",").map((p) => p.trim());
   const last = parts[parts.length - 1];
   if (parts.length > 1 && last) {
@@ -77,9 +73,7 @@ export function useCaseMarkers(): CaseMarker[] {
     const cache = readCache();
     setCoords((prev) => ({ ...cache, ...prev }));
 
-    const missing = [...locations.entries()].filter(
-      ([key]) => !(key in cache),
-    );
+    const missing = [...locations.entries()].filter(([key]) => !(key in cache));
 
     (async () => {
       for (const [key, original] of missing) {
@@ -91,7 +85,7 @@ export function useCaseMarkers(): CaseMarker[] {
           writeCache(cache);
           setCoords((prev) => ({ ...prev, [key]: result }));
         } catch {
-          return; // network/rate-limit error: stop, retry on next visit
+          return;
         }
         await new Promise((r) => setTimeout(r, REQUEST_GAP_MS));
       }

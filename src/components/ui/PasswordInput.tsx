@@ -7,7 +7,12 @@ interface PasswordInputProps extends React.InputHTMLAttributes<HTMLInputElement>
   error?: string;
 }
 
-export default function PasswordInput({ error, className, id, ...props }: PasswordInputProps) {
+export default function PasswordInput({
+  error,
+  className,
+  id,
+  ...props
+}: PasswordInputProps) {
   const [showPassword, setShowPassword] = useState(false);
 
   return (
@@ -27,9 +32,7 @@ export default function PasswordInput({ error, className, id, ...props }: Passwo
       >
         {showPassword ? <FiEyeOff size={18} /> : <FiEye size={18} />}
       </button>
-      {error && (
-        <p className="mt-1 text-xs text-destructive">{error}</p>
-      )}
+      {error && <p className="mt-1 text-xs text-destructive">{error}</p>}
     </div>
   );
 }

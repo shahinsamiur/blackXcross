@@ -16,14 +16,62 @@ export type LedgerEntry = {
   status: "matched" | "flagged" | "pending";
 };
 export const ledgerEntries: LedgerEntry[] = [
-  { id: "1", merchant: "Stripe Payout", category: "Revenue", amount: 18420.0, status: "matched" },
-  { id: "2", merchant: "AWS", category: "Infrastructure", amount: -1284.32, status: "matched" },
-  { id: "3", merchant: "Figma Inc", category: "Software", amount: -45.0, status: "matched" },
-  { id: "4", merchant: "Unknown Wire", category: "Uncategorized", amount: -3200.0, status: "flagged" },
-  { id: "5", merchant: "Payroll — July", category: "Payroll", amount: -42110.55, status: "matched" },
-  { id: "6", merchant: "Delta Airlines", category: "Travel", amount: -612.4, status: "pending" },
-  { id: "7", merchant: "Notion Labs", category: "Software", amount: -20.0, status: "matched" },
-  { id: "8", merchant: "Client — Vantage Co", category: "Revenue", amount: 9800.0, status: "matched" },
+  {
+    id: "1",
+    merchant: "Stripe Payout",
+    category: "Revenue",
+    amount: 18420.0,
+    status: "matched",
+  },
+  {
+    id: "2",
+    merchant: "AWS",
+    category: "Infrastructure",
+    amount: -1284.32,
+    status: "matched",
+  },
+  {
+    id: "3",
+    merchant: "Figma Inc",
+    category: "Software",
+    amount: -45.0,
+    status: "matched",
+  },
+  {
+    id: "4",
+    merchant: "Unknown Wire",
+    category: "Uncategorized",
+    amount: -3200.0,
+    status: "flagged",
+  },
+  {
+    id: "5",
+    merchant: "Payroll — July",
+    category: "Payroll",
+    amount: -42110.55,
+    status: "matched",
+  },
+  {
+    id: "6",
+    merchant: "Delta Airlines",
+    category: "Travel",
+    amount: -612.4,
+    status: "pending",
+  },
+  {
+    id: "7",
+    merchant: "Notion Labs",
+    category: "Software",
+    amount: -20.0,
+    status: "matched",
+  },
+  {
+    id: "8",
+    merchant: "Client — Vantage Co",
+    category: "Revenue",
+    amount: 9800.0,
+    status: "matched",
+  },
 ];
 export type BentoFeature = {
   id: string;
@@ -35,25 +83,29 @@ export const bentoFeatures: BentoFeature[] = [
   {
     id: "smart-expenses",
     title: "Smart Expenses",
-    description: "Every card swipe is categorized the moment it clears, not at month end.",
+    description:
+      "Every card swipe is categorized the moment it clears, not at month end.",
     size: "lg",
   },
   {
     id: "bank-sync",
     title: "Bank Sync",
-    description: "Connects to 11,000+ institutions and stays in sync automatically.",
+    description:
+      "Connects to 11,000+ institutions and stays in sync automatically.",
     size: "sm",
   },
   {
     id: "daily-insights",
     title: "Daily AI Insights",
-    description: "A one-paragraph read on where money moved and why it matters.",
+    description:
+      "A one-paragraph read on where money moved and why it matters.",
     size: "sm",
   },
   {
     id: "invoice-status",
     title: "Invoice Status",
-    description: "See what's paid, what's late, and who to nudge — without opening a spreadsheet.",
+    description:
+      "See what's paid, what's late, and who to nudge — without opening a spreadsheet.",
     size: "sm",
   },
   {
@@ -65,7 +117,8 @@ export const bentoFeatures: BentoFeature[] = [
   {
     id: "anomaly-detection",
     title: "Anomaly Detection",
-    description: "Xit flags the transaction that doesn't look like the other 4,000.",
+    description:
+      "Xit flags the transaction that doesn't look like the other 4,000.",
     size: "lg",
   },
 ];
@@ -115,7 +168,11 @@ export const pricingTiers: PricingTier[] = [
     price: "$0",
     cadence: "forever",
     description: "For solo founders getting their books in order.",
-    features: ["1 connected account", "Manual categorization", "Monthly summary"],
+    features: [
+      "1 connected account",
+      "Manual categorization",
+      "Monthly summary",
+    ],
   },
   {
     id: "pro",
@@ -123,7 +180,12 @@ export const pricingTiers: PricingTier[] = [
     price: "$29",
     cadence: "per month",
     description: "For small teams who want the books to run themselves.",
-    features: ["Unlimited accounts", "AI categorization", "Daily insights", "Invoice tracking"],
+    features: [
+      "Unlimited accounts",
+      "AI categorization",
+      "Daily insights",
+      "Invoice tracking",
+    ],
     highlighted: true,
   },
   {
@@ -132,7 +194,12 @@ export const pricingTiers: PricingTier[] = [
     price: "$79",
     cadence: "per month",
     description: "For growing companies with more to reconcile.",
-    features: ["Everything in Pro", "Anomaly detection", "Forecasting", "Priority support"],
+    features: [
+      "Everything in Pro",
+      "Anomaly detection",
+      "Forecasting",
+      "Priority support",
+    ],
   },
 ];
 export type Testimonial = {
@@ -165,7 +232,8 @@ export const testimonials: Testimonial[] = [
   },
   {
     id: "4",
-    quote: "Forecasting used to live in three different spreadsheets. Now it lives in one screen.",
+    quote:
+      "Forecasting used to live in three different spreadsheets. Now it lives in one screen.",
     name: "Ellis Grant",
     role: "Operations Director, Kettlewell",
   },
@@ -183,31 +251,36 @@ export const faqItems: FaqItem[] = [
     id: "1",
     category: "General",
     question: "How long does setup take?",
-    answer: "Most teams connect their first account and see categorized transactions within ten minutes.",
+    answer:
+      "Most teams connect their first account and see categorized transactions within ten minutes.",
   },
   {
     id: "2",
     category: "General",
     question: "Does Xit replace my accountant?",
-    answer: "No — Xit handles the day-to-day categorization and reconciliation so your accountant spends their time on strategy instead of data entry.",
+    answer:
+      "No — Xit handles the day-to-day categorization and reconciliation so your accountant spends their time on strategy instead of data entry.",
   },
   {
     id: "3",
     category: "Billing",
     question: "Can I change plans later?",
-    answer: "Yes, upgrade or downgrade at any time. Changes take effect on your next billing cycle.",
+    answer:
+      "Yes, upgrade or downgrade at any time. Changes take effect on your next billing cycle.",
   },
   {
     id: "4",
     category: "Billing",
     question: "Is there a contract?",
-    answer: "No contracts on Pro or Premium. Cancel anytime and keep access through the end of the period you've paid for.",
+    answer:
+      "No contracts on Pro or Premium. Cancel anytime and keep access through the end of the period you've paid for.",
   },
   {
     id: "5",
     category: "Security",
     question: "How is my bank data protected?",
-    answer: "Bank connections use read-only, encrypted tokens. Xit never stores your banking credentials.",
+    answer:
+      "Bank connections use read-only, encrypted tokens. Xit never stores your banking credentials.",
   },
   {
     id: "6",
@@ -229,21 +302,24 @@ export const blogPosts: BlogPost[] = [
   {
     id: "1",
     title: "The five-minute month-end close, explained",
-    excerpt: "What actually has to happen for books to close fast — and what's just habit.",
+    excerpt:
+      "What actually has to happen for books to close fast — and what's just habit.",
     date: "Jul 2, 2026",
     readTime: "6 min read",
   },
   {
     id: "2",
     title: "Why anomaly detection beats manual review",
-    excerpt: "The math on why a human scanning 4,000 rows misses the one that matters.",
+    excerpt:
+      "The math on why a human scanning 4,000 rows misses the one that matters.",
     date: "Jun 18, 2026",
     readTime: "4 min read",
   },
   {
     id: "3",
     title: "Runway math every founder should be able to do in their head",
-    excerpt: "A simple mental model for cash position that doesn't require a spreadsheet.",
+    excerpt:
+      "A simple mental model for cash position that doesn't require a spreadsheet.",
     date: "Jun 4, 2026",
     readTime: "5 min read",
   },

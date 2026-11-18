@@ -89,37 +89,21 @@ export default function CreateCasePage() {
     setValues((prev) => ({ ...prev, imageFile: null, imagePreviewUrl: "" }));
   };
   const handleGalleryFilesSelected = (files: File[]) => {
-    setGalleryItems((prev) => {
-      const remainingSlots = MAX_GALLERY_IMAGES - prev.length;
-      if (remainingSlots <= 0) return prev;
-      const filesToAdd = files.slice(0, remainingSlots);
-      const newItems = filesToAdd.map((file) => ({
-        file,
-        url: URL.createObjectURL(file),
-      }));
-      setValues((prevValues) => ({
-        ...prevValues,
-        gallery: [...prevValues.gallery, ...newItems.map((item) => item.url)],
-      }));
-
-      return [...prev, ...newItems];
-    });
+    const remainingSlots = MAX_GALLERY_IMAGES - galleryItems.length;
+    if (remainingSlots <= 0) return;
+    const newItems = files.slice(0, remainingSlots).map((file) => ({
+      file,
+      url: URL.createObjectURL(file),
+    }));
+    setGalleryItems((prev) => [...prev, ...newItems]);
   };
 
   const handleRemoveGalleryImage = (index: number) => {
-    setGalleryItems((prev) => {
-      const removed = prev[index];
-      if (removed?.url?.startsWith("blob:")) {
-        URL.revokeObjectURL(removed.url);
-      }
-      const newItems = prev.filter((_, i) => i !== index);
-      setValues((prevValues) => ({
-        ...prevValues,
-        gallery: newItems.map((item) => item.url),
-      }));
-
-      return newItems;
-    });
+    const removed = galleryItems[index];
+    if (removed?.url?.startsWith("blob:")) {
+      URL.revokeObjectURL(removed.url);
+    }
+    setGalleryItems((prev) => prev.filter((_, i) => i !== index));
   };
 
   const handleEvidenceFilesSelected = (files: File[]) => {
@@ -326,7 +310,7 @@ export default function CreateCasePage() {
           error={errors.image}
         />
         <GalleryImageUpload
-          images={values.gallery}
+          images={galleryItems.map((item) => item.url)}
           max={MAX_GALLERY_IMAGES}
           onFilesSelected={handleGalleryFilesSelected}
           onRemove={handleRemoveGalleryImage}

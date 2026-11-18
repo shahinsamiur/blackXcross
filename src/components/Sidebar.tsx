@@ -68,39 +68,15 @@ function SidebarContent() {
           <button
             type="button"
             aria-label="Create group"
-            className="text-muted hover:text-primary"
+            disabled
+            className="cursor-not-allowed text-gray-600"
           >
             <FiPlus size={16} />
           </button>
         </div>
-        <ul className="flex flex-col gap-3">
-          {myGroups.map((group) => (
-            <li
-              key={group.id}
-              className="flex items-center! justify-between! gap-2 text-sm text-foreground/90 w-full"
-            >
-              <span className="relative flex h-7 w-7 shrink-0 items-center justify-center overflow-hidden rounded-full border border-gray-800 bg-card text-muted">
-                {group.avatar ? (
-                  // eslint-disable-next-line @next/next/no-img-element
-                  <img
-                    src={group.avatar}
-                    alt={group.name}
-                    className="h-full w-full object-cover"
-                  />
-                ) : (
-                  <FiUsers size={14} />
-                )}
-              </span>
-              <span className="flex-1 truncate text-gray-300 text-nowrap">
-                {group.name}
-              </span>
-              <span className="flex shrink-0 items-center gap-1.5 text-xs text-muted">
-                <span className="h-1.5 w-1.5 rounded-full bg-success" />
-                {group.memberCount}
-              </span>
-            </li>
-          ))}
-        </ul>
+        <p className="px-1 text-sm text-gray-500">
+          This functionality is not available yet
+        </p>
       </div>
 
       <div className="flex flex-col gap-3">
@@ -112,7 +88,8 @@ function SidebarContent() {
           <input
             type="text"
             placeholder="Find Contacts"
-            className="w-full rounded-lg border border-border bg-[#1a1a1a] py-2.5 pl-9 pr-3 text-sm text-foreground placeholder:text-gray-600 focus:border-[#7a1526] focus:outline-none"
+            disabled
+            className="w-full cursor-not-allowed rounded-lg border border-border bg-[#1a1a1a] py-2.5 pl-9 pr-3 text-sm text-gray-500 placeholder:text-gray-600"
           />
         </label>
         <div className="flex items-center justify-between px-1">
@@ -122,46 +99,25 @@ function SidebarContent() {
           <button
             type="button"
             aria-label="Add contact"
-            className="text-muted hover:text-primary"
+            disabled
+            className="cursor-not-allowed text-gray-600"
           >
             <FiPlus size={16} />
           </button>
         </div>
-        <ul className="flex flex-col gap-3">
-          {myContacts.map((contact, i) => (
-            <li
-              key={`${contact.id}-${i}`}
-              className="flex items-center gap-2 text-sm text-gray-300"
-            >
-              <span className="relative flex h-7 w-7 shrink-0 items-center justify-center overflow-hidden rounded-full bg-card text-muted">
-                {contact.avatar ? (
-                  // eslint-disable-next-line @next/next/no-img-element
-                  <img
-                    src={contact.avatar}
-                    alt={contact.name}
-                    className="h-full w-full object-cover"
-                  />
-                ) : (
-                  <FiUser size={14} />
-                )}
-              </span>
-              <span className="truncate">{contact.name}</span>
-              {contact.online && (
-                <span className="ml-auto h-1.5 w-1.5 shrink-0 rounded-full bg-success" />
-              )}
-            </li>
-          ))}
-        </ul>
+        <p className="px-1 text-sm text-gray-500">
+          This functionality is not available yet
+        </p>
       </div>
 
-      <Link
-        href="/groups/create"
+      <button
         type="button"
-        className="flex items-center justify-center gap-2 rounded-lg border border-gray-800 bg-[#3d0a12]/40 px-4 py-2.5 text-sm font-medium text-gray-200 hover:border-primary/40 hover:text-primary"
+        disabled
+        className="flex cursor-not-allowed items-center justify-center gap-2 rounded-lg border border-gray-800 bg-[#3d0a12]/40 px-4 py-2.5 text-sm font-medium text-gray-500"
       >
         <FiPlus size={16} />
         Start New Group
-      </Link>
+      </button>
 
       <div className="mt-auto rounded-lg border border-[#3d0a12]/20 bg-card p-5">
         <p className="text-sm italic leading-relaxed text-gray-500">
