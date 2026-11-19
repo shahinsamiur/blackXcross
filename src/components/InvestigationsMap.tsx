@@ -4,7 +4,7 @@ import { useState } from "react";
 import dynamic from "next/dynamic";
 import { FiUser, FiUsers, FiX } from "react-icons/fi";
 import { FaStar } from "react-icons/fa6";
-import { investigationStats } from "../_mock/blackxcross";
+import type { DashboardStats } from "../state/redux/api/dashboard";
 import { useCaseMarkers } from "../hooks/useCaseMarkers";
 
 const LeafletMap = dynamic(() => import("./LeafletMap"), {
@@ -16,15 +16,34 @@ const LeafletMap = dynamic(() => import("./LeafletMap"), {
   ),
 });
 
-const statIcons = {
-  "active-investigations": FiUser,
-  "countries-involved": FaStar,
-  "community-members": FiUsers,
-};
-
-export default function InvestigationsMap() {
+export default function InvestigationsMap({
+  stats,
+}: {
+  stats?: DashboardStats;
+}) {
   const [isFullMapOpen, setIsFullMapOpen] = useState(false);
   const markers = useCaseMarkers();
+
+  const statItems = [
+    {
+      id: "active-investigations",
+      label: "Active Investigations",
+      value: stats?.activeInvestigations,
+      Icon: FiUser,
+    },
+    {
+      id: "countries-involved",
+      label: "Countries Involved",
+      value: stats?.countriesInvolved,
+      Icon: FaStar,
+    },
+    {
+      id: "community-members",
+      label: "Community Members",
+      value: stats?.communityMembers,
+      Icon: FiUsers,
+    },
+  ];
 
   return (
     <section className="flex flex-col gap-5 rounded-xl border border-border bg-card p-5">
@@ -46,25 +65,22 @@ export default function InvestigationsMap() {
       </div>
 
       <div className="grid grid-cols-3 divide-x divide-border">
-        {investigationStats.map((stat) => {
-          const Icon = statIcons[stat.id as keyof typeof statIcons];
-          return (
-            <div
-              key={stat.id}
-              className="flex flex-col items-center gap-1 px-3 text-center first:pl-0 last:pr-0"
-            >
-              <div className="flex items-center gap-2">
-                <Icon className="text-red-500" size={20} />
-                <span className="text-lg font-bold text-foreground">
-                  {stat.value}
-                </span>
-              </div>
-              <span className="text-[11px] leading-tight text-muted">
-                {stat.label}
+        {statItems.map(({ id, label, value, Icon }) => (
+          <div
+            key={id}
+            className="flex flex-col items-center gap-1 px-3 text-center first:pl-0 last:pr-0"
+          >
+            <div className="flex items-center gap-2">
+              <Icon className="text-red-500" size={20} />
+              <span className="text-lg font-bold text-foreground">
+                {value === undefined ? "–" : value.toLocaleString()}
               </span>
             </div>
-          );
-        })}
+            <span className="text-[11px] leading-tight text-muted">
+              {label}
+            </span>
+          </div>
+        ))}
       </div>
 
       {isFullMapOpen && (

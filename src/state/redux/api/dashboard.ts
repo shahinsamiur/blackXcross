@@ -40,6 +40,9 @@ export interface DashboardStats {
   totalCases: number;
   totalTheories: number;
   totalUsers: number;
+  activeInvestigations: number;
+  countriesInvolved: number;
+  communityMembers: number;
 }
 
 export interface DashboardResponse {

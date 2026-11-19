@@ -85,7 +85,7 @@ export default function Home() {
           activities={data?.recentActivity || []}
           isLoading={isLoading}
         />
-        <InvestigationsMap />
+               <InvestigationsMap stats={data?.stats} />
         <TrendingTheories
           theories={data?.trendingTheories || []}
           isLoading={isLoading}

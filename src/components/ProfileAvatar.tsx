@@ -1,4 +1,8 @@
+"use client";
+
+import { useState } from "react";
 import Image from "next/image";
+import { DEFAULT_AVATAR } from "../utils/avatar";
 
 export default function ProfileAvatar({
   src,
@@ -9,16 +13,21 @@ export default function ProfileAvatar({
   alt: string;
   size?: number;
 }) {
+  const [failedSrc, setFailedSrc] = useState<string | null>(null);
+  const finalSrc = !src || failedSrc === src ? DEFAULT_AVATAR : src;
+
   return (
     <span
       className="relative block shrink-0 overflow-hidden rounded-full ring-1 ring-primary/30"
       style={{ width: size, height: size }}
     >
       <Image
-        src={src}
+        src={finalSrc}
         alt={alt}
         fill
+        unoptimized
         sizes={`${size}px`}
+        onError={() => setFailedSrc(src)}
         className="object-cover grayscale contrast-125"
       />
       <span

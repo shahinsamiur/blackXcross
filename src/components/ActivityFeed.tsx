@@ -1,6 +1,6 @@
 import { FiFlag, FiMessageSquare } from "react-icons/fi";
-import Image from "next/image";
 import type { DashboardActivity } from "@/src/state/redux/api/dashboard";
+import ProfileAvatar from "./ProfileAvatar";
 
 interface ActivityFeedProps {
   activities: DashboardActivity[];
@@ -19,18 +19,11 @@ function formatTimeAgo(dateString: string): string {
 }
 
 function ActivityIndicator({ type }: { type: string }) {
-  if (type === "CASE") {
-    return (
-      <div className="flex shrink-0 items-center gap-2 pt-1">
-        <FiFlag size={16} className="text-muted" />
-        <span className="h-2.5 w-2.5 rounded-full bg-primary" />
-      </div>
-    );
-  }
+  const Icon = type === "CASE" ? FiFlag : FiMessageSquare;
   return (
-    <div className="flex shrink-0 items-center gap-1 pt-1 text-xs text-muted">
-      <FiMessageSquare size={16} />
-    </div>
+    <span className="flex shrink-0 items-center text-muted">
+      <Icon size={14} />
+    </span>
   );
 }
 
@@ -40,19 +33,17 @@ export default function ActivityFeed({
 }: ActivityFeedProps) {
   if (isLoading) {
     return (
-      <section className="flex flex-col gap-5 rounded-xl border border-gray-800/80 bg-card p-5">
+      <section className="flex flex-col gap-5 rounded-xl border border-border bg-card p-5">
         <div className="h-4 w-48 animate-pulse rounded bg-muted" />
-        <div className="flex flex-col gap-5">
+        <div className="flex flex-col">
           {[...Array(4)].map((_, i) => (
             <div
               key={i}
-              className="flex w-full items-start justify-between gap-3"
+              className={`flex items-center gap-3 py-4 ${i !== 3 ? "border-b border-border" : ""}`}
             >
-              <div className="h-12 w-12 animate-pulse rounded-full bg-muted" />
-              <div className="flex flex-1 flex-col gap-2">
-                <div className="h-3 w-32 animate-pulse rounded bg-muted" />
-                <div className="h-4 w-48 animate-pulse rounded bg-muted" />
-              </div>
+              <div className="h-9 w-9 animate-pulse rounded-full bg-muted" />
+              <div className="h-4 flex-1 animate-pulse rounded bg-muted" />
+              <div className="h-4 w-8 animate-pulse rounded bg-muted" />
             </div>
           ))}
         </div>
@@ -60,14 +51,14 @@ export default function ActivityFeed({
     );
   }
   return (
-    <section className="flex flex-col gap-5 rounded-xl border border-gray-800/80 bg-card p-5">
+    <section className="flex flex-col gap-5 rounded-xl border border-border bg-card p-5">
       <div className="flex items-center justify-between">
-        <h2 className="text-sm font-tight tracking-wide text-gray-400 uppercase">
+        <h2 className="text-sm font-bold tracking-wide text-foreground/80 uppercase">
           Latest Community Activity
         </h2>
         <button
           type="button"
-          className="text-xs font-semibold text-primary hover:opacity-80 border border-border px-4 py-2 rounded-lg hover:bg-primary/10 cursor-pointer"
+          className="text-xs font-semibold text-red-500 hover:text-red-400 cursor-pointer"
         >
           View All
         </button>
@@ -76,8 +67,8 @@ export default function ActivityFeed({
       {!activities || activities.length === 0 ? (
         <p className="text-sm text-muted">No recent activity.</p>
       ) : (
-        <ul className="flex flex-col gap-5">
-          {activities.map((item) => {
+        <ul className="flex flex-col">
+          {activities.map((item, index) => {
             const actorName =
               item.author.name || item.author.username || "Anonymous";
             const actionText =
@@ -91,37 +82,33 @@ export default function ActivityFeed({
             return (
               <li
                 key={item.id}
-                className="flex w-full items-start justify-between gap-3"
+                className={`flex items-center gap-3 py-4 ${
+                  index !== activities.length - 1
+                    ? "border-b border-border"
+                    : ""
+                }`}
               >
-                <div className="relative shrink-0">
-                  <div className="h-12 w-12 overflow-hidden rounded-full border border-border bg-card">
-                    {item.author.avatarUrl ? (
-                      <Image
-                        src={item.author.avatarUrl}
-                        alt={actorName}
-                        width={48}
-                        height={48}
-                        className="h-full w-full object-cover"
-                      />
-                    ) : (
-                      <div className="flex h-full w-full items-center justify-center bg-muted text-lg font-bold text-foreground/50">
-                        {actorName[0]?.toUpperCase()}
-                      </div>
-                    )}
-                  </div>
-                  <span className="absolute -left-0.5 top-0.5 h-2 w-2 rounded-full bg-primary" />
-                </div>
-                <div className="flex min-w-0 flex-1 flex-col">
-                  <div className="truncate text-sm leading-relaxed text-gray-300">
-                    <span className="font-medium text-white">{actorName}</span>{" "}
-                    {actionText}
-                  </div>
-                  <div className="text-base font-medium leading-relaxed text-gray-300 sm:text-lg truncate">
-                    {target}
-                  </div>
-                  <span className="mt-0.5 text-xs text-gray-600">
-                    {formatTimeAgo(item.createdAt)}
+                {item.author.avatarUrl ? (
+                  <ProfileAvatar
+                    src={item.author.avatarUrl}
+                    alt={actorName}
+                    size={36}
+                  />
+                ) : (
+                  <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-red-500/10 text-xs font-bold text-red-500">
+                    {actorName[0]?.toUpperCase()}
                   </span>
+                )}
+                <div className="flex min-w-0 flex-1 flex-col gap-0.5">
+                  <span className="truncate text-xs text-muted">
+                    <span className="font-semibold text-foreground/90">
+                      {actorName}
+                    </span>{" "}
+                    {actionText} · {formatTimeAgo(item.createdAt)}
+                  </span>
+                  <p className="truncate text-sm leading-snug text-foreground/80">
+                    {target}
+                  </p>
                 </div>
                 <ActivityIndicator type={item.type} />
               </li>

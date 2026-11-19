@@ -28,34 +28,13 @@ function IconBadge({ count }: { count: number }) {
     </span>
   );
 }
-const placeholderNotifications = [
-  {
-    id: "n1",
-    text: "ForensicPhil uploaded new evidence in Hinterkaifeck Murders Revisited",
-    time: "5 min ago",
-  },
-  { id: "n2", text: "Your theory received 12 new upvotes", time: "1 hour ago" },
-  {
-    id: "n3",
-    text: "Alpine Anomaly Team posted an update",
-    time: "3 hours ago",
-  },
-];
-const placeholderMessages = [
-  {
-    id: "m1",
-    from: "TrueCrimeJane",
-    text: "Did you see the new radio signal data?",
-    time: "10 min ago",
-  },
-  {
-    id: "m2",
-    from: "Investigator_X",
-    text: "Joining the 1984 Highway Slip thread.",
-    time: "2 hours ago",
-  },
-];
+
+const NOTIFICATION_COUNT = 0;
+const MESSAGE_COUNT = 0;
+const NOT_AVAILABLE_LABEL = "This functionality is not available yet";
+
 type OpenMenu = "notifications" | "messages" | "profile" | null;
+
 function DropdownPanel({
   title,
   footerHref,
@@ -84,19 +63,13 @@ function DropdownPanel({
     </div>
   );
 }
+
 function EmptyDropdownState({ label }: { label: string }) {
   return (
     <div className="px-4 py-8 text-center text-xs text-muted">{label}</div>
   );
 }
-function getInitials(name: string): string {
-  return name
-    .split(/\s+/)
-    .filter(Boolean)
-    .slice(0, 2)
-    .map((part) => part[0]?.toUpperCase())
-    .join("");
-}
+
 export default function Header() {
   const router = useRouter();
   const dispatch = useDispatch();
@@ -149,7 +122,7 @@ export default function Header() {
               >
                 <FiBell size={16} className="sm:hidden" />
                 <FiBell size={18} className="hidden sm:block" />
-                <IconBadge count={placeholderNotifications.length} />
+                <IconBadge count={NOTIFICATION_COUNT} />
               </button>
 
               {openMenu === "notifications" && (
@@ -158,28 +131,7 @@ export default function Header() {
                   footerHref="/notifications"
                   footerLabel="View all notifications"
                 >
-                  {placeholderNotifications.length === 0 ? (
-                    <EmptyDropdownState label="You're all caught up." />
-                  ) : (
-                    <ul>
-                      {placeholderNotifications.map((n) => (
-                        <li
-                          key={n.id}
-                          className="flex gap-3 border-b border-border px-4 py-3 last:border-b-0 hover:bg-background"
-                        >
-                          <span className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-primary" />
-                          <div className="min-w-0 flex-1">
-                            <p className="text-sm leading-snug text-foreground/90">
-                              {n.text}
-                            </p>
-                            <span className="mt-1 block text-xs text-muted">
-                              {n.time}
-                            </span>
-                          </div>
-                        </li>
-                      ))}
-                    </ul>
-                  )}
+                  <EmptyDropdownState label={NOT_AVAILABLE_LABEL} />
                 </DropdownPanel>
               )}
             </div>
@@ -194,7 +146,7 @@ export default function Header() {
               >
                 <FiMail size={16} className="sm:hidden" />
                 <FiMail size={18} className="hidden sm:block" />
-                <IconBadge count={placeholderMessages.length} />
+                <IconBadge count={MESSAGE_COUNT} />
               </button>
               {openMenu === "messages" && (
                 <DropdownPanel
@@ -202,33 +154,7 @@ export default function Header() {
                   footerHref="/notifications"
                   footerLabel="View all messages"
                 >
-                  {placeholderMessages.length === 0 ? (
-                    <EmptyDropdownState label="No messages yet." />
-                  ) : (
-                    <ul>
-                      {placeholderMessages.map((m) => (
-                        <li
-                          key={m.id}
-                          className="flex gap-3 border-b border-border px-4 py-3 last:border-b-0 hover:bg-background"
-                        >
-                          <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-primary/10 text-xs font-semibold text-primary">
-                            {getInitials(m.from)}
-                          </span>
-                          <div className="min-w-0 flex-1">
-                            <p className="truncate text-sm font-medium text-foreground/90">
-                              {m.from}
-                            </p>
-                            <p className="mt-0.5 truncate text-sm leading-snug text-muted">
-                              {m.text}
-                            </p>
-                            <span className="mt-1 block text-xs text-muted">
-                              {m.time}
-                            </span>
-                          </div>
-                        </li>
-                      ))}
-                    </ul>
-                  )}
+                  <EmptyDropdownState label={NOT_AVAILABLE_LABEL} />
                 </DropdownPanel>
               )}
             </div>

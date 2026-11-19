@@ -31,6 +31,8 @@ export interface CommentItem {
   theoryId: string;
   parentId: string | null;
   replies: CommentItem[];
+  likeCount?: number;
+  likedByMe?: boolean;
   createdAt: string;
   updatedAt: string;
 }
@@ -87,6 +89,25 @@ export const commentsApi = api.injectEndpoints({
         { type: "Comment", id: `THEORY-${theoryId}` },
       ],
     }),
+
+    likeComment: builder.mutation<void, { id: string; theoryId: string }>({
+      query: ({ id }) => ({
+        url: `/comments/comments/${id}/like`,
+        method: "POST",
+      }),
+      invalidatesTags: (result, error, { theoryId }) => [
+        { type: "Comment", id: `THEORY-${theoryId}` },
+      ],
+    }),
+    unlikeComment: builder.mutation<void, { id: string; theoryId: string }>({
+      query: ({ id }) => ({
+        url: `/comments/comments/${id}/like`,
+        method: "DELETE",
+      }),
+      invalidatesTags: (result, error, { theoryId }) => [
+        { type: "Comment", id: `THEORY-${theoryId}` },
+      ],
+    }),
   }),
   overrideExisting: false,
 });
@@ -95,4 +116,6 @@ export const {
   useGetTheoryCommentsQuery,
   useCreateCommentMutation,
   useCreateCommentReplyMutation,
+  useLikeCommentMutation,
+  useUnlikeCommentMutation,
 } = commentsApi;

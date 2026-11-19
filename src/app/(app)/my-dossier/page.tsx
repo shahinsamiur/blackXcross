@@ -6,6 +6,7 @@ import { FiEdit3, FiUsers, FiFileText } from "react-icons/fi";
 import CaseCard from "../../../components/CaseCard";
 import ProfileAvatar from "../../../components/ProfileAvatar";
 import type { RootState } from "../../../state/redux/store";
+import { resolveAvatar } from "../../../utils/avatar";
 import {
   useGetUserQuery,
   useGetUserCasesQuery,
@@ -68,7 +69,7 @@ export default function DossierPage() {
           ) : (
             <ProfileAvatar
               key={photo || "no-avatar"}
-              src={photo || "/image/hero1.jpg"}
+              src={resolveAvatar(photo)}
               alt={user?.username || "Your profile"}
               size={64}
             />

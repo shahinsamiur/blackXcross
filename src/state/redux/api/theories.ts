@@ -20,6 +20,7 @@ export interface TheoryItem {
   userId: string;
   user: TheoryAuthor;
   caseId: string;
+  upvotedByMe?: boolean;
   _count: { upvotes: number; comments: number };
   createdAt: string;
   updatedAt: string;

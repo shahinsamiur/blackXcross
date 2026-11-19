@@ -16,7 +16,7 @@ import {
   useUpdateUserMutation,
   useDeleteUserMutation,
 } from "../../../../state/redux/api/users";
-const DEFAULT_AVATAR = "/image/hero1.jpg";
+import { DEFAULT_AVATAR } from "../../../../utils/avatar";
 export default function DossierEditPage() {
   const router = useRouter();
   const {
