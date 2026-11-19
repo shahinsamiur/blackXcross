@@ -79,6 +79,7 @@ export const api = createApi({
     "Report",
     "Moderation",
     "Admin",
+    "Analytics",
   ],
   endpoints: () => ({}),
 });
