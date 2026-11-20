@@ -1,7 +1,8 @@
+
 import type { NextConfig } from "next";
 
 const API_URL =
-  process.env.NEXT_PUBLIC_API_URL || "https://api.sardarit.cloud/api";
+  process.env.NEXT_PUBLIC_API_URL || "https://api.blackcross.net/api";
 
 const nextConfig: NextConfig = {
   images: {
@@ -15,7 +16,7 @@ const nextConfig: NextConfig = {
       },
       {
         protocol: "https",
-        hostname: "api.sardarit.cloud",
+        hostname: "api.blackcross.net",
         pathname: "/uploads/**",
       },
       {
